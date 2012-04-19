@@ -209,4 +209,59 @@ public class ConnectionManager {
         Statement st = con.createStatement();
         return (st.executeUpdate(query) != 0);
     }
+    
+    /**
+     * Method that initiates a Transaction and returns the open connection.
+     * @return Connection
+     * @throws SQLException 
+     */
+    public static Connection initTransaction() throws SQLException{
+        Connection con = pool.getConnection();
+        con.setAutoCommit(false);
+        return con;
+    }
+    
+    /**
+     * Method that makes a commit on the connection
+     * @param con
+     * @throws SQLException 
+     */
+    public static void commit(Connection con) throws SQLException{
+        con.commit();
+        con.setAutoCommit(true);
+    }
+    
+    /**
+     * Method that rollbacks the connection.
+     * @param con
+     * @throws SQLException 
+     */
+    public static void rollback(Connection con) throws SQLException{
+        con.rollback();
+        con.setAutoCommit(true);
+    }
+    
+    /**
+     * Method that does a INSERT INTO <tt>table</tt> VALUES (<tt>values</tt>)
+     * @param fields Array of strings containing the key pairs {{COLUMN, VALUE},{COLUMN, VALUE}} to be inserted.
+     * @param table Table where the values should be inserted into.
+     * @return <b>True</b> if successful.
+     * @throws SQLException
+     */
+    public static boolean insert(String[][] fields, String table, Connection con) throws SQLException {
+        String query = "INSERT INTO " + table+"";
+        String columns = " (" + fields[0][0]+"";
+        String values = " ('" + fields[0][1] + "'";
+        for (int i = 1; i < fields.length; i++) {
+            columns += ", " + fields[i][0];
+            values += ", '" + fields[i][1] + "'";
+        }
+        columns += ")";
+        values += ")";
+        query += columns + " VALUES" + values;
+        Statement st = con.createStatement();
+        System.out.println(query);
+        return (st.executeUpdate(query) != 0);
+    }
+    
 }
