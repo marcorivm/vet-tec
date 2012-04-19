@@ -4,6 +4,14 @@
 <%
     City[] cities;
     cities = (City[]) request.getAttribute("cities");
+    if (cities == null) {
+%> <jsp:forward page="Ciudades" >
+    <jsp:param name="referer" value="vuelos.jsp" />
+</jsp:forward><%
+
+        RequestDispatcher rd = request.getRequestDispatcher("Ciudades");
+        rd.forward(request, response);
+    }
     Flight flights[];
     flights = (Flight[]) request.getAttribute("flights");
     Flight flights2[];
@@ -28,6 +36,7 @@
         <script type="text/javascript" src="js/cufon-replace.js"></script>
         <script type="text/javascript" src="js/Myriad_Pro_600.font.js"></script>
         <script type="text/javascript" src="js/jquery.datepick.js"></script>
+        <script type="text/javascript" src="js/vet.js"></script>
         <!--[if lt IE 9]>
                 <script type="text/javascript" src="http://info.template-help.com/files/ie6_warning/ie6_script_other.js"></script>
                 <script type="text/javascript" src="js/html5.js"></script>
@@ -70,84 +79,79 @@
                         <h3>Buscar Vuelo</h3>
                         <div class="pad">
                             <div class="wrapper under">
-                                <form id="form_1" method="POST" action="FlightSearch">
+                                <form id="form_1" method="POST" action="FlightServlet">
                                     <div class="tabs_cont">
-                                        <div><label for="customerId">Id Cliente</label>
-                                            <select name="customerId" id="customerId">
-                                                <option value="blank">---------------</option>
-                                            </select>
+                                        <div class="bg">
+                                            <div class="wrapper">
+                                                <div class="radio">
+                                                    <input type="radio" name="isRoundTrip" value="true" checked onclick="mostrarRegreso()">Redondo
+                                                </div>
+                                                <div class="radio"><input type="radio" name="isRoundTrip" value="false" onclick="ocultarRegreso()">Simple</div>
+                                            </div>                                           
+                                            <div class="wrapper"><label for="source">Origen</label>
+                                                <select name="source" id="source">
+                                                    <% if (cities != null)
+                                                            for (City c : cities) {%>
+                                                    <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
+                                                    <% }%>
+                                                </select></div>                                           
+                                            <div class="wrapper"><label for="destiny">Destino</label>
+                                                <select name="destiny" id="destiny">
+                                                    <% if (cities != null)
+                                                            for (City c : cities) {%>
+                                                    <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
+                                                    <% }%>
+                                                </select></div>
+                                            <div class="wrapper"><label for="date1">Salida (dd/mm/aaaa)</label>
+                                                <input type="text" name="date1" id="date1" /></div>
+                                            <div id="regreso" class="wrapper pad_bot1"><label for="date2">Regreso (dd/mm/aaaa)</label>
+                                                <input type="text" name="date2" id="date2" /></div>                                    
+                                            <div class="wrapper pad_bot1d">
+                                                <label for="timeFrom">Hora</label>
+                                                <select name="timeFrom" id="timeFrom">
+                                                    <%
+                                                        for (int i = 6; i <= 22; i++) {
+                                                    %>
+                                                    <option value="<%=i%>"><%=i%></option>    
+                                                    <%
+                                                        }
+                                                    %>
+                                                </select>
+                                                <br />
+                                                <label for="timeTo">a</label>
+                                                <select name="timeTo" id="timeTo">
+                                                    <%
+                                                        for (int i = 7; i <= 23; i++) {
+                                                    %>
+                                                    <option value="<%=i%>"><%=i%></option>    
+                                                    <%
+                                                        }
+                                                    %>
+                                                </select>
+                                            </div>
+                                            <div class="wrapper pad_bot1">
+                                                Adultos<br />
+                                                <select name="adults">
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option value="35">35</option>
+                                                </select><br />
+                                                Niños<br />
+                                                <select name="kids">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                </select><br />
+                                            </div>
+                                            <div>
+                                                <input type="submit" class="button" value="Buscar" />                                            
+                                            </div>
                                         </div>
-                                        <div><label for="source">Salida</label>
-                                            <select name="source" id="source">
-                                                <% if (cities != null)
-                                                        for (City c : cities) {%>
-                                                <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
-                                                <% }%>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="destination">Destino</label>
-                                            <select name="destination" id="destination">
-                                                <% if (cities != null)
-                                                        for (City c : cities) {%>
-                                                <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
-                                                <% }%>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="timeFrom">Hora</label>
-                                            <select name="timeFrom" id="timeFrom">
-                                                <%
-                                                    for (int i = 6; i <= 22; i++) {
-                                                %>
-                                                <option value="<%=i%>"><%=i%></option>    
-                                                <%
-                                                    }
-                                                %>
-                                            </select>
-                                            <br />
-                                            <label for="timeTo">a</label>
-                                            <select name="timeTo" id="timeTo">
-                                                <%
-                                                    for (int i = 7; i <= 23; i++) {
-                                                %>
-                                                <option value="<%=i%>"><%=i%></option>    
-                                                <%
-                                                    }
-                                                %>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="departure">Fecha de Salida</label>
-                                            <input type="text" name="departure" id="departure" />                                           
-                                        </div>
-                                        <div>
-                                            <label for="adult">Adultos</label>
-                                            <select name="adult" id="adult">
-                                                <%
-                                                    for (int i = 1; i <= 4; i++) {
-                                                %>
-                                                <option value="<%=i%>"><%=i%></option>    
-                                                <%
-                                                    }
-                                                %>
-                                            </select>
-                                            <br />
-                                            <label for="children">Ni&ntilde;os</label>
-                                            <select name="children" id="children">
-                                                <%
-                                                    for (int i = 0; i <= 4; i++) {
-                                                %>
-                                                <option value="<%=i%>"><%=i%></option>    
-                                                <%
-                                                    }
-                                                %>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <input type="submit" class="button" value="Buscar" />                                            
-                                        </div>
-                                    </div>
                                 </form>
                             </div>
                             <!-- div class="wrapper">
@@ -164,8 +168,7 @@
 
                         %>
                         <h3>Vuelos Disponibles Ida</h3>
-                        <div class="wrapper under2" style="margin-bottom:2em;">
-                            <form>
+                        <div class="wrapper under2" style="margin-bottom:2em;">                            
                                 <div><table>
                                         <tr>
                                             <th>Aerol&iacute;nea</th>
@@ -184,12 +187,11 @@
                                             <td><%=f.getDestination().getCityName()%></td>
                                             <td><%=f.getAdult_Fare()%></td>
                                             <td><%=f.getChild_Fare()%></td>
-                                            <td><input type="button" class="button" value="Reservar" /></td>
+                                            <td><a href="/Reservar?flightNo=<%=f.getFlight_No() %>"><button class="button" value="Reservar" /></a></td>
                                         </tr>
                                         <%
                                             }%>
-                                    </table></div>
-                            </form>
+                                    </table></div>                           
                         </div>
                         <% } else if (f2) {%>
                         <h3> Vuelos de Ida no Disponibles </h3>
@@ -201,7 +203,7 @@
                         %>
                         <h3>Vuelos Disponibles Retorno</h3>
                         <div class="wrapper under">
-                            <form>
+                            
                                 <div><table>
                                         <tr>
                                             <th>Aerol&iacute;nea</th>
@@ -220,116 +222,16 @@
                                             <td><%=f.getDestination().getCityName()%></td>
                                             <td><%=f.getAdult_Fare()%></td>
                                             <td><%=f.getChild_Fare()%></td>
-                                            <td><input type="button" class="button" value="Reservar" /></td>
+                                            <td><a href="/Reservar?flightNo=<%=f.getFlight_No() %>"><button class="button" value="Reservar" /></a></td>
                                         </tr>
                                         <%
                                             }%>
                                     </table></div>
-                            </form>
+                           
                         </div>
                         <% } else if (f1 && flights2 != null) {%>
                         <h3> Vuelos de Retorno no Disponibles </h3>
                         <% }%>
-
-
-
-                        <h2>Revisar Vuelo</h2>
-                        <div class="wrapper under">
-                            <div id="flightDetails" class="under">
-                                <h3>Revisar Detalles del Vuelo</h3>
-                                <div><span class="city">Bangalore</span> --> <span class="city">Chennai</span></div>
-                                <div>
-                                    <table>
-                                        <tr>
-                                            <th>N&uacute;mero de Vuelo</th>
-                                            <th>Aerol&iacute;nea</th>
-                                            <th>Fecha de Salida</th>
-                                            <th>Fecha de Llegada</th>
-                                        </tr>
-                                        <tr>
-                                            <td>F216</td>
-                                            <td>Kingfischer</td>
-                                            <td>16-Jan-2012 06:00 AM</td>
-                                            <td>16-Jan-2012 06:50 AM</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <div id="fareDetails">
-                                <h3>Revisar Detalles de la Tarifa</h3>
-                                <div>
-                                    <table>
-                                        <tr>
-                                            <th>Tipo de Tarifa</th>
-                                            <th>Asientos</th>
-                                            <th>Tarifa Base</th>
-                                            <th>Impuestos</th>
-                                            <th>Total incluyendo Impuestos</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Adultos</td>
-                                            <td>2</td>
-                                            <td>$ 1000 ($500 x 2)</td>
-                                            <td>$ 4080</td>
-                                            <td>$ 5080</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ni&ntilde;os</td>
-                                            <td>2</td>
-                                            <td>$ 1000 ($500 x 2)</td>
-                                            <td>$ 4080</td>
-                                            <td>$ 5080</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <div>
-                                <span><input type="button" class="button" value="Reservar Vuelo" /></span>
-                                <br />
-                                <span class="floatRight">
-                                    -------------------------<br />
-                                    Total: $ 10060<br />
-                                    -------------------------
-                                </span>
-                            </div>
-                        </div>
-                        <h2>Nombres</h2>
-                        <!-- adultos -->
-                        <div class="wrapper under">
-                            <div class="wrapper">
-                                <h3>Adulto 1: Pasajero Principal</h3>
-                                <div class="form">
-                                    <label for="title1">T&iacute;tulo </label>
-                                    <select name="title1" id="title1">
-                                        <option>Sr.</option>
-                                        <option>Sra.</option>
-                                        <option>Srta.</option>
-                                    </select>
-                                </div>
-                                <div class="form">
-                                    <label for="fname1">Nombre: </label>
-                                    <input type="text" name="fname1" id="fname1" />
-                                </div>
-                                <div class="form">
-                                    <label for="lname1">Apellidos: </label>
-                                    <input type="text" name="lname1" id="lname1" />
-                                </div>
-                            </div>
-                        </div>
-                        <!-- ninos -->
-                        <div class="wrapper under">
-                            <div class="wrapper">
-                                <h3>Infante 1</h3>
-                                <div class="form">
-                                    <label for="child-fname1">Nombre: </label>
-                                    <input type="text" name="child-fname1" id="child-fname1" />
-                                </div>
-                                <div class="form">
-                                    <label for="child-lname1">Apellidos: </label>
-                                    <input type="text" name="child-lname1" id="child-lname1" />
-                                </div>
-                            </div>
-                        </div>
                         <h2>Datos de Pago</h2>
                         <div class="wrapper">
                             Boleto de <span class="city">Bangalore</span> to <span class="city">Chennai</span><br />
@@ -340,28 +242,7 @@
                             Impuestos <span class="bold">$ 800</span><br />
                             Total <span class="bold">$ 9800</span><br />
                             <input type="button" class="button" value="Hacer Pago" onclick="(function() { alert('Payment Succesful!'); })();" /><br />
-                        </div>
-                        <!-- div class="wrapper">
-                            <figure class="left marg_right1"><img src="images/page2_img1.jpg" alt=""></figure>
-                            <p><strong>Sed ut perspiciatis unde omnis iste natus</strong> error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorehjum ipsum quia dolor sit amet, consectetur vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.</p>
-                            <p><strong>Voluptatum deleniti atque corrupti quos</strong> dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa. Et harum quidem rerum facilisest et expedita distinctio. Nam libero tepore cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus omnis voluptas assumenda.</p>
-                        </div>
-                        <div class="wrapper line1 marg_bot1">
-                            <ul class="list1 cols">
-                                <li><a href="#">At vero eos et accusamus et iusto odio</a></li>
-                                <li><a href="#">Dignissimos ducimus qui blanditiis praesentium</a></li>
-                                <li><a href="#">Voluptatum deleniti atque corrupti quos dolores</a></li>
-                                <li><a href="#">Quas molestias excepturi sint occaecati</a></li>
-                            </ul>
-                            <ul class="list1 cols pad_left1">
-                                <li><a href="#">At vero eos et accusamus et iusto odio</a></li>
-                                <li><a href="#">Dignissimos ducimus qui blanditiis praesentium</a></li>
-                                <li><a href="#">Voluptatum deleniti atque corrupti quos dolores</a></li>
-                                <li><a href="#">Quas molestias excepturi sint occaecati</a></li>
-                            </ul>
-                        </div>
-                        Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda. error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorehjum ipsum quia dolor sit amet, consectetur vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.
-                        -->
+                        </div>                        
                     </article>
                 </section>
                 <!-- / content -->
@@ -375,7 +256,11 @@
         </div>
         <script type="text/javascript">
             Cufon.now();
-            $("#departure").datepick({
+            $("#date1").datepick({
+                dateFormat: 'dd-mm-yyyy',
+                minDate: new Date()
+            });
+            $("#date2").datepick({
                 dateFormat: 'dd-mm-yyyy',
                 minDate: new Date()
             });

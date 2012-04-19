@@ -7,8 +7,6 @@ package Servlets;
 import Clases.Flight_Booking;
 import dbcp.ConnectionManager;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,11 +36,12 @@ public class CancelReservation extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        //PrintWriter out = response.getWriter();
         
         //  remove item
         String idreservacion = request.getParameter("reservacion");
         HttpSession session = request.getSession();
+        boolean exitoso;
         
         // Get the cart
         Flight_Booking mi_vueloReservado = (Flight_Booking) session.
@@ -54,23 +53,25 @@ public class CancelReservation extends HttpServlet {
        }
        else{
            try{
-                ConnectionManager.init();
+               ConnectionManager.init();
                  
                if(idreservacion.equals(mi_vueloReservado.getBookingId())){
-                   ConnectionManager.delete("Tbl_Flight_Booking_GroupNo",
-                         "BookingId = '" + idreservacion+"'");     
+                    exitoso = ConnectionManager.delete("Tbl_Flight_Booking_GroupNo",
+                        "BookingId = '" + idreservacion+"'");
+                    
+                    request.setAttribute("Cancelacion exitosa", exitoso);
+                    String url="/vuelos.jsp";
+                    ServletContext sc = getServletContext();
+                    RequestDispatcher rd = sc.getRequestDispatcher(url);
+                    rd.forward(request, response);
+                       
                }
                 
            } catch (ArrayIndexOutOfBoundsException e){}
        }
        
        
-        // Show the cart and let user check out or order more
-
-        String url="/vuelos.jsp";
-        ServletContext sc = getServletContext();
-        RequestDispatcher rd = sc.getRequestDispatcher(url);
-        rd.forward(request, response);
+        
 
         /*
         try {

@@ -41,14 +41,16 @@ public class FlightServlet extends HttpServlet {
         String destiny = request.getParameter("destiny");
         String date1 = request.getParameter("date1");
         String date2 = request.getParameter("date2");
+        float h1 = Float.parseFloat(request.getParameter("timeFrom"));
+        float h2 = Float.parseFloat(request.getParameter("timeTo"));
         int adults = Integer.parseInt(request.getParameter("adults"));
         int kids = Integer.parseInt(request.getParameter("kids"));
         try {
 
-            Flight[] fs = Flight.getFlights(source, destiny, adults + kids);
+            Flight[] fs = Flight.getFlights(source, destiny, adults + kids, date1, h1, h2);
             request.setAttribute("flights", fs);
             if (isRoundTrip) {
-                Flight[] fs2 = Flight.getFlights(destiny, source, adults + kids);
+                Flight[] fs2 = Flight.getFlights(destiny, source, adults + kids, date2, h1, h2);
                 request.setAttribute("flights2", fs2);
             }
         } catch (SQLException ex) {
@@ -56,7 +58,7 @@ public class FlightServlet extends HttpServlet {
             System.out.println("Error (FlightServlet, Flight.getFlights(source, destiny, adults+kids); " + ex.getMessage());
         }
 
-        RequestDispatcher rd = request.getRequestDispatcher("Ciudades");
+        RequestDispatcher rd = request.getRequestDispatcher("vuelos.jsp");
         rd.forward(request, response);
 
 

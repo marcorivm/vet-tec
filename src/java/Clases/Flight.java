@@ -4,7 +4,13 @@ import dbcp.ConnectionManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Flight {
 
@@ -123,10 +129,10 @@ public class Flight {
      * @return f An object created out of the variables of the Flights class
      */
     public static Flight getFlight(int id) throws SQLException {
-        ResultSet rs = ConnectionManager.selectAllColumns("Flight", "_flightNo= " + id);
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Flight_GroupNo", "FlightNo= " + id);
         if (rs.next()) {
-            Flight f = new Flight(rs.getInt("_flight_No"), rs.getString("_airline_Name"), City.getCity(rs.getString("_source")), City.getCity(rs.getString("_destination")), rs.getTime("_departure_Time"), rs.getTime("_arrival_Time"),
-                    rs.getInt("_total_Seats"), rs.getDouble("_adult_Fare"), rs.getDouble("_child_Fare"), rs.getDouble("_airport_Tax"));
+            Flight f = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), rs.getTime("DepartureTime"), rs.getTime("ArrivalTime"),
+                    rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
             return f;
         } else {
             return null;
@@ -221,7 +227,54 @@ public class Flight {
         }
     }
     
-    public int getRemainingSeats() throws SQLException{
+    public static Flight[] getFlights(String _source, String _destination, int _seats, String date, float timeFrom, float timeTo) throws SQLException {
+        ConnectionManager.init();
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Flight_GroupNo", "source= '" + _source + "' and destination= '" + _destination 
+                + "' and DepartureTime >= '" + timeFrom + "' and DepartureTime <= '" + timeTo + "'"); //falta poner que haya un mes de diferencia, no estoy seguro de como
+        if (rs.next()) {
+            ArrayList flightArrayList = new ArrayList();
+            
+            do {
+                try {
+                    Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), rs.getTime("DepartureTime"), rs.getTime("ArrivalTime"),
+                            rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
+                    //Date d = (Date) new DateFormat().parse(date);
+                    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                    Date d = (Date) df.parse(date);
+                    if(temp.getRemainingSeats(d) >= _seats){
+                        flightArrayList.add(temp);
+                    }
+                } catch (ParseException ex) {
+                    Logger.getLogger(Flight.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } while (rs.next());
+            Flight f[] = new Flight[flightArrayList.size()];
+            flightArrayList.toArray(f);
+            return f;
+        } else {
+            return null;
+        }
+    }
+    
+    public int getRemainingSeats(Date date) throws SQLException, ParseException{
+        /* Sacar de DB la cantididad en base a this._flight_No */
+        ConnectionManager.init();
+        ResultSet rs = ConnectionManager.selectAllColumns( "Tbl_FlightSeat_Status_GroupNo", "FlightNo = '"+this._flight_No+"'");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        if (rs.next()){
+        String temp = rs.getString("DateOfJourney");
+        Date dOJ = df.parse(temp);
+        System.out.println("date: " + date.toString() + " | " + dOJ.toString() + " | " + temp);
+        if(dOJ.compareTo(date) == 0){
+            return rs.getInt("RemainingSeats");
+        } else {
+            return -1;
+        }
+        } else {
+            return -2;
+        }
+    }
+ public int getRemainingSeats() throws SQLException{
         /* Sacar de DB la cantididad en base a this._flight_No */
         ConnectionManager.init();
         ResultSet rs = ConnectionManager.select("RemainingSeats", "Tbl_FlightSeat_Status_GroupNo", "FlightNo = '"+this._flight_No+"'");

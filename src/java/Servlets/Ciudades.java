@@ -6,7 +6,6 @@ package Servlets;
 
 import Clases.City;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,8 +36,10 @@ public class Ciudades extends HttpServlet {
         try {
             City[] ciudades = City.getCities();
             request.setAttribute("cities", ciudades);
+            //String referer = request.getHeader("Referer");
+            String referer = (String)request.getParameter("referer");
             
-            RequestDispatcher rd = request.getRequestDispatcher("vuelos.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher(referer);
             rd.forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(Ciudades.class.getName()).log(Level.SEVERE, null, ex);
