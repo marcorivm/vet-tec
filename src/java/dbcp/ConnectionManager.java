@@ -111,6 +111,7 @@ public class ConnectionManager {
             query += " WHERE " + whereClause;
         }
         Statement st = con.createStatement();
+        System.out.println(query);
         return st.executeQuery(query);
     }
 

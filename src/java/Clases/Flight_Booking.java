@@ -134,7 +134,8 @@ public class Flight_Booking {
      * @throws SQLException 
      */
     public static String getNextId() throws SQLException {
-        ResultSet rd = ConnectionManager.select("CONCAT(  'B', (MID( BookingId, 2 ) +1 ))", "FROM  `Tbl_Flight_Booking_GroupNo` ", "1 ORDER BY BookingId DESC LIMIT 1");
+        ConnectionManager.init();
+        ResultSet rd = ConnectionManager.select("CONCAT(  'B', (MID( BookingId, 2 ) +1 ))", "Tbl_Flight_Booking_GroupNo", "1 ORDER BY BookingId DESC LIMIT 1");
         if(rd.next()){
             return  rd.getString(1);
         } else {
