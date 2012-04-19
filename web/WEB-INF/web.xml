@@ -22,6 +22,14 @@
         <servlet-name>Ciudades</servlet-name>
         <servlet-class>Servlets.Ciudades</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CancelReservation</servlet-name>
+        <servlet-class>Servlets.CancelReservation</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReservarVuelo</servlet-name>
+        <servlet-class>Servlets.ReservarVuelo</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>FlightServlet</servlet-name>
         <url-pattern>/FlightServlet</url-pattern>
@@ -33,6 +41,14 @@
     <servlet-mapping>
         <servlet-name>Ciudades</servlet-name>
         <url-pattern>/Ciudades</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CancelReservation</servlet-name>
+        <url-pattern>/CancelReservation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReservarVuelo</servlet-name>
+        <url-pattern>/ReservarVuelo</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
