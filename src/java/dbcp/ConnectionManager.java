@@ -232,7 +232,7 @@ public class ConnectionManager {
     }
     
     /**
-     * Method that rollbacks the connection.
+     * Method that makes a rollback using the received connection.
      * @param con
      * @throws SQLException 
      */
@@ -243,8 +243,10 @@ public class ConnectionManager {
     
     /**
      * Method that does a INSERT INTO <tt>table</tt> VALUES (<tt>values</tt>)
+     * This method is to be used with transactions.
      * @param fields Array of strings containing the key pairs {{COLUMN, VALUE},{COLUMN, VALUE}} to be inserted.
      * @param table Table where the values should be inserted into.
+     * @param con Connection to use.
      * @return <b>True</b> if successful.
      * @throws SQLException
      */
@@ -264,4 +266,31 @@ public class ConnectionManager {
         return (st.executeUpdate(query) != 0);
     }
     
+    /**
+     * Method that does a INSERT INTO <tt>table</tt> VALUES (<tt>values</tt>)
+     * and returns the new generated key for the values inserted.
+     * This method is to be used with transactions.
+     * @param fields Array of strings containing the key pairs {{COLUMN, VALUE},{COLUMN, VALUE}} to be inserted.
+     * @param table Table where the values should be inserted into.
+     * @param con Connection to use.
+     * @return a ResultSet containing the generated keys.
+     * @throws SQLException 
+     */
+    public static int insertAndGetKey(String[][] fields, String table, Connection con) throws SQLException {
+        String query = "INSERT INTO `" + table +"`";
+        String columns = "(`" + fields[0][0]+"`";
+        String values = " (" + fields[0][1] + "";
+        for (int i = 1; i < fields.length; i++) {
+            columns += ", `" + fields[i][0] +"`";
+            values += "," + fields[i][1] + "";
+        }
+        columns += ")";
+        values += ")";
+        query += columns + " VALUES" + values;
+        PreparedStatement st = con.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+        st.executeUpdate();
+        ResultSet rs = st.getGeneratedKeys();
+        rs.next();
+        return rs.getInt(1);
+    }
 }
