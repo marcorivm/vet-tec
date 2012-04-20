@@ -39,9 +39,9 @@ public class ReservarVuelo extends HttpServlet {
             throws ServletException, IOException, SQLException {
 //Al llamar al servlet se actualizan los datos
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter(); //Se deja para que los de aquellos encargados de la interfaz decidan como se imprimirá
         ResultSet resultados;
-        try {
+        
+        
     /*
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD hh:mm:ss");
@@ -57,9 +57,6 @@ public class ReservarVuelo extends HttpServlet {
                 String vuelo2[][] = 
             }
        */
-        } finally {            
-            out.close();
-        }
     }
 
  
