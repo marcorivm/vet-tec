@@ -38,7 +38,7 @@ public class ReservarVuelo extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-        //Al llamar al servlet se actualizan los datos
+//Al llamar al servlet se actualizan los datos
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter(); //Se deja para que los de aquellos encargados de la interfaz decidan como se imprimirá
         ResultSet resultados;

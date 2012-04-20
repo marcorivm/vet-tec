@@ -34,6 +34,14 @@
         <servlet-name>Reservacion</servlet-name>
         <servlet-class>Servlets.Reservacion</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>HotelServlet</servlet-name>
+        <servlet-class>Servlets.HotelServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReservarP</servlet-name>
+        <servlet-class>Servlets.ReservarP</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>FlightServlet</servlet-name>
         <url-pattern>/FlightServlet</url-pattern>
@@ -57,6 +65,14 @@
     <servlet-mapping>
         <servlet-name>Reservacion</servlet-name>
         <url-pattern>/Reservacion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HotelServlet</servlet-name>
+        <url-pattern>/HotelServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReservarP</servlet-name>
+        <url-pattern>/ReservarP</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

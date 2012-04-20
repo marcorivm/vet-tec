@@ -1,5 +1,6 @@
 package Clases;
 
+import dbcp.ConnectionManager;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,12 +10,13 @@ import java.sql.SQLException;
  * @author Luis Fernando
  */
 public class Hotel_Booking {
-    int bookingId, noOfDeluxeRooms, noOfExeRooms;
+    private String bookingId;
+    int noOfDeluxeRooms, noOfExeRooms;
     Hotel hotel;
     Customer customer;
     Date dateOfBooking, checkInDate, checkOutDate;
 
-    public Hotel_Booking(int bookingId, int noOfDeluxeRooms, int noOfExeRooms, Hotel hotel, Customer customer, Date dateOfBooking, Date checkInDate, Date checkOutDate) {
+    public Hotel_Booking(String bookingId, int noOfDeluxeRooms, int noOfExeRooms, Hotel hotel, Customer customer, Date dateOfBooking, Date checkInDate, Date checkOutDate) {
         this.bookingId = bookingId;
         this.noOfDeluxeRooms = noOfDeluxeRooms;
         this.noOfExeRooms = noOfExeRooms;
@@ -25,11 +27,11 @@ public class Hotel_Booking {
         this.checkOutDate = checkOutDate;
     }
 
-    public int getBookingId() {
+    public String getBookingId() {
         return bookingId;
     }
 
-    public void setBookingId(int bookingId) {
+    public void setBookingId(String bookingId) {
         this.bookingId = bookingId;
     }
 
@@ -105,7 +107,7 @@ public class Hotel_Booking {
             hb = new Hotel_Booking[rs.getFetchSize()];
             for(int i = 0; i < hb.length; i++){
                 rs.next();
-                hb[i] = new Hotel_Booking(rs.getInt("BookingId"), rs.getInt("NoOfDeluxeRooms"), 
+                hb[i] = new Hotel_Booking(rs.getString("BookingId"), rs.getInt("NoOfDeluxeRooms"), 
                                           rs.getInt("NoOfExeRooms"), Hotel.getHotel(rs.getString("HotelId")), 
                                           Customer.getCustomer(rs.getInt("CustomerId")), rs.getDate("DateOfBooking"), 
                                           rs.getDate("CheckInDate"), rs.getDate("CheckOutDate"));
@@ -133,7 +135,7 @@ public class Hotel_Booking {
             hb = new Hotel_Booking[rs.getFetchSize()];
             for(int i = 0; i < hb.length; i++){
                 rs.next();
-                hb[i] = new Hotel_Booking(rs.getInt("BookingId"), rs.getInt("NoOfDeluxeRooms"), 
+                hb[i] = new Hotel_Booking(rs.getString("BookingId"), rs.getInt("NoOfDeluxeRooms"), 
                                           rs.getInt("NoOfExeRooms"), Hotel.getHotel(rs.getString("HotelId")), 
                                           Customer.getCustomer(rs.getInt("CustomerId")), rs.getDate("DateOfBooking"), 
                                           rs.getDate("CheckInDate"), rs.getDate("CheckOutDate"));
@@ -158,13 +160,28 @@ public class Hotel_Booking {
         Hotel_Booking hb;
         
         if(rs.next()){
-            hb = new Hotel_Booking(rs.getInt("BookingId"), rs.getInt("NoOfDeluxeRooms"), 
+            hb = new Hotel_Booking(rs.getString("BookingId"), rs.getInt("NoOfDeluxeRooms"), 
                                           rs.getInt("NoOfExeRooms"), Hotel.getHotel(rs.getString("HotelId")), 
                                           Customer.getCustomer(rs.getInt("CustomerId")), rs.getDate("DateOfBooking"), 
                                           rs.getDate("CheckInDate"), rs.getDate("CheckOutDate"));
             return hb;
         }else{
             return null;
+        }
+    }
+    
+    /**
+     * Method that returns the next available id for a Flight Booking.
+     * @return next available id B0000
+     * @throws SQLException 
+     */
+    public static String getNextId() throws SQLException {
+        ConnectionManager.init();
+        ResultSet rd = ConnectionManager.select("CONCAT(  'H', (MID( BookingId, 2 ) +1 ))", "Tbl_Hotel_Booking_GroupNo", "1 ORDER BY BookingId DESC LIMIT 1");
+        if(rd.next()){
+            return  rd.getString(1);
+        } else {
+            return null; 
         }
     }
 }
