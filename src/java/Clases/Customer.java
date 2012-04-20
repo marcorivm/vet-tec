@@ -2,6 +2,7 @@ package Clases;
 
 import java.sql.*;
 import dbcp.ConnectionManager;
+import java.util.ArrayList;
 
 public class Customer {
 
@@ -75,9 +76,9 @@ public class Customer {
      * @throws SQLException  
      */
     public static Customer getCustomer(int _customerID) throws SQLException{
-            ResultSet rs = ConnectionManager.selectAllColumns("Customer", "CustomerID= "+_customerID);
+            ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Customer_GroupNo", "CustomerID= "+_customerID);
             if(rs.next()){
-            Customer cus = new Customer(rs.getInt("CustomerID"), rs.getString("FirstName"), rs.getString("LastName"), rs.getString("Address"), rs.getString("Email"), rs.getString("Phone"));
+            Customer cus = new Customer(rs.getInt("CustomerId"), rs.getString("FirstName"), rs.getString("LastName"), rs.getString("Address"), rs.getString("Email"), rs.getString("Phone"));
             return cus;
             }else{
                 return null;
@@ -92,12 +93,28 @@ public class Customer {
      * @throws SQLException  
      */	
     public static Customer getCustomer(String _email) throws SQLException{
-            ResultSet rs = ConnectionManager.selectAllColumns("Customer", "Email= "+_email);
+            ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Customer_GroupNo", "Email= "+_email);
             if(rs.next()){
-            Customer cus = new Customer(rs.getInt("CustomerID"), rs.getString("FirstName"), rs.getString("LastName"), rs.getString("Address"), rs.getString("Email"), rs.getString("Phone"));
+            Customer cus = new Customer(rs.getInt("CustomerId"), rs.getString("FirstName"), rs.getString("LastName"), rs.getString("Address"), rs.getString("Email"), rs.getString("Phone"));
             return cus;
             }else{
                 return null;
             }
+    }
+    
+    public static Customer[] getCustomers() throws SQLException {
+            ConnectionManager.init();
+            ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Customer_GroupNo", "");
+            Customer[] customers = null;
+            ArrayList<Customer> cL = new ArrayList<Customer>();
+            while(rs.next()){
+                Customer c = new Customer(rs.getInt("CustomerId"), rs.getString("FirstName"), rs.getString("LastName"), rs.getString("Address"), rs.getString("Email"), rs.getString("Phone"));
+                cL.add(c);
+            }
+            if(cL.size()>0){
+                customers = new Customer[cL.size()];
+                cL.toArray(customers);
+            }
+            return customers;
     }
 }
