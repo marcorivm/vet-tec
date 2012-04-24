@@ -42,25 +42,7 @@
                 <header>
                     <div class="wrapper">
                         <h1><a href="index.html" id="logo">Around the World</a></h1>
-                        <div class="right">
-                            <div class="wrapper">
-                                <form id="search" action="" method="post">
-                                    <div class="bg">
-                                        <input type="submit" class="submit" value="">
-                                        <input type="text" class="input">
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="wrapper">
-                                <nav>
-                                    <ul id="top_nav">
-                                        <li><a href="#">Register</a></li>
-                                        <li><a href="#">Log In</a></li>
-                                        <li><a href="#">Help</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
+                        
                     </div>
                     <jsp:include page="includes/navbar.jsp" />
                 </header>
@@ -72,7 +54,7 @@
                         <h3>Buscar Hotel</h3>
                         <div class="pad">
                             <div class="wrapper under">
-                                <form id="form_1" method="POST" action="HotelSearch">
+                                <form id="form_1" method="POST" action="HotelServlet">
                                     <div class="tabs_cont">
                                         <div class="bg">
 
@@ -89,20 +71,19 @@
                                             <div id="regreso" class="wrapper"><label for="date2">Salida (dd/mm/aaaa)</label>
                                                 <input type="text" name="date2" id="date2" /></div>
                                             <div class="wrapper">
-                                                Tipo<br />
+                                                Tipo de Habitaci&oacute;n<br />
                                                 <select name="tipoHabitacion">
                                                     <option value="sencilla">Sencilla</option>
                                                     <option value="doble">Doble</option>
+                                                    <option value="triple">Tripe</option>
                                                     <option value="cuadruple">Cu&aacute;druple</option>
                                                 </select><br />
                                             </div>
                                             <div class="wrapper">
-                                                <label for="noDeluxe">No. Cuartos Delujo</label>
-                                                <input type="text" name="noDeluxe" id="noDeluxe" />
-                                            </div>
-                                            <div class="wrapper pad_bot1">
-                                                <label for="noExe">No. Cuartos Ejecutivos</label>
-                                                <input type="text" name="noExe" id="noExe" />
+                                                <input type ="radio" name="type" id="type" value="deluxe"/>                                                
+                                                <label for="deluxe">Cuartos Deluxe</label> <br/>
+                                                <input type="radio" name ="type" id="type" value="exe" />
+                                                <i<label for="exe">Cuartos Exe</label>
                                             </div>
                                             <div>
                                                 <input type="submit" class="button" value="Buscar" />
@@ -150,8 +131,8 @@
                                             <th>Tipo de Habitación</th>
                                             <th>Tarifa Delujo Diaria</th>
                                             <th>Tarifa Ejecutiva Diaria</th>
-                                            <th>No de Habitaciones Delujo</th>
-                                            <th>No de Habitaciones Ejecutivas</th>
+                                            <th>Habitaciones Deluxe</th>
+                                            <th>Habitaciones Exe</th>
                                             <th>Tarifa</th>
                                             <th>Impuestos</th>
                                             <th>Total</th>
@@ -186,8 +167,7 @@
             <div class="main">
                 <!-- footer -->
                 <footer>
-                    <a rel="nofollow" href="http://www.templatemonster.com/" target="_blank">Website template</a> designed by TemplateMonster.com<br>
-                    <a href="http://www.templates.com/product/3d-models/" target="_blank">3D Models</a> provided by Templates.com
+                    
                 </footer>
                 <!-- / footer -->
             </div>
