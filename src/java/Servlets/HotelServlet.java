@@ -51,10 +51,10 @@ public class HotelServlet extends HttpServlet {
 
         } catch (SQLException ex) {
             Logger.getLogger(FlightServlet.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Error (FlightServlet, Flight.getFlights(source, destiny, adults+kids); " + ex.getMessage());
+            System.out.println("Error (HotelServlet; " + ex.getMessage());
         }
 
-        RequestDispatcher rd = request.getRequestDispatcher("hoteles.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("Hotel.jsp");
         rd.forward(request, response);
 
 

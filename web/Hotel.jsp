@@ -3,6 +3,11 @@
 <%
     City[] cities;
     cities = (City[]) request.getAttribute("cities");
+    if (cities == null){
+        request.setAttribute("referer", "Hotel.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("Ciudades");
+        rd.forward(request, response);
+    }
     Hotel[] hotels;
     hotels = (Hotel[]) request.getAttribute("hotels");
     int cuartosDel = 0;

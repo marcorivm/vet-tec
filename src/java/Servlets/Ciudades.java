@@ -37,7 +37,7 @@ public class Ciudades extends HttpServlet {
             City[] ciudades = City.getCities();
             request.setAttribute("cities", ciudades);
             //String referer = request.getHeader("Referer");
-            String referer = (String)request.getParameter("referer");
+            String referer = (String)request.getAttribute("referer");
             
             RequestDispatcher rd = request.getRequestDispatcher(referer);
             rd.forward(request, response);

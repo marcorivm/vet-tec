@@ -1,3 +1,4 @@
+<%@page import="java.util.Set"%>
 <%@page import="Clases.Flight"%>
 <%@page import="Clases.City"%>
 <%@page import="java.util.ArrayList"%>
@@ -5,10 +6,7 @@
     City[] cities;
     cities = (City[]) request.getAttribute("cities");
     if (cities == null) {
-%> <jsp:forward page="Ciudades" >
-    <jsp:param name="referer" value="vuelos.jsp" />
-</jsp:forward><%
-
+        request.setAttribute("referer", "vuelos.jsp");
         RequestDispatcher rd = request.getRequestDispatcher("Ciudades");
         rd.forward(request, response);
     }
@@ -22,6 +20,7 @@
     f1 = (flights != null) && (flights.length > 0);
     f2 = (flights2 != null) && (flights2.length > 0);
 %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
