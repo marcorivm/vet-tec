@@ -456,6 +456,70 @@ footer a {
     width: 66px;
 }
 
+#form_2 {
+    color: #fff;
+    line-height: 24px;
+}
+#form_2 .input {
+    background: #fff;
+    color: #7f7f7f;
+    float: right;
+    font: 12px Arial, Helvetica, sans-serif;
+    height: 16px;
+    margin-top: 3px;
+    padding: 1px 8px;
+    width: 133px;
+}
+#form_2 a {
+    color: #439deb;
+}
+#form_2 .radio {
+    float: left;
+    padding-right: 16px;
+}
+#form_2 .radio.end {
+    padding-right: 0;
+}
+#form_2 .radio input {
+    float: left;
+    height: 12px;
+    margin: 5px 5px 0 0px;
+    overflow: hidden;
+    padding: 0;
+    width: 12px;
+}
+#form_2 .check_box {
+    margin-top: 12px;
+}
+#form_2 .input2 {
+    width: 62px;
+}
+#form_2 select {
+    display: inline-block;
+    height: 18px;
+    margin-left: 5px;
+    margin-top: 5px;
+    padding: 1px;
+    width: 100px;
+}
+#form_2 .button {
+    background: #3081c8;
+    behavior: url(js/PIE.htc);
+    border-radius: 4px;
+    color: #fff;
+    float: right;
+    font-size: 12px;
+    line-height: 26px;
+    moz-border-radius: 4px;
+    padding: 0;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    webkit-border-radius: 4px;
+    width: 66px;
+}
+
 table, table td, th, tr {
     border: black solid;
     border-collapse: collapse;

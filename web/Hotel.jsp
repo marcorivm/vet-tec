@@ -75,7 +75,7 @@
                                                 <select name="tipoHabitacion">
                                                     <option value="sencilla">Sencilla</option>
                                                     <option value="doble">Doble</option>
-                                                    <option value="triple">Tripe</option>
+                                                    <option value="triple">Triple</option>
                                                     <option value="cuadruple">Cu&aacute;druple</option>
                                                 </select><br />
                                             </div>
