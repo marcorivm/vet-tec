@@ -3,6 +3,11 @@
 <%
     City[] cities;
     cities = (City[]) request.getAttribute("cities");
+    if (cities == null){
+        request.setAttribute("referer", "Hotel.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("Ciudades");
+        rd.forward(request, response);
+    }
     Hotel[] hotels;
     hotels = (Hotel[]) request.getAttribute("hotels");
     int cuartosDel = 0;
@@ -75,7 +80,7 @@
                                                 <select name="tipoHabitacion">
                                                     <option value="sencilla">Sencilla</option>
                                                     <option value="doble">Doble</option>
-                                                    <option value="triple">Tripe</option>
+                                                    <option value="triple">Triple</option>
                                                     <option value="cuadruple">Cu&aacute;druple</option>
                                                 </select><br />
                                             </div>
@@ -165,11 +170,7 @@
         </div>
         <div class="body1">
             <div class="main">
-                <!-- footer -->
-                <footer>
-                    
-                </footer>
-                <!-- / footer -->
+                <jsp:include page="includes/footer.jsp" />
             </div>
         </div>
         <script type="text/javascript">

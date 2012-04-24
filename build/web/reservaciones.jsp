@@ -2,6 +2,7 @@
 <%@page import="Clases.Hotel"%>
 <%@page import="Clases.Flight"%>
 <%@page import="Clases.Flight_Booking"%>
+<%@page import="Clases.Package_Booking"%>
 <%
     Package_Booking booking = null;
     Flight_Booking flightToBooking = null;
@@ -16,7 +17,7 @@
     int ninosFrom = 0;
 
     if (request.getAttribute("booking") != null) {
-        booking = (Flight_Booking) request.getAttribute("booking");
+        booking = (Package_Booking) request.getAttribute("booking");
     }
 
     if (booking != null) {
@@ -62,26 +63,7 @@
                 <!-- header -->
                 <header>
                     <div class="wrapper">
-                        <h1><a href="index.html" id="logo">Vuelos</a></h1>
-                        <div class="right">
-                            <div class="wrapper">
-                                <form id="search" action="" method="post">
-                                    <div class="bg">
-                                        <input type="submit" class="submit" value="">
-                                        <input type="text" class="input">
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="wrapper">
-                                <nav>
-                                    <ul id="top_nav">
-                                        <li><a href="#">Register</a></li>
-                                        <li><a href="#">Log In</a></li>
-                                        <li><a href="#">Help</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
+                        <h1><a href="index.html" id="logo">Vuelos</a></h1>                     
                     </div>
                     <jsp:include page="includes/navbar.jsp" />
                 </header>
@@ -90,7 +72,7 @@
                 <section id="content">
                     <!-- columna izq -->
                     <article class="col1">
-                        <h3>Buscar Vuelo</h3>
+                        <h3>Buscar</h3>
                         <div class="pad">
                             <div class="wrapper under">
                                 <form id="form_1" method="POST" action="Reservaciones">
