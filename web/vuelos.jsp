@@ -5,7 +5,7 @@
 <%
     City[] cities;
     cities = (City[]) request.getAttribute("cities");
-    if (cities == null) {
+    if (cities == null){
         request.setAttribute("referer", "vuelos.jsp");
         RequestDispatcher rd = request.getRequestDispatcher("Ciudades");
         rd.forward(request, response);

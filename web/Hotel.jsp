@@ -170,11 +170,7 @@
         </div>
         <div class="body1">
             <div class="main">
-                <!-- footer -->
-                <footer>
-                    
-                </footer>
-                <!-- / footer -->
+                <jsp:include page="includes/footer.jsp" />
             </div>
         </div>
         <script type="text/javascript">
