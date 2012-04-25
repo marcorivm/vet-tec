@@ -4,6 +4,6 @@
 					<li><a href="vuelos.jsp" class="nav2">Vuelos</a></li>
 					<li><a href="Hotel.jsp" class="nav3">Hoteles</a></li>
 					<li><a href="reservaciones.jsp" class="nav4">Reservaciones</a></li>
-                                        <li class="end"><a href="Info.jsp" class="nav5">Informacin</a></li>
+                                        <li class="end"><a href="Info.jsp" class="nav5">Informacion</a></li>
 				</ul>
 			</nav>
