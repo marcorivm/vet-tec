@@ -115,24 +115,32 @@ public class Hotel {
      * Method that creates an object according to its defined WHERE clause and
      * received variables
      *
-     * @param _location The location or city of each Hotel
+     * @param _cityCode The City where the hotel(s) should be looked
      * @throws SQLException
      * @return h An array of Hotel objects that contain the info of each created
      * Hotel
      */
     public static Hotel[] getHotels(City _location) throws SQLException {
-        ResultSet rs = ConnectionManager.selectAllColumns("City", "_locatione= " + _location);
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Hotel_Details_Groupno", "location='" + _location.getCityCode() +"'");
         if (rs.next()) {
             ArrayList hotelArrayList = new ArrayList();
             Hotel h[];
             do {
-                hotelArrayList.add(new Hotel(rs.getString("_hotelId"), rs.getString("_hotelName"), City.getCity(rs.getString("_cityCode")), rs.getInt("_noOfDeluxeRooms"),
-                        rs.getInt("_numOfEXERooms"), rs.getDouble("_deluxRoomsFare_PerDay"), rs.getDouble("_eXERoomFarePerDay"), rs.getDouble("_hotelTax")));
+                hotelArrayList.add(new Hotel(rs.getString("HotelId"), 
+                                            rs.getString("HotelName"), 
+                                            City.getCity(rs.getString("Location")), 
+                                            rs.getInt("NoOfDeluxRooms"),
+                                            rs.getInt("NoOfEXERooms"), 
+                                            rs.getDouble("deluxRoomFare_PerDay"), 
+                                            rs.getDouble("EXERoomFare_PerDay"), 
+                                            rs.getDouble("HotelTax")));
             } while (rs.next());
-            h = (Hotel[]) hotelArrayList.toArray();
-            return h;
-        } else {
-            return null;
+            if(hotelArrayList.size()>0){
+                h = new Hotel[hotelArrayList.size()];
+                hotelArrayList.toArray(h);
+                return h;
+            }            
         }
+        return null;
     }
 }

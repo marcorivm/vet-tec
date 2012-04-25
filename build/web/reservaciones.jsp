@@ -46,7 +46,7 @@
         <link rel="stylesheet" href="css/layout.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/style.css" type="text/css" media="all">
         <style type="text/css">@import "css/jquery.datepick.css";</style>
-        <script type="text/javascript" src="js/jquery-1.4.2.js" ></script>
+        <script type="text/javascript" src="js/jquery-1.7.1.min.js" ></script>
         <script type="text/javascript" src="js/cufon-yui.js"></script>
         <script type="text/javascript" src="js/cufon-replace.js"></script>
         <script type="text/javascript" src="js/Myriad_Pro_600.font.js"></script>
@@ -61,10 +61,7 @@
         <div class="extra">
             <div class="main">
                 <!-- header -->
-                <header>
-                    <div class="wrapper">
-                        <h1><a href="index.html" id="logo">Vuelos</a></h1>                     
-                    </div>
+                <header>                    
                     <jsp:include page="includes/navbar.jsp" />
                 </header>
                 <!-- / header -->
