@@ -5,7 +5,7 @@
 <%
     City[] cities;
     cities = (City[]) request.getAttribute("cities");
-    if (cities == null){
+    if (cities == null) {
         request.setAttribute("referer", "vuelos.jsp");
         RequestDispatcher rd = request.getRequestDispatcher("Ciudades");
         rd.forward(request, response);
@@ -141,11 +141,15 @@
                     </article>
                     <!-- columna derecha -->
                     <article class="col2 pad_left1">
-                        <% if (f1) {
+                        <form method="POST" action="reservar.jsp">
+                            <input type="hidden" name="adultos" value="<%=request.getAttribute("adultos")%>"/>
+                            <input type="hidden" name="ninos" value="<%=request.getAttribute("ninos")%>"/>
+                            <% if (f1) {
 
-                        %>
-                        <h3>Vuelos Disponibles Ida</h3>
-                        <div class="wrapper under2" style="margin-bottom:2em;">                            
+                            %>
+
+                            <h3>Vuelos Disponibles Ida</h3>
+                            <div class="wrapper under2" style="margin-bottom:2em;">                            
                                 <div><table>
                                         <tr>
                                             <th>Aerol&iacute;nea</th>
@@ -164,23 +168,23 @@
                                             <td><%=f.getDestination().getCityName()%></td>
                                             <td><%=f.getAdult_Fare()%></td>
                                             <td><%=f.getChild_Fare()%></td>
-                                            <td><a href="/Reservar?flightNo=<%=f.getFlight_No() %>"><button class="button" value="Reservar" /></a></td>
+                                            <td><input name="flight1" type="radio" value="<%=f.getFlight_No()%>" /></td>
                                         </tr>
                                         <%
                                             }%>
                                     </table></div>                           
-                        </div>
-                        <% } else if (f2) {%>
-                        <h3> Vuelos de Ida no Disponibles </h3>
-                        <% } else {%>
-                        <h3> Puedes buscar vuelos en la parte izquierda </h3>
-                        <% }
-                            if (f2) {
+                            </div>
+                            <% } else if (f2) {%>
+                            <h3> Vuelos de Ida no Disponibles </h3>
+                            <% } else {%>
+                            <h3> Puedes buscar vuelos en la parte izquierda </h3>
+                            <% }
+                                if (f2) {
 
-                        %>
-                        <h3>Vuelos Disponibles Retorno</h3>
-                        <div class="wrapper under">
-                            
+                            %>
+                            <h3>Vuelos Disponibles Retorno</h3>
+                            <div class="wrapper under">
+
                                 <div><table>
                                         <tr>
                                             <th>Aerol&iacute;nea</th>
@@ -199,16 +203,21 @@
                                             <td><%=f.getDestination().getCityName()%></td>
                                             <td><%=f.getAdult_Fare()%></td>
                                             <td><%=f.getChild_Fare()%></td>
-                                            <td><a href="/Reservar?flightNo=<%=f.getFlight_No() %>"><button class="button" value="Reservar" /></a></td>
+                                            <td><input name ="flight2" type="radio" value="<%=f.getFlight_No()%>" /></a></td>
                                         </tr>
                                         <%
                                             }%>
                                     </table></div>
-                           
-                        </div>
-                        <% } else if (f1 && flights2 != null) {%>
-                        <h3> Vuelos de Retorno no Disponibles </h3>
-                        <% }%>
+
+                            </div>
+
+                            <% } else if (f1 && flights2 != null) {%>
+                            <h3> Vuelos de Retorno no Disponibles </h3>
+                            <% }if (f1 | f2){%>
+                            <input type="submit" class="button" value="Reservar" />
+                            <%
+                              }%>
+                        </form>
                         <h2>Datos de Pago</h2>
                         <div class="wrapper">
                             Boleto de <span class="city">Bangalore</span> to <span class="city">Chennai</span><br />

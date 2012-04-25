@@ -49,6 +49,8 @@ public class FlightServlet extends HttpServlet {
 
             Flight[] fs = Flight.getFlights(source, destiny, adults + kids, date1, h1, h2);
             request.setAttribute("flights", fs);
+            request.setAttribute("adultos", adults);
+            request.setAttribute("ninos", kids);
             if (isRoundTrip) {
                 Flight[] fs2 = Flight.getFlights(destiny, source, adults + kids, date2, h1, h2);
                 request.setAttribute("flights2", fs2);

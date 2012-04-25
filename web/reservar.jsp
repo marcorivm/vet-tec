@@ -4,6 +4,10 @@
 <%
     int adultos = 1;
     int ninos = 0;
+    Flight flightida = null;
+    Flight flightregreso = null;
+    int flightNo1 = -1;
+    int flightNo2 = -1;
 
     if (request.getParameter("adultos") != null) {
         adultos = Integer.parseInt(request.getParameter("adultos"));
@@ -11,9 +15,17 @@
     if (request.getParameter("ninos") != null) {
         ninos = Integer.parseInt(request.getParameter("ninos"));
     }
+    
+    if(request.getParameter("flight1")!= null){
+        flightNo1 = Integer.parseInt(request.getParameter("flight1"));
+        flightida = Flight.getFlight(flightNo1);
+    }
+    if(request.getParameter("flight2") != null){
+        flightNo2 = Integer.parseInt(request.getParameter("flight2"));
+        flightregreso = Flight.getFlight(flightNo2);
+    }
+    
 
-    Flight flight;
-    flight = (Flight) request.getAttribute("flight");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,13 +58,14 @@
                 <!-- content -->
                 <section id="content">
                     <!-- columna derecha -->
-                    <article class="col2 pad_left1">                        
+                    <article class="col2 pad_left1">
+                        <form method="POST" action="ReservarVuelo">
                         <h2>Reservar Vuelo</h2>
-                        <% if (flight != null) {%>
+                        <% if (flightida != null) {%>
                         <div class="wrapper under">
                             <div id="flightDetails" class="under">
-                                <h3>Revisar Detalles del Vuelo</h3>
-                                <div><span class="city"><%=flight.getSource().getCityName() %></span> --> <span class="city"><%=flight.getDestination().getCityName() %></span></div>
+                                <h3>Detalles del Vuelo de Ida</h3>
+                                <div><span class="city"><%=flightida.getSource().getCityName() %></span> --> <span class="city"><%=flightida.getDestination().getCityName() %></span></div>
                                 <div>
                                     <table>
                                         <tr>
@@ -62,16 +75,16 @@
                                             <th>Fecha de Llegada</th>
                                         </tr>
                                         <tr>
-                                            <td><%=flight.getFlight_No() %></td>
-                                            <td><%=flight.getAirline_Name() %></td>
-                                            <td><%=flight.getDeparture_Time() %></td>
-                                            <td><%=flight.getArrival_Time() %></td>
+                                            <td><%=flightida.getFlight_No() %></td>
+                                            <td><%=flightida.getAirline_Name() %></td>
+                                            <td><%=flightida.getDeparture_Time() %></td>
+                                            <td><%=flightida.getArrival_Time() %></td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
                             <div id="fareDetails">
-                                <h3>Revisar Detalles de la Tarifa</h3>
+                                <h3>Detalles de la Tarifa de Vuelo de Ida</h3>
                                 <div>
                                     <table>
                                         <tr>
@@ -84,16 +97,16 @@
                                         <tr>
                                             <td>Adultos</td>
                                             <td><%=adultos %></td>
-                                            <td>$ <%=flight.getAdult_Fare()*adultos %> (<%=flight.getAdult_Fare() %> x <%=adultos %>)</td>  
-                                            <td>$ <%=flight.getAirport_Tax() %></td>
-                                            <td>$ <%=(flight.getAdult_Fare()*adultos + flight.getAirport_Tax()) %></td>
+                                            <td>$ <%=flightida.getAdult_Fare()*adultos %> (<%=flightida.getAdult_Fare() %> x <%=adultos %>)</td>  
+                                            <td>$ <%=flightida.getAirport_Tax() %></td>
+                                            <td>$ <%=(flightida.getAdult_Fare()*adultos + flightida.getAirport_Tax()) %></td>
                                         </tr>
                                         <tr>
                                             <td>Ni&ntilde;os</td>
                                             <td><%=ninos %></td>
-                                            <td>$ <%=flight.getChild_Fare()*ninos %> (<%=flight.getChild_Fare() %> x <%=ninos %>)</td>  
-                                            <td>$ <%=flight.getAirport_Tax() %></td>
-                                            <td>$ <%=(flight.getChild_Fare()*ninos + flight.getAirport_Tax()) %></td>
+                                            <td>$ <%=flightida.getChild_Fare()*ninos %> (<%=flightida.getChild_Fare() %> x <%=ninos %>)</td>  
+                                            <td>$ <%=flightida.getAirport_Tax() %></td>
+                                            <td>$ <%=(flightida.getChild_Fare()*ninos + flightida.getAirport_Tax()) %></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -102,7 +115,67 @@
                                 <br />
                                 <span class="floatRight">
                                     -------------------------<br />
-                                    Total: $ <%=((flight.getAdult_Fare()*adultos + flight.getAirport_Tax()) + (flight.getChild_Fare()*ninos + flight.getAirport_Tax())) %><br />
+                                    Total: $ <%=((flightida.getAdult_Fare()*adultos + flightida.getAirport_Tax()) + (flightida.getChild_Fare()*ninos + flightida.getAirport_Tax())) %><br />
+                                    -------------------------
+                                </span>
+                            </div>
+                        </div>
+                        <% }%>
+                        <% if (flightregreso != null) {%>
+                        <div class="wrapper under">
+                            <div id="flightDetails" class="under">
+                                <h3>Detalles del Vuelo de Regreso</h3>
+                                <div><span class="city"><%=flightregreso.getSource().getCityName() %></span> --> <span class="city"><%=flightregreso.getDestination().getCityName() %></span></div>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <th>N&uacute;mero de Vuelo</th>
+                                            <th>Aerol&iacute;nea</th>
+                                            <th>Fecha de Salida</th>
+                                            <th>Fecha de Llegada</th>
+                                        </tr>
+                                        <tr>
+                                            <td><%=flightregreso.getFlight_No() %></td>
+                                            <td><%=flightregreso.getAirline_Name() %></td>
+                                            <td><%=flightregreso.getDeparture_Time() %></td>
+                                            <td><%=flightregreso.getArrival_Time() %></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="fareDetails">
+                                <h3>Detalles de la Tarifa de Vuelo de Regreso</h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <th>Tipo de Tarifa</th>
+                                            <th>Asientos</th>
+                                            <th>Tarifa Base</th>
+                                            <th>Impuestos</th>
+                                            <th>Total incluyendo Impuestos</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Adultos</td>
+                                            <td><%=adultos %></td>
+                                            <td>$ <%=flightregreso.getAdult_Fare()*adultos %> (<%=flightregreso.getAdult_Fare() %> x <%=adultos %>)</td>  
+                                            <td>$ <%=flightregreso.getAirport_Tax() %></td>
+                                            <td>$ <%=(flightregreso.getAdult_Fare()*adultos + flightregreso.getAirport_Tax()) %></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ni&ntilde;os</td>
+                                            <td><%=ninos %></td>
+                                            <td>$ <%=flightregreso.getChild_Fare()*ninos %> (<%=flightregreso.getChild_Fare() %> x <%=ninos %>)</td>  
+                                            <td>$ <%=flightregreso.getAirport_Tax() %></td>
+                                            <td>$ <%=(flightregreso.getChild_Fare()*ninos + flightregreso.getAirport_Tax()) %></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div>               
+                                <br />
+                                <span class="floatRight">
+                                    -------------------------<br />
+                                    Total: $ <%=((flightregreso.getAdult_Fare()*adultos + flightregreso.getAirport_Tax()) + (flightregreso.getChild_Fare()*ninos + flightregreso.getAirport_Tax())) %><br />
                                     -------------------------
                                 </span>
                             </div>
@@ -171,6 +244,7 @@
                             </div>
                             <% }%>
                         </div>
+                        <input type="submit" class="button" value="Reservar" />
                         <h2>Datos de Pago</h2>
                         <div class="wrapper">
                             Boleto de <span class="city">Bangalore</span> to <span class="city">Chennai</span><br />
@@ -203,6 +277,7 @@
                         </div>
                         Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda. error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorehjum ipsum quia dolor sit amet, consectetur vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.
                         -->
+                        </form>
                     </article>
                 </section>
                 <!-- / content -->
