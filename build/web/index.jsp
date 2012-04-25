@@ -5,9 +5,7 @@
     cities = (City[]) request.getAttribute("cities");
 
     if (cities == null) {
-%> <jsp:forward page="Ciudades" >
-    <jsp:param name="referer" value="index.jsp" />
-</jsp:forward><%
+        request.setAttribute("referer", "index.jsp");
 
         RequestDispatcher rd = request.getRequestDispatcher("Ciudades");
         rd.forward(request, response);
@@ -30,8 +28,8 @@
         <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/layout.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/style.css" type="text/css" media="all">
-        <link rel="stylesheet" href="css/jquery.datepick.css" type="text/css" media="all">
-        <script type="text/javascript" src="js/jquery-1.4.2.js" ></script>
+        <link rel="stylesheet" href="css/jquery.datepick.css" type="text/css" media="all">        
+        <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
         <script type="text/javascript" src="js/cufon-yui.js"></script>
         <script type="text/javascript" src="js/cufon-replace.js"></script>
         <script type="text/javascript" src="js/Myriad_Pro_600.font.js"></script>
@@ -46,10 +44,7 @@
         <div class="extra">
             <div class="main">
                 <!-- header -->
-                <header>
-                    <div class="wrapper">
-                        <h1><a href="index.jsp" id="logo">Around the World</a></h1>
-                    </div>
+                <header>                    
                     <jsp:include page="includes/navbar.jsp" />
                     <article class="col1">
                         <ul class="tabs">
@@ -161,7 +156,7 @@
                                             <input type ="radio" name="type" id="type" value="deluxe"/>                                                
                                             <label for="deluxe">Cuartos Deluxe</label> <br/>
                                             <input type="radio" name ="type" id="type" value="exe" />
-                                            <i<label for="exe">Cuartos Exe</label>
+                                            <label for="exe">Cuartos Exe</label>
                                         </div>
                                         <div>
                                             <input type="submit" class="button" value="Buscar" />
@@ -175,7 +170,7 @@
                             <img src="images/text1.jpg" alt="">
                             <h2>Las mejores Ofertas</h2>
                             <p>AroundtheWorld es una empresa que se dedica al turismo. Tenemos las mejores ofertas del mercado en Vuelos y Hoteles.</p>
-                        </div>
+                        </div>                       
                     </article>
                     <div class="img"><img src="images/img.jpg" alt=""></div>
                 </header><div class="ic">More Website Templates at TemplateMonster.com!</div>
@@ -229,11 +224,7 @@
         </div>
         <div class="body1">
             <div class="main">
-                <!-- footer -->
-                <footer>
-
-                </footer>
-                <!-- / footer -->
+                <jsp:include page="includes/footer.jsp" />
             </div>
         </div>
         <script type="text/javascript">

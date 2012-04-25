@@ -252,7 +252,7 @@ header {
 .img {
     position: absolute;
     right: 0px;
-    top: 203px;
+    top: 213px;
 }
 .text {
     padding: 7px 0 0 36px;
@@ -539,4 +539,19 @@ table, table td, th, tr {
 
 .bold {
     font-weight: bold;
+}
+
+#top_header {
+    text-align: center;
+}
+
+#top_header table, #top_header table tr {
+    border: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#top_header table tr td  {
+    border: none;    
+    width: 116px;
 }
