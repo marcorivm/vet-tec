@@ -17,7 +17,9 @@ public class ConnectionManager {
      * Initializes the <tt>con</tt> object of type {@link Connection}
      */
     public static void init() {
-        pool = new ConnectionPool();
+        if(pool == null){
+            pool = new ConnectionPool();
+        }
     }
 
 
@@ -44,7 +46,7 @@ public class ConnectionManager {
      * @throws SQLException  
      */
     public static boolean update(String[][] fields, String table, String whereClause) throws SQLException {
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
         String query = "UPDATE " + table + " SET " + fields[0][0] + "='" + fields[0][1] + "'";
         for (int i = 1; i < fields.length; i++) {
             query += ", " + fields[i][0] + "='" + fields[i][1] + "'";
@@ -101,7 +103,7 @@ public class ConnectionManager {
      * @throws SQLException 
      */
     public static ResultSet select(String[] fields, String table, String whereClause) throws SQLException {
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
         String query = "SELECT " + fields[0];
         for (int i = 1; i < fields.length; i++) {
             query += ", " + fields[i];
@@ -123,7 +125,7 @@ public class ConnectionManager {
      * @throws SQLException
      */
     public static boolean insert(String[] values, String table) throws SQLException {
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
         String query = "INSERT INTO " + table + " VALUES ('" + values[0] + "'";
         for (int i = 1; i < values.length; i++) {
             query += ", '" + values[i] + "'";
@@ -141,7 +143,7 @@ public class ConnectionManager {
      * @throws SQLException 
      */
     public static int insertAndGetKey(String[][] fields, String table) throws SQLException {
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
         String query = "INSERT INTO `" + table +"`";
         String columns = "(`" + fields[0][0]+"`";
         String values = " (" + fields[0][1] + "";
@@ -167,7 +169,7 @@ public class ConnectionManager {
      * @throws SQLException
      */
     public static boolean insert(String[][] fields, String table) throws SQLException {
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
         String query = "INSERT INTO " + table+"";
         String columns = " (" + fields[0][0]+"";
         String values = " ('" + fields[0][1] + "'";
@@ -201,7 +203,7 @@ public class ConnectionManager {
      * @throws SQLException
      */
     public static boolean delete(String table, String whereClause) throws SQLException {
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
         String query = "DELETE FROM " + table;
         if (!whereClause.isEmpty()) {
             query += " WHERE " + whereClause;
@@ -216,7 +218,7 @@ public class ConnectionManager {
      * @throws SQLException 
      */
     public static Connection initTransaction() throws SQLException{
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
         con.setAutoCommit(false);
         return con;
     }
