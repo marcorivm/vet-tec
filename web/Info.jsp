@@ -6,10 +6,11 @@
         <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/layout.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/style.css" type="text/css" media="all">
-        <script type="text/javascript" src="js/jquery-1.4.2.js" ></script>
+        <script type="text/javascript" src="js/jquery-1.7.1.min.js" ></script>
         <script type="text/javascript" src="js/cufon-yui.js"></script>
         <script type="text/javascript" src="js/cufon-replace.js"></script>  
         <script type="text/javascript" src="js/Myriad_Pro_600.font.js"></script>
+        <script type="text/javascript" src="js/vet.js"></script>
         <!--[if lt IE 9]>
                 <script type="text/javascript" src="http://info.template-help.com/files/ie6_warning/ie6_script_other.js"></script>
                 <script type="text/javascript" src="js/html5.js"></script>
@@ -20,9 +21,6 @@
             <div class="main">
                 <!-- header -->
                 <header>
-                    <div class="wrapper">
-                        <h1><a href="index.jsp" id="logo">Around the World</a></h1>				
-                    </div>
                     <jsp:include page="includes/navbar.jsp" />
                     <div class="text">
                         <img src="images/text1.jpg" alt="">
@@ -68,12 +66,7 @@
         </div>
         <div class="body1">
             <div class="main">
-                <!-- footer -->
-                <footer>
-                    <a rel="nofollow" href="http://www.templatemonster.com/" target="_blank">Website template</a> designed by TemplateMonster.com<br>
-                    <a href="http://www.templates.com/product/3d-models/" target="_blank">3D Models</a> provided by Templates.com
-                </footer>
-                <!-- / footer -->
+                <jsp:include page="includes/footer.jsp" />
             </div>
         </div>
         <script type="text/javascript"> Cufon.now(); </script>

@@ -22,6 +22,19 @@ function mostrarForma(tipo){
         hotel.style.display = "none";
         document.getElementById("opcionVuelo").setAttribute("class", "active")
         document.getElementById("opcionHotel").setAttribute("class", "")
-    }
-  
+    }  
+}
+
+function animacionHeader(imagenes) {
+    var img0 = $(imagenes[0]);
+    var img1 = $(imagenes[1]);
+    var img2 = $(imagenes[2]);
+    
+    
+    img0.fadeToggle(1000, function() {
+        img1.fadeToggle(1000, function() {
+            img2. fadeToggle(1000);
+        });
+    });
+    
 }

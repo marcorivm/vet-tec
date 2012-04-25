@@ -1,3 +1,11 @@
+<script>
+    var imagenes = $("#table_imgs img");
+            
+    window.setInterval(function () {
+        animacionHeader(imagenes);
+    }, 3000)
+</script>
+
 <!-- footer -->
 <footer>
     Protecto VET<br />
