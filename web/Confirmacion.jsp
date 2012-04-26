@@ -32,7 +32,7 @@
                     <jsp:include page="includes/navbar.jsp" />
                     <div class="wrapper" style="text-align: center">
                         <h3>Confirmacion Reservacion</h3>
-                        <% if (!mensaje.equalsIgnoreCase("success")) {
+                        <% if (mensaje.equalsIgnoreCase("success")) {
                         %>
                         <h2>La reservacion fue exitosa</h2>
                         <%
