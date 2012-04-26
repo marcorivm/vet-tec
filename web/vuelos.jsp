@@ -168,7 +168,7 @@
                                             <td><%=f.getDestination().getCityName()%></td>
                                             <td><%=f.getAdult_Fare()%></td>
                                             <td><%=f.getChild_Fare()%></td>
-                                            <td><input name="flight1" type="radio" value="<%=f.getFlight_No()%>" /></td>
+                                            <td><input name="flightTo" type="radio" value="<%=f.getFlight_No()%>" /></td>
                                         </tr>
                                         <%
                                             }%>
@@ -203,7 +203,7 @@
                                             <td><%=f.getDestination().getCityName()%></td>
                                             <td><%=f.getAdult_Fare()%></td>
                                             <td><%=f.getChild_Fare()%></td>
-                                            <td><input name ="flight2" type="radio" value="<%=f.getFlight_No()%>" /></a></td>
+                                            <td><input name ="flightFrom" type="radio" value="<%=f.getFlight_No()%>" /></a></td>
                                         </tr>
                                         <%
                                             }%>
@@ -218,7 +218,7 @@
                             <%
                               }%>
                         </form>
-                        <h2>Datos de Pago</h2>
+                        <!--<h2>Datos de Pago</h2>
                         <div class="wrapper">
                             Boleto de <span class="city">Bangalore</span> to <span class="city">Chennai</span><br />
                             Adultos <span class="bold">3</span><br />
@@ -228,7 +228,7 @@
                             Impuestos <span class="bold">$ 800</span><br />
                             Total <span class="bold">$ 9800</span><br />
                             <input type="button" class="button" value="Hacer Pago" onclick="(function() { alert('Payment Succesful!'); })();" /><br />
-                        </div>                        
+                        </div> -->                       
                     </article>
                 </section>
                 <!-- / content -->

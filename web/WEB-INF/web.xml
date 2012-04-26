@@ -42,6 +42,10 @@
         <servlet-name>ReservarP</servlet-name>
         <servlet-class>Servlets.ReservarP</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PrepareOfr</servlet-name>
+        <servlet-class>Servlets.PrepareOfr</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>FlightServlet</servlet-name>
         <url-pattern>/FlightServlet</url-pattern>
@@ -73,6 +77,10 @@
     <servlet-mapping>
         <servlet-name>ReservarP</servlet-name>
         <url-pattern>/ReservarP</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PrepareOfr</servlet-name>
+        <url-pattern>/PrepareOfr</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
