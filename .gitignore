@@ -1,4 +1,4 @@
 context.xml
-/dist/
-/nbproject/
-/build/
+/dist
+/nbproject
+/build
