@@ -42,11 +42,11 @@ public class ReservarP extends HttpServlet {
 
         try {
 
-            Flight_Booking fbTo = (Flight_Booking) request.getAttribute("flightTo");
+            Flight_Booking fbTo = (Flight_Booking) request.getSession().getAttribute("fbTo");
             String fbToId = "";
-            Flight_Booking fbFrom = (Flight_Booking) request.getAttribute("flightFrom");
+            Flight_Booking fbFrom = (Flight_Booking) request.getSession().getAttribute("fbFrom");
             String fbFromId = "";
-            Hotel_Booking hotel = (Hotel_Booking) request.getAttribute("hotel");
+            Hotel_Booking hotel = (Hotel_Booking) request.getSession().getAttribute("hb");
             String hotelId = "";
 
             double discount = 0.0;

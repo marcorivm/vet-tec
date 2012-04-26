@@ -46,6 +46,10 @@
         <servlet-name>PrepareOfr</servlet-name>
         <servlet-class>Servlets.PrepareOfr</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SaveFB</servlet-name>
+        <servlet-class>Servlets.SaveFB</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>FlightServlet</servlet-name>
         <url-pattern>/FlightServlet</url-pattern>
@@ -81,6 +85,10 @@
     <servlet-mapping>
         <servlet-name>PrepareOfr</servlet-name>
         <url-pattern>/PrepareOfr</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SaveFB</servlet-name>
+        <url-pattern>/SaveFB</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

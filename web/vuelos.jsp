@@ -110,20 +110,18 @@
                                             <div class="wrapper pad_bot1">
                                                 Adultos<br />
                                                 <select name="adults">
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                    <option value="35">35</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
                                                 </select><br />
-                                                Niños<br />
+                                                Ni&ntilde;os<br />
                                                 <select name="kids">
-                                                    <option>0</option>
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                    <option>5</option>
+                                                    <option value="0">0</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
                                                 </select><br />
                                             </div>
                                             <div>
@@ -143,8 +141,11 @@
                     <!-- columna derecha -->
                     <article class="col2 pad_left1">
                         <form method="POST" action="reservar.jsp">
-                            <input type="hidden" name="adultos" value="<%=request.getAttribute("adultos")%>"/>
-                            <input type="hidden" name="ninos" value="<%=request.getAttribute("ninos")%>"/>
+                            <input type="hidden" name="adultos" id="adultos" value="<%=request.getAttribute("adultos")%>"/>
+                            <input type="hidden" name="ninos" id="ninos" value="<%=request.getAttribute("ninos")%>"/>
+                            <input type="hidden" name="date1" id="date1" value="${date1}"/>
+                            <input type="hidden" name="date2" id="date2" value="${date2}"/>
+                            
                             <% if (f1) {
 
                             %>

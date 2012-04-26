@@ -17,12 +17,12 @@
         ninos = Integer.parseInt(request.getParameter("ninos"));
     }
 
-    if (request.getParameter("flight1") != null) {
-        flightNo1 = Integer.parseInt(request.getParameter("flight1"));
+    if (request.getParameter("flightTo") != null) {
+        flightNo1 = Integer.parseInt(request.getParameter("flightTo"));
         flightida = Flight.getFlight(flightNo1);
     }
-    if (request.getParameter("flight2") != null) {
-        flightNo2 = Integer.parseInt(request.getParameter("flight2"));
+    if (request.getParameter("flightFrom") != null) {
+        flightNo2 = Integer.parseInt(request.getParameter("flightFrom"));
         flightregreso = Flight.getFlight(flightNo2);
     }
 
@@ -61,6 +61,13 @@
                     <!-- columna derecha -->
                     <article class="col2 pad_left1">
                         <form method="POST" action="SaveFB">
+                            <input type="hidden" name="flightTo" id="flightTo" value="<%=flightNo1%>" />
+                            <input type="hidden" name="flightFrom" id="flightFrom" value="<%=flightNo2%>" />
+                            <input type="hidden" name="adultos" id="adultos" value="<%=request.getParameter("adultos")%>" />
+                            <input type="hidden" name="ninos" id="ninos" value="<%=request.getParameter("ninos")%>" />
+                            <input type="hidden" name="date1" id="date1" value="<%=request.getParameter("date1")%>" />
+                            <input type="hidden" name="date2" id="date2" value="<%=request.getParameter("date2")%>" />
+                            
                             <h2>Reservar Vuelo</h2>
                             <% if (flightida != null) {%>
                             <div class="wrapper under">
@@ -214,7 +221,7 @@
                                         </tr>
                                         <tr>
                                         <div class="form">
-                                            <td><label for="lemail1">E-mail: </label></td>
+                                            <td><label for="email1">E-mail: </label></td>
                                             <td><input type="text" name="lemail1" id="lemail1" /></td>
                                         </div>
                                         </tr>
