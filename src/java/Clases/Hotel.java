@@ -121,7 +121,7 @@ public class Hotel {
      * Hotel
      */
     public static Hotel[] getHotels(City _location) throws SQLException {
-        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Hotel_Details_Groupno", "location='" + _location.getCityCode() +"'");
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Hotel_Details_GroupNo", "location='" + _location.getCityCode() +"'");
         if (rs.next()) {
             ArrayList hotelArrayList = new ArrayList();
             Hotel h[];

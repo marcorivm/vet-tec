@@ -127,7 +127,7 @@ public class ReservarP extends HttpServlet {
                         {"NoOfDeluxRooms", hotel.getNoOfDeluxeRooms() + ""},
                         {"NoOfExeRooms", hotel.getNoOfExeRooms() + ""},};
 
-                    isOk = ConnectionManager.insert(fields, "Tbl_Flight_Booking_GroupNo", con);
+                    isOk = ConnectionManager.insert(fields, "Tbl_Hotel_Booking_GroupNo", con);
 
                     if (!isOk) {
                         throw new SQLException("Error registering Hotel_Booking ");
@@ -157,11 +157,11 @@ public class ReservarP extends HttpServlet {
                     {"name", name},
                     {"email", email},};
 
-                int id = ConnectionManager.insertAndGetKey(fields, name, con);
+                int id = ConnectionManager.insertAndGetKey(fields, "Tbl_Packages", con);
                 isOk = (id > 0);
 
                 if (!isOk) {
-                    throw new SQLException("Error registering Hotel_Booking ");
+                    throw new SQLException("Error registering Package_Booking ");
                 }
                 ConnectionManager.commit(con);
                 
