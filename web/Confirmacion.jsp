@@ -40,8 +40,19 @@
                             if (request.getParameter("bookingId") != null) {
                                 bookingId = Integer.parseInt(request.getParameter("bookingId"));
                             }
+                            String folio = "ABCD1234";
+                            if (request.getParameter("folio") != null) {
+                                folio = request.getParameter("folio");
+                            }
                         %>
-                        <span>Para ver los detalles de la reservacion haz clic <a href="Reservacion?bookingId=<%=bookingId%>">aqu&iacute;</a></span>
+                        <div class="wrapper">Para ver los detalles de la reservacion haz clic <a href="Reservacion?bookingId=<%=bookingId%>">aqu&iacute;</a>
+                        <br />
+                        <br />
+                        Puedes realizar tu pago en los establecimientos participantes
+                        <br />
+                        utilizando el siguiente n&uacute;mero de folio:
+                        <span style="font-weight: bold"><%=folio %></span>
+                        </div>
                         <% } else {%>
                         <h2>No se pudo realizar la reservacion</h2>
                         <% }%>
