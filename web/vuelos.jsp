@@ -177,7 +177,21 @@
                             <% } else if (f2) {%>
                             <h3> Vuelos de Ida no Disponibles </h3>
                             <% } else {%>
-                            <h3> Puedes buscar vuelos en la parte izquierda </h3>
+                            <article class="col2 pad_left1">
+                                <h2>Nuestros Vuelos</h2>
+                                <div class="wrapper under">
+                                    <figure class="left marg_right1"><img src="images/vuelos1.jpg" alt=""></figure>
+                                    <p class="pad_bot2"><strong>Vuelos Directos a Turqu&iacute;a</strong></p>
+                                    <p class="pad_bot2">Recientemente hemos adquirido más vuelos partiendo hacia y desde Turqu&iacute;a. Tenemos una gran variedad de vuelos con escalas, as&iacute; como vuelos directos.</p>
+                                    <p class="pad_bot2">Si quieres visitar Turqu&iacute;a no puedes dejar pasar esta oportunidad. Reserva tu vuelo y de paso podr&aacute;s reservar en uno de los mejores hoteles para hacer de tus vacaciones una estancia inolvidable.</p>                          
+                                </div>
+                                <div class="wrapper">
+                                    <figure class="left marg_right1"><img src="images/vuelos2.jpg" alt=""></figure>
+                                    <p class="pad_bot2"><strong>Vuelos a Sudam&eacute;rica</strong></p>
+                                    <p class="pad_bot2">Contamos con la mayor cantidad de vuelos con los destinos m&aacute;s populares en el continente americano. Destinos como Chile, Buenos Aires, Bogot&aacute;, Lima, Rio de Janeiro, entre otros est&aacute;n disponibles para que armes tu viaje perfecto.</p>
+                                    <p class="pad_bot2">Consulte los vuelos que tenemos disponibles ahora mismo. Contamos con vuelos diarios a las principales ciudades sudamericanas.</p>                          
+                                </div>
+                            </article>
                             <% }
                                 if (f2) {
 
@@ -213,10 +227,10 @@
 
                             <% } else if (f1 && flights2 != null) {%>
                             <h3> Vuelos de Retorno no Disponibles </h3>
-                            <% }if (f1 | f2){%>
+                            <% }
+                                if (f1 | f2) {%>
                             <input type="submit" class="button" value="Reservar" />
-                            <%
-                              }%>
+                            <%                                }%>
                         </form>
                         <!--<h2>Datos de Pago</h2>
                         <div class="wrapper">

@@ -3,7 +3,7 @@
             
     window.setInterval(function () {
         animacionHeader(imagenes);
-    }, 3000)
+    }, 4500)
 </script>
 
 <!-- footer -->

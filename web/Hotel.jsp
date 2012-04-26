@@ -84,7 +84,7 @@
                                                 <input type ="radio" name="type" id="type" value="deluxe"/>                                                
                                                 <label for="deluxe">Cuartos Deluxe</label> <br/>
                                                 <input type="radio" name ="type" id="type" value="exe" />
-                                                <i<label for="exe">Cuartos Exe</label>
+                                                <label for="exe">Cuartos Exe</label>
                                             </div>
                                             <div>
                                                 <input type="submit" class="button" value="Buscar" />
@@ -158,12 +158,24 @@
                             </div>
                         </div>
                         <% } else {%>
-                        <h3>No hay resultados.</h3>
-                        <h2>Tips e Informacion</h2>
-                        <p>
-                        Te recordamos que en la mayoría de los hoteles la hora de check-in es a las 3:00 PM.
-                        La hora de check-out generalmente es a las 12:00 PM.
-                        </p>
+                        <h3>No hay resultados</h3>
+                        <article class="col2 pad_left1">
+                            <h2>Hoteles Populares</h2>
+                            <div class="wrapper under">
+                                <figure class="left marg_right1"><img src="images/page1_img4.jpg" alt=""></figure>
+                                <p class="pad_bot2"><strong>Helmsley Park Lane</strong></p>
+                                <p class="pad_bot2">Helmsley Park Lane ® es un hotel de lujo de 46 historias con las vistas panorámicas de Central Park  y el horizonte de la Ciudad de Nueva York . Sus espacios son amplios, elegantes y sus suites ofrecen ventanales y vistas magníficas. Se disfruta de un ambiente clásico, comodidad y conveniencia para una experiencia &uacute;nica en la ciudad líder mundial más extraordinaria.</p>
+                                <p class="pad_bot2"> Localizada en el Central Park en Nueva York, justo en el centro del distrito de negocios, este hotel esta a una corta distancia de la 5ta Avenida, Broadway, Radio City, entre otras atracciones.</p>
+                                <a href="#" class="marker_2"></a>
+                            </div>
+                            <div class="wrapper">
+                                <figure class="left marg_right1"><img src="images/page1_img5.jpg" alt=""></figure>
+                                <p class="pad_bot2"><strong>Belmont</strong></p>
+                                <p class="pad_bot2">El hotel Belmont es un establecimiento distendido de 3 estrellas. Dotado de un notable confort tecnológico y unos espacios sorprendentes, es un remanso de paz con una atmósfera relajante. Nuestro amable personal le informará sobre las visitas más interesantes de su barrio de los Campos Elíseos para lograr que su estancia le resulte inolvidable.</p>
+                                <p class="pad_bot2">Situado a un centenar de metros de los Campos Elíseos, el hotel Belmont le ofrece un acceso inmediato a las lujosas boutiques de las avenidas Montaigne y George V.</p>
+                                <a href="#" class="marker_2"></a>
+                            </div>
+                        </article>
                         <% }%>
                     </article>
                 </section>

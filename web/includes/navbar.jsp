@@ -3,9 +3,9 @@
     <div id="top_header">
         <table id="table_imgs">
             <tr>
-                <td><img src="images/slider.jpg" /></td>
-                <td><img src="images/slider.jpg" /></td>
-                <td><img src="images/slider.jpg" /></td>                                    
+                <td><img src="images/slider1.jpg" /></td>
+                <td><img src="images/slider2.jpg" /></td>
+                <td><img src="images/slider3.jpg" /></td>                                    
             </tr>
         </table>
     </div>
