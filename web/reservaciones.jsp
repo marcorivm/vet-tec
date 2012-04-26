@@ -210,16 +210,20 @@
                                     </select>
                                 </div>
                                 <div class="form">
+                                    <label for="lname1">Apellidos: </label>
+                                    <input type="text" name="lname1" id="lname1" />
+                                </div>
+                                <div class="form">
                                     <label for="fname1">Nombre: </label>
                                     <input type="text" name="fname1" id="fname1" />
                                 </div>
                                 <div class="form">
-                                    <label for="lname1">Apellidos: </label>
-                                    <input type="text" name="lname1" id="lname1" />
+                                    <label for="email">E-mail: </label>
+                                    <input type="text" name="email1" id="email1" />
                                 </div>
                             </div>
                         </div>
-                        <!-- ninos -->
+                        <!-- ninos
                         <div class="wrapper under">
                             <div class="wrapper">
                                 <h3>Ni;ntilde;o 1</h3>
@@ -232,7 +236,7 @@
                                     <input type="text" name="child-lname1" id="child-lname1" />
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <h2>Datos de Pago</h2>
                         <div class="wrapper">
                             Boleto de <span class="city">Bangalore</span> to <span class="city">Chennai</span><br />
