@@ -31,9 +31,9 @@ function animacionHeader(imagenes) {
     var img2 = $(imagenes[2]);
     
     
-    img0.fadeToggle(1000, function() {
-        img1.fadeToggle(1000, function() {
-            img2. fadeToggle(1000);
+    img0.fadeToggle(1500, function() {
+        img1.fadeToggle(1500, function() {
+            img2. fadeToggle(1500);
         });
     });
     
