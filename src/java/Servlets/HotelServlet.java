@@ -37,6 +37,15 @@ public class HotelServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        /*
+         * Por motivmos de tiempo no hay revisiones de seguridad e integridad pero
+         * se debe realizar si hay tiempo
+         * Pametros esperados (GET/POST)
+         * start_date - Fecha de inicio de la reservacion
+         * finish_date - Fecha de finalización de la reservación
+         * location - Id del hotel
+         * room_type - tipo de habitación
+         */
         
         String city = request.getParameter("city");
         String date1 = request.getParameter("date1");
