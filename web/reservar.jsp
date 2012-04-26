@@ -17,12 +17,12 @@
         ninos = Integer.parseInt(request.getParameter("ninos"));
     }
 
-    if (request.getParameter("flight1") != null) {
-        flightNo1 = Integer.parseInt(request.getParameter("flight1"));
+    if (request.getParameter("flightTo") != null) {
+        flightNo1 = Integer.parseInt(request.getParameter("flightTo"));
         flightida = Flight.getFlight(flightNo1);
     }
-    if (request.getParameter("flight2") != null) {
-        flightNo2 = Integer.parseInt(request.getParameter("flight2"));
+    if (request.getParameter("flightFrom") != null) {
+        flightNo2 = Integer.parseInt(request.getParameter("flightFrom"));
         flightregreso = Flight.getFlight(flightNo2);
     }
 
