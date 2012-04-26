@@ -24,7 +24,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>About</title>
+        <title>Vuelos</title>
         <meta charset="utf-8">
         <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/layout.css" type="text/css" media="all">
@@ -98,12 +98,13 @@
                                                 <label for="timeTo">a</label>
                                                 <select name="timeTo" id="timeTo">
                                                     <%
-                                                        for (int i = 7; i <= 23; i++) {
+                                                        for (int i = 7; i < 23; i++) {
                                                     %>
                                                     <option value="<%=i%>"><%=i%></option>    
                                                     <%
                                                         }
                                                     %>
+                                                    <option value="23" selected="selected">23</option>
                                                 </select>
                                             </div>
                                             <div class="wrapper pad_bot1">

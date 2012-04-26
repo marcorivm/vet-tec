@@ -31,7 +31,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>About</title>
+        <title>Seleccionar Vuelos</title>
         <meta charset="utf-8">
         <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/layout.css" type="text/css" media="all">
@@ -60,7 +60,7 @@
                 <section id="content">
                     <!-- columna derecha -->
                     <article class="col2 pad_left1">
-                        <form method="POST" action="ReservarVuelo">
+                        <form method="POST" action="SaveFB">
                             <h2>Reservar Vuelo</h2>
                             <% if (flightida != null) {%>
                             <div class="wrapper under">
@@ -202,14 +202,14 @@
                                         </tr>
                                         <tr>
                                         <div class="form">
-                                            <td><label for="fname1">Nombre: </label></td>
-                                            <td><input type="text" name="fname1" id="fname1" /></td>
+                                            <td><label for="lname1">Apellidos: </label></td>
+                                            <td><input type="text" name="lname1" id="lname1" /></td>
                                         </div>
                                         </tr>
                                         <tr>
                                         <div class="form">
-                                            <td><label for="lname1">Apellidos: </label></td>
-                                            <td><input type="text" name="lname1" id="lname1" /></td>
+                                            <td><label for="fname1">Nombre: </label></td>
+                                            <td><input type="text" name="fname1" id="fname1" /></td>
                                         </div>
                                         </tr>
                                         <tr>
@@ -240,14 +240,14 @@
                                         </tr>
                                         <tr>
                                         <div class="form">
-                                            <td><label for="fname<%=i%>">Nombre: </label></td>
-                                            <td><input type="text" name="fname<%=i%>" id="fname<%=i%>" /></td>
+                                            <td><label for="lname<%=i%>">Apellidos: </label></td>
+                                            <td><input type="text" name="lname<%=i%>" id="lname<%=i%>" /></td>
                                         </div>
                                         </tr>
                                         <tr>
                                         <div class="form">
-                                            <td><label for="lname<%=i%>">Apellidos: </label></td>
-                                            <td><input type="text" name="lname<%=i%>" id="lname<%=i%>" /></td>
+                                            <td><label for="fname<%=i%>">Nombre: </label></td>
+                                            <td><input type="text" name="fname<%=i%>" id="fname<%=i%>" /></td>
                                         </div>
                                         </tr>
                                         <tr>
@@ -267,55 +267,24 @@
                                 <div class="wrapper pad_bot1">
                                     <h3>Infante <%=i%></h3>
                                     <div class="form">
-                                        <label for="child-fname<%=i%>">Nombre: </label>
-                                        <input type="text" name="child-fname<%=i%>" id="child-fname<%=i%>" />
-                                    </div>
-                                    <div class="form">
                                         <label for="child-lname<%=i%>">Apellidos: </label>
                                         <input type="text" name="child-lname<%=i%>" id="child-lname<%=i%>" />
+                                    </div>
+                                    <div class="form">
+                                        <label for="child-fname<%=i%>">Nombre: </label>
+                                        <input type="text" name="child-fname<%=i%>" id="child-fname<%=i%>" />
                                     </div>
                                 </div>
                                 <% }%>
                             </div>
                             <input type="submit" class="button" value="Reservar" />
                             <% Customer[] customers = Customer.getCustomers(); %>
+                            <label for="customerId">Agente de Ventas:</label>
                             <select name="customerId" id="customerId">
                                 <% for(int i = 0; i < customers.length; i++){ %>
                                 <option value="<%= customers[i].getCustomerID() %>"><%= customers[i].getFirstName() %> <%= customers[i].getLastName() %></option>
                                 <% } %>
                             </select>
-                            <!--<h2>Datos de Pago</h2>
-                            <div class="wrapper">
-                                Boleto de <span class="city">Bangalore</span> to <span class="city">Chennai</span><br />
-                                Adultos <span class="bold">3</span><br />
-                                Ni&ntilde;os <span class="bold">2</span><br />
-                                Tarifa Total Adultos <span class="bold">$ 5000</span><br />
-                                Tarifa Total Ni&ntilde;os <span class="bold">$ 4000</span><br />
-                                Impuestos <span class="bold">$ 800</span><br />
-                                Total <span class="bold">$ 9800</span><br />
-                                <input type="button" class="button" value="Hacer Pago" onclick="(function() { alert('Payment Succesful!'); })();" /><br />
-                            </div>-->
-                            <!-- div class="wrapper">
-                                <figure class="left marg_right1"><img src="images/page2_img1.jpg" alt=""></figure>
-                                <p><strong>Sed ut perspiciatis unde omnis iste natus</strong> error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorehjum ipsum quia dolor sit amet, consectetur vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.</p>
-                                <p><strong>Voluptatum deleniti atque corrupti quos</strong> dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa. Et harum quidem rerum facilisest et expedita distinctio. Nam libero tepore cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus omnis voluptas assumenda.</p>
-                            </div>
-                            <div class="wrapper line1 marg_bot1">
-                                <ul class="list1 cols">
-                                    <li><a href="#">At vero eos et accusamus et iusto odio</a></li>
-                                    <li><a href="#">Dignissimos ducimus qui blanditiis praesentium</a></li>
-                                    <li><a href="#">Voluptatum deleniti atque corrupti quos dolores</a></li>
-                                    <li><a href="#">Quas molestias excepturi sint occaecati</a></li>
-                                </ul>
-                                <ul class="list1 cols pad_left1">
-                                    <li><a href="#">At vero eos et accusamus et iusto odio</a></li>
-                                    <li><a href="#">Dignissimos ducimus qui blanditiis praesentium</a></li>
-                                    <li><a href="#">Voluptatum deleniti atque corrupti quos dolores</a></li>
-                                    <li><a href="#">Quas molestias excepturi sint occaecati</a></li>
-                                </ul>
-                            </div>
-                            Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda. error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorehjum ipsum quia dolor sit amet, consectetur vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.
-                            -->
                         </form>
                     </article>
                 </section>

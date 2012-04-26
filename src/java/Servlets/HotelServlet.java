@@ -39,6 +39,21 @@ public class HotelServlet extends HttpServlet {
 
         
         String city = request.getParameter("city");
+        String date1 = request.getParameter("date1");
+        String date2 = request.getParameter("date2");
+        String tipo = request.getParameter("tipoHabitacion");
+        String cat = request.getParameter("type");
+        
+        request.setAttribute("city", city);
+        request.setAttribute("date1", date1);
+        request.setAttribute("date2", date2);
+        request.setAttribute("type", cat);
+        request.setAttribute("tipoHabitacion", tipo);
+        
+        String habitacion = (cat.equals("deluxe"))? "Delujo " : "Ejecutiva ";
+        habitacion += tipo;
+        
+        request.setAttribute("habitacion", habitacion);
         //String arriva1 = request.getParameter("arrival");
         //String departure = request.getParameter("departure");
         
