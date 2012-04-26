@@ -193,12 +193,12 @@ public class Flight {
             return null;
         }
     }
-    
-       /**
+
+    /**
      * Method that creates an object according to its defined WHERE clause and
      * received variables
      *
-     * @param _source The source city code  of the flight
+     * @param _source The source city code of the flight
      * @param _destination The destination code of the flight
      * @param _seats The amount of seats remaining needed
      * @throws SQLException
@@ -211,11 +211,11 @@ public class Flight {
         ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Flight_GroupNo", "source= '" + _source + "' and destination= '" + _destination + "'"); //falta poner que haya un mes de diferencia, no estoy seguro de como
         if (rs.next()) {
             ArrayList flightArrayList = new ArrayList();
-            
+
             do {
                 Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), rs.getTime("DepartureTime"), rs.getTime("ArrivalTime"),
                         rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
-                if(temp.getRemainingSeats() >= _seats){
+                if (temp.getRemainingSeats() >= _seats) {
                     flightArrayList.add(temp);
                 }
             } while (rs.next());
@@ -226,14 +226,14 @@ public class Flight {
             return null;
         }
     }
-    
+
     public static Flight[] getFlights(String _source, String _destination, int _seats, String date, float timeFrom, float timeTo) throws SQLException {
         ConnectionManager.init();
-        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Flight_GroupNo", "source= '" + _source + "' and destination= '" + _destination 
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Flight_GroupNo", "source= '" + _source + "' and destination= '" + _destination
                 + "' and DepartureTime >= '" + timeFrom + "' and DepartureTime <= '" + timeTo + "'"); //falta poner que haya un mes de diferencia, no estoy seguro de como
         if (rs.next()) {
             ArrayList flightArrayList = new ArrayList();
-            
+
             do {
                 try {
                     Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), rs.getTime("DepartureTime"), rs.getTime("ArrivalTime"),
@@ -241,7 +241,7 @@ public class Flight {
                     //Date d = (Date) new DateFormat().parse(date);
                     DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
                     Date d = (Date) df.parse(date);
-                    if(temp.getRemainingSeats(d) >= _seats){
+                    if (temp.getRemainingSeats(d) >= _seats) {
                         flightArrayList.add(temp);
                     }
                 } catch (ParseException ex) {
@@ -255,33 +255,78 @@ public class Flight {
             return null;
         }
     }
-    
-    public int getRemainingSeats(Date date) throws SQLException, ParseException{
-        /* Sacar de DB la cantididad en base a this._flight_No */
+
+    public int getRemainingSeats(Date date) throws SQLException, ParseException {
+        /*
+         * Sacar de DB la cantididad en base a this._flight_No
+         */
         ConnectionManager.init();
-        ResultSet rs = ConnectionManager.selectAllColumns( "Tbl_FlightSeat_Status_GroupNo", "FlightNo = '"+this._flight_No+"'");
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_FlightSeat_Status_GroupNo", "FlightNo = '" + this._flight_No + "'");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        if (rs.next()){
-        String temp = rs.getString("DateOfJourney");
-        Date dOJ = df.parse(temp);
-        System.out.println("date: " + date.toString() + " | " + dOJ.toString() + " | " + temp);
-        if(dOJ.compareTo(date) == 0){
-            return rs.getInt("RemainingSeats");
-        } else {
-            return -1;
-        }
+        if (rs.next()) {
+            String temp = rs.getString("DateOfJourney");
+            Date dOJ = df.parse(temp);
+            System.out.println("date: " + date.toString() + " | " + dOJ.toString() + " | " + temp);
+            if (dOJ.compareTo(date) == 0) {
+                return rs.getInt("RemainingSeats");
+            } else {
+                return -1;
+            }
         } else {
             return -2;
         }
     }
- public int getRemainingSeats() throws SQLException{
-        /* Sacar de DB la cantididad en base a this._flight_No */
+
+    public int getRemainingSeats() throws SQLException {
+        /*
+         * Sacar de DB la cantididad en base a this._flight_No
+         */
         ConnectionManager.init();
-        ResultSet rs = ConnectionManager.select("RemainingSeats", "Tbl_FlightSeat_Status_GroupNo", "FlightNo = '"+this._flight_No+"'");
-        if(rs.next()){
+        ResultSet rs = ConnectionManager.select("RemainingSeats", "Tbl_FlightSeat_Status_GroupNo", "FlightNo = '" + this._flight_No + "'");
+        if (rs.next()) {
             return rs.getInt("RemainingSeats");
         } else {
             return -1;
         }
+    }
+    
+    /**
+     * Method that returns the applicable discount to a flight according to
+     * date of booking and current flight's capacity
+     * 
+     * @param Flight_No The Flight number to calculate discount
+     * @param DoB Date of Booking
+     * @param DoJ Date of Flight's Journey
+     * @param Package_Discount Package Discount assigned by travel agent
+     * @return Discount in percentage form, -0.2 represents a 20% discount
+     * @throws SQLException
+     * @throws ParseException 
+     */
+    public static double getDiscount(int Flight_No, Date DoB, Date DoJ, double Package_Discount) throws SQLException, ParseException {
+        double descuento = 0;
+        Flight flight = Flight.getFlight(Flight_No);
+        
+        Date mesAntes = (Date) DoJ.clone();
+        mesAntes.setMonth(mesAntes.getMonth() - 1);
+        
+        // se hizo el booking por lo menos un mes antes del viaje
+        if (DoB.before(mesAntes)) { 
+            descuento -= 0.2;
+        }
+        
+        // descuento por capacidad
+        int asientosDisponibles = flight.getRemainingSeats(DoJ);
+        int asientosVuelo = flight.getTotal_Seats();
+        double ratioOcupado = (asientosVuelo - asientosDisponibles) / asientosVuelo;               
+        // si hay 80% del vuelo ocupado, vender mas caro
+        if (ratioOcupado >= 0.8) {
+            descuento += 0.2; // 20% mas caro
+        } else if(ratioOcupado <= 0.2) { // si hay solo 20% ocupado, vender mas barato
+            descuento -=0.2; // 20% mas barato
+        }
+        
+        // agregar el descuneto por paquete
+        descuento += Package_Discount;
+        return descuento;
     }
 }
