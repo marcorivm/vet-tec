@@ -124,10 +124,11 @@
                                             <option value="4">4</option>
                                         </select><br />
                                     </div>
-                                    <div><a href="#" class="button" onclick="document.getElementById('form_1').submit()">Buscar</a></div>
+                                    <div><a href="#" class="button" onclick='$("#form_1").submit();'>Buscar</a></div>
                                 </div>
                             </form>
                             <form  style="display: none" id="form_2" method="POST" action="HotelServlet" >
+                                <input type="hidden" name="referer" id="referer" value="Hotel.jsp" />
                                 <div class="tabs_cont">
                                     <div class="bg">
 
@@ -139,10 +140,10 @@
                                                 <% }%>
                                             </select></div>
 
-                                        <div class="wrapper"><label for="date1">Llegada (dd/mm/aaaa)</label>
-                                            <input type="text" name="date1" id="date1" /><input type="hidden" name="start_date" id="start_date" /></div>
-                                        <div id="regreso" class="wrapper"><label for="date2">Salida (dd/mm/aaaa)</label>
-                                            <input type="text" name="date2" id="date2" /><input type="hidden" name="finish_date" id="finish_date" /></div>
+                                        <div class="wrapper"><label for="date_1">Llegada (dd/mm/aaaa)</label>
+                                            <input type="text" name="date1" id="date_1" /><input type="hidden" name="start_date" id="start_date" /></div>
+                                        <div id="regreso" class="wrapper"><label for="date_2">Salida (dd/mm/aaaa)</label>
+                                            <input type="text" name="date2" id="date_2" /><input type="hidden" name="finish_date" id="finish_date" /></div>
                                         <div class="wrapper">
                                             Tipo de Habitaci&oacute;n<br />
                                             <select name="tipoHabitacion">
@@ -153,7 +154,7 @@
                                             </select><br />
                                         </div>
                                         <div class="wrapper">
-                                            <input type ="radio" name="type" id="type" value="deluxe"/>                                                
+                                            <input type ="radio" name="type" id="type" value="deluxe" checked="checked"/>                                                
                                             <label for="deluxe">Cuartos Deluxe</label> <br/>
                                             <input type="radio" name ="type" id="type" value="exe" />
                                             <label for="exe">Cuartos Exe</label>
@@ -202,14 +203,14 @@
                         <div class="wrapper under">
                             <figure class="left marg_right1"><img src="images/page1_img4.jpg" alt=""></figure>
                             <p class="pad_bot2"><strong>Helmsley Park Lane</strong></p>
-                            <p class="pad_bot2">Helmsley Park Lane ® es un hotel de lujo de 46 historias con las vistas panorámicas de Central Park  y el horizonte de la Ciudad de Nueva York . Sus espacios son amplios, elegantes y sus suites ofrecen ventanales y vistas magníficas. Se disfruta de un ambiente clásico, comodidad y conveniencia para una experiencia &uacute;nica en la ciudad líder mundial más extraordinaria.</p>
+                            <p class="pad_bot2">Helmsley Park Lane ï¿½ es un hotel de lujo de 46 historias con las vistas panorï¿½micas de Central Park  y el horizonte de la Ciudad de Nueva York . Sus espacios son amplios, elegantes y sus suites ofrecen ventanales y vistas magnï¿½ficas. Se disfruta de un ambiente clï¿½sico, comodidad y conveniencia para una experiencia &uacute;nica en la ciudad lï¿½der mundial mï¿½s extraordinaria.</p>
                             <p class="pad_bot2"> Localizada en el Central Park en Nueva York, justo en el centro del distrito de negocios, este hotel esta a una corta distancia de la 5ta Avenida, Broadway, Radio City, entre otras atracciones.</p>
                         </div>
                         <div class="wrapper">
                             <figure class="left marg_right1"><img src="images/page1_img5.jpg" alt=""></figure>
                             <p class="pad_bot2"><strong>Belmont</strong></p>
-                            <p class="pad_bot2">El hotel Belmont es un establecimiento distendido de 3 estrellas. Dotado de un notable confort tecnológico y unos espacios sorprendentes, es un remanso de paz con una atmósfera relajante. Nuestro amable personal le informará sobre las visitas más interesantes de su barrio de los Campos Elíseos para lograr que su estancia le resulte inolvidable.</p>
-                            <p class="pad_bot2">Situado a un centenar de metros de los Campos Elíseos, el hotel Belmont le ofrece un acceso inmediato a las lujosas boutiques de las avenidas Montaigne y George V.</p>
+                            <p class="pad_bot2">El hotel Belmont es un establecimiento distendido de 3 estrellas. Dotado de un notable confort tecnolï¿½gico y unos espacios sorprendentes, es un remanso de paz con una atmï¿½sfera relajante. Nuestro amable personal le informarï¿½ sobre las visitas mï¿½s interesantes de su barrio de los Campos Elï¿½seos para lograr que su estancia le resulte inolvidable.</p>
+                            <p class="pad_bot2">Situado a un centenar de metros de los Campos Elï¿½seos, el hotel Belmont le ofrece un acceso inmediato a las lujosas boutiques de las avenidas Montaigne y George V.</p>
                         </div>
                     </article>
                 </section>
@@ -227,9 +228,9 @@
             $("#form_2").bind("submit",function() {
                 var isValid = true;
                 
-                if(!validator.isNumeric($("#date1")) && 
-                    !validator.isNumeric($("#date2")) && 
-                    !validator.isNumeric($("#finish_date")) &&
+                if(!validator.isDate($("#date_1")) ||
+                    !validator.isDate($("#date_2")) || 
+                    !validator.isNumeric($("#finish_date")) ||
                     !validator.isNumeric($("#start_date"))){
                     // TODO: Validar rango de fechas
                     isValid = false;
@@ -241,29 +242,35 @@
             
             $("#form_1").bind("submit",function() {
                 var isValid = true;
-                if(!validator.isNumeric($("#date1")) || 
+                if(!validator.isDate($("#date1")) || 
                     (jQuery("[name='isRoundTrip']").get(0).checked && 
-                    !validator.isNumeric($("#date2")))){
+                    !validator.isDate($("#date2")))){
                     // TODO: Validar rango de fechas
                     isValid = false;
                     alert("Debes seleccionar un rango de fechas!");
                 }
-                if(!validator.isEqual($("#source"), $("#destiny"))){
+                if(validator.isEqual($("#source"), $("#destiny"))){
                     isValid = false;
                     alert("El origen y el destino no pueden ser iguales!");
                 }
-                
-                
-                return isValid;
+                return false;
             })
             
             $("#date1").datepick({
+                dateFormat: 'dd-mm-yyyy',
+                minDate: new Date()
+            });
+            $("#date2").datepick({
+                dateFormat: 'dd-mm-yyyy',
+                minDate: new Date()
+            });
+            $("#date_1").datepick({
                 dateFormat: 'dd-mm-yyyy',
                 minDate: new Date(),
                 altFormat: '@',
                 altField: '#start_date'
             });
-            $("#date2").datepick({
+            $("#date_2").datepick({
                 dateFormat: 'dd-mm-yyyy',
                 minDate: new Date(),
                 altFormat: '@',

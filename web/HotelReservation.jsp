@@ -121,7 +121,9 @@
                                             <div id="regreso" class="wrapper"><label for="date2">Salida (dd/mm/aaaa)</label>
                                                 <input type="text" name="dateSal" id="dateSal" value="<%=request.getParameter("date2")%>" /></div>
                             </div>
+                            <input type="submit" class="button" value="Reservar" />
                         </div>
+                            
                         </form>
                     </article>
                 </section>

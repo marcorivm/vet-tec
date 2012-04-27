@@ -35,7 +35,7 @@
                 <section id="content">
                     <!-- columna derecha -->
                     <article class="col2 pad_left1">
-                        <form method="POST" action="SaveFB">
+                        <form method="POST" action="ReservarP">
                             <%
                                 Flight_Booking fbTo = null;
                                 Flight flightTo = null;
