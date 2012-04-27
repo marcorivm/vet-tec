@@ -561,3 +561,7 @@ table.tabla-datos, td.tabla-datos, tr.tabla-datos{
     text-align: left;
     vertical-align: middle;
 }
+
+.scroll {
+    overflow: scroll; 
+}

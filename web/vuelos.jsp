@@ -66,14 +66,14 @@
                                                 <div class="radio"><input type="radio" name="isRoundTrip" value="false" onclick="ocultarRegreso()">Simple</div>
                                             </div>                                           
                                             <div class="wrapper"><label for="source">Origen</label>
-                                                <select name="source" id="source">
+                                                <select name="source" id="source" class="floatRight">
                                                     <% if (cities != null)
                                                             for (City c : cities) {%>
                                                     <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
                                                     <% }%>
                                                 </select></div>                                           
                                             <div class="wrapper"><label for="destiny">Destino</label>
-                                                <select name="destiny" id="destiny">
+                                                <select name="destiny" id="destiny" class="floatRight">
                                                     <% if (cities != null)
                                                             for (City c : cities) {%>
                                                     <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
@@ -83,9 +83,9 @@
                                                 <input type="text" name="date1" id="date1" /></div>
                                             <div id="regreso" class="wrapper pad_bot1"><label for="date2">Regreso (dd/mm/aaaa)</label>
                                                 <input type="text" name="date2" id="date2" /></div>                                    
-                                            <div class="wrapper pad_bot1d">
+                                            <div class="wrapper pad_bot1">
                                                 <label for="timeFrom">Hora</label>
-                                                <select name="timeFrom" id="timeFrom">
+                                                <select name="timeFrom" id="timeFrom" class="floatRight">
                                                     <%
                                                         for (int i = 6; i <= 22; i++) {
                                                     %>
@@ -96,7 +96,7 @@
                                                 </select>
                                                 <br />
                                                 <label for="timeTo">a</label>
-                                                <select name="timeTo" id="timeTo">
+                                                <select name="timeTo" id="timeTo" class="floatRight">
                                                     <%
                                                         for (int i = 7; i < 23; i++) {
                                                     %>
@@ -107,16 +107,17 @@
                                                     <option value="23" selected="selected">23</option>
                                                 </select>
                                             </div>
+
                                             <div class="wrapper pad_bot1">
-                                                Adultos<br />
-                                                <select name="adults">
+                                                Adultos
+                                                <select name="adults" class="floatRight">
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
                                                     <option value="3">3</option>
                                                     <option value="4">4</option>
                                                 </select><br />
-                                                Ni&ntilde;os<br />
-                                                <select name="kids">
+                                                Ni&ntilde;os
+                                                <select name="kids" class="floatRight">
                                                     <option value="0">0</option>
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
@@ -145,7 +146,7 @@
                             <input type="hidden" name="ninos" id="ninos" value="<%=request.getAttribute("ninos")%>"/>
                             <input type="hidden" name="date1" id="date1" value="${date1}"/>
                             <input type="hidden" name="date2" id="date2" value="${date2}"/>
-                            
+
                             <% if (f1) {
 
                             %>
@@ -178,7 +179,7 @@
                             </div>
                             <% } else if (f2) {%>
                             <h3> Vuelos de Ida no Disponibles </h3>
-                            <% } else if((flights == null)&&(flights2 == null)){%>
+                            <% } else if ((flights == null) && (flights2 == null)) {%>
                             <article class="col2 pad_left1">
                                 <h2>Nuestros Vuelos</h2>
                                 <div class="wrapper under">
