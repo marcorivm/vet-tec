@@ -1,10 +1,13 @@
+<%@page import="Clases.Hotel_Payment"%>
 <%@page import="Clases.FlightSeat_Status"%>
-<%@page import="java.util.Date"%>
+<%@page import="Clases.City"%>
 <%@page import="Clases.Hotel_Booking"%>
 <%@page import="Clases.Hotel"%>
 <%@page import="Clases.Flight"%>
 <%@page import="Clases.Flight_Booking"%>
 <%@page import="Clases.Package_Booking"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Date"%>
 <%
     Package_Booking booking = null;
     Flight_Booking flightToBooking = null;
@@ -13,41 +16,80 @@
     Flight flightTo = null;
     Flight flightFrom = null;
     Hotel hotel = null;
+    FlightSeat_Status FSS = null;
+    String folio = "";
+    String firstName = "";
+    String lastName = "";
+    int noPersonas;
+    int precio;
+    String nomHotel = "";
+    String fecha;
+    int idTempVuelo = 0;
+    String source = "";
+    String destination = "";
+    int vueloIda = 0;
+    int vueloVuelta = 0;
     int adultosTo = 1;
     int adultosFrom = 1;
     int ninosTo = 0;
     int ninosFrom = 0;
-    int impuestosNinosTo = 0;
-    int impuestosNinosFrom = 0;
-    double totalIda = 0;
-    double totalFrom = 0;
-
+        
     if (request.getAttribute("booking") != null) {
         booking = (Package_Booking) request.getAttribute("booking");
+        RequestDispatcher rd = request.getRequestDispatcher("");
+        rd.forward(request, response);
     }
-
+        
     if (booking != null) {
         flightToBooking = booking.getFlightTo();
         flightFromBooking = booking.getFlightFrom();
         hotelBooking = booking.getHotel();
     }
-
+        
     if (flightToBooking != null) {
         flightTo = flightToBooking.getFlight();
         adultosTo = flightToBooking.getNoOfAdults();
         ninosTo = flightToBooking.getNoOfChildren();
-        if (ninosTo > 0) {
-            impuestosNinosTo = 1;
-        }
     }
     if (flightFromBooking != null) {
         flightFrom = flightFromBooking.getFlight();
         adultosFrom = flightFromBooking.getNoOfAdults();
         ninosFrom = flightFromBooking.getNoOfChildren();
-        if (ninosFrom > 0) {
-            impuestosNinosFrom = 1;
-        }
     }
+    if (booking.getHotel().getDateOfBooking() == null) {
+        idTempVuelo = flightFrom.getFlight_No();
+        FSS = FlightSeat_Status.getFlightSeat_Status(idTempVuelo);
+        fecha = FSS.getDateOfJourney().toString();
+    } else {
+        fecha = booking.getHotel().getDateOfBooking().toString();
+    }
+    folio = booking.getId();
+    //fecha lista
+    firstName = booking.getName();
+    lastName = booking.getLastName();
+    source = flightFrom.getSource().getCityName();
+    destination = flightTo.getDestination().getCityName();
+    vueloIda = booking.getFlightFrom().getFlight().getFlight_No();
+    vueloVuelta = booking.getFlightTo().getFlight().getFlight_No();
+    if (hotelBooking.getHotel().getHotelName() == null) {
+        nomHotel = "No hay";
+    } else {
+        nomHotel = hotelBooking.getHotel().getHotelName();
+    }
+    //noPersonas listo
+        if (flightFromBooking == null) {
+            if (hotelBooking.getHotel().getNoOfDeluxRooms() == 0) {
+                noPersonas = hotelBooking.getHotel().getNoOfEXERooms();
+            } else {
+                noPersonas = hotelBooking.getHotel().getNoOfDeluxRooms();
+            }
+        } else {
+            noPersonas = adultosFrom + ninosFrom;
+        }
+    String idTempHotel = hotelBooking.getHotel().getHotelId();
+    //hp = Hotel_Payment.getHotel_Payment(_paymentId)
+    //precio = Hp.
+    
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,7 +100,7 @@
         <link rel="stylesheet" href="css/layout.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/style.css" type="text/css" media="all">
         <style type="text/css">@import "css/jquery.datepick.css";</style>
-        <script type="text/javascript" src="js/jquery-1.7.1.min.js" ></script>
+        <script type="text/javascript" src="js/jquery-1.4.2.js" ></script>
         <script type="text/javascript" src="js/cufon-yui.js"></script>
         <script type="text/javascript" src="js/cufon-replace.js"></script>
         <script type="text/javascript" src="js/Myriad_Pro_600.font.js"></script>
@@ -73,7 +115,10 @@
         <div class="extra">
             <div class="main">
                 <!-- header -->
-                <header>                    
+                <header>
+                    <div class="wrapper">
+                        <h1><a href="index.html" id="logo">Vuelos</a></h1>                     
+                    </div>
                     <jsp:include page="includes/navbar.jsp" />
                 </header>
                 <!-- / header -->
@@ -84,7 +129,7 @@
                         <h3>Buscar</h3>
                         <div class="pad">
                             <div class="wrapper under">
-                                <form id="form_1" method="POST" action="SearchReservation">
+                                <form id="form_1" method="POST" action="Reservaciones">
                                     <div class="tabs_cont">
                                         <div class="bg">
                                             <div class="wrapper">
@@ -92,7 +137,7 @@
                                                 <hr />
                                                 <input type="text" placeholder="Apellido" name="lastName" />
                                                 <input type="text" placeholder="Nombre" name="firstName" />
-                                                <input type="text" placeholder="E-Mail" name="mail" />
+                                                <input type="text" placeholder="Correo Electrónico" name="email" />
                                             </div>                                           
 
 
@@ -112,338 +157,24 @@
                         </div>
                     </article>
                     <!-- columna derecha -->
-                    <article class="col2 pad_left1">
-                        <% if (flightTo != null) {
-
-                        %>
-                        <h3>Vuelo Ida Reservado</h3>
-                        <div class="wrapper under2" style="margin-bottom:2em;">
-                            <form action="Cancelar" method="POST">
-                                <input type="hidden" name="flightToBooking" value="<%=flightToBooking.getBookingId()%>" />
-                                <div><table>
-                                        <tr>
-                                            <th>Aerol&iacute;nea</th>
-                                            <th>Or&iacute;gen</th>
-                                            <th>Destino</th>
-                                            <th>Tarifa Adulto</th>
-                                            <th>Tarifa Ni&ntilde;o</th>
-                                            <th>Cancelar</th>
-                                        </tr>
-
-                                        <tr>
-                                            <td><%=flightTo.getAirline_Name()%></td>
-                                            <td><%=flightTo.getSource().getCityName()%></td>
-                                            <td><%=flightTo.getDestination().getCityName()%></td>
-                                            <td><%=flightTo.getAdult_Fare()%></td>
-                                            <td><%=flightTo.getChild_Fare()%></td>
-                                            <td><input type="submit" class="button" value="Cancelar" /></td>
-                                        </tr>
-
-                                    </table></div>
-                            </form>
-                        </div>                     
-                        <% } else {%>
-                        <h3> No Hay Vuelo de Ida Reservado </h3>
-                        <% }
-                        %>                       
-
-                        <h2>Detalles Vuelo Ida</h2>
-                        <div class="wrapper under">     
-                            <% if (flightTo != null) {%>
-                            <div id="flightDetails" class="under">
-                                <h3>Revisar Detalles del Vuelo</h3>
-                                <div><span class="city"><%=flightTo.getSource().getCityName()%></span> --> <span class="city"><%=flightTo.getDestination().getCityName()%></span></div>
-                                <div>
-                                    <table>
-                                        <tr>
-                                            <th>N&uacute;mero de Vuelo</th>
-                                            <th>Aerol&iacute;nea</th>
-                                            <th>Fecha de Salida</th>
-                                            <th>Fecha de Llegada</th>
-                                        </tr>
-                                        <tr>
-                                            <td><%=flightTo.getFlight_No()%></td>
-                                            <td><%=flightTo.getAirline_Name()%></td>
-                                            <td><%=flightTo.getDeparture_Time()%></td>
-                                            <td><%=flightTo.getArrival_Time()%></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <div id="fareDetails">
-                                <h3>Revisar Detalles de la Tarifa</h3>
-                                <div>
-                                    <table>
-                                        <tr>
-                                            <th>Tipo de Tarifa</th>
-                                            <th>Asientos</th>
-                                            <th>Tarifa Base</th>
-                                            <th>Impuestos</th>
-                                            <th>Total incluyendo Impuestos</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Adultos</td>
-                                            <td><%=adultosTo%></td>
-                                            <td>$ <%=flightTo.getAdult_Fare() * adultosTo%> (<%=flightTo.getAdult_Fare()%> x <%=adultosTo%>)</td>  
-                                            <td>$ <%=flightTo.getAirport_Tax()%></td>
-                                            <td>$ <%=(flightTo.getAdult_Fare() * adultosTo + flightTo.getAirport_Tax())%></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ni&ntilde;os</td>
-                                            <td><%=ninosTo%></td>
-                                            <td>$ <%=flightTo.getChild_Fare() * ninosTo%> (<%=flightTo.getChild_Fare()%> x <%=ninosTo%>)</td>  
-                                            <td>$ <%=flightTo.getAirport_Tax() * impuestosNinosTo%></td>
-                                            <td>$ <%=(flightTo.getChild_Fare() * ninosTo + (flightTo.getAirport_Tax() * impuestosNinosTo))%></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <div>                              
-                                <br />
-                                <span class="floatRight">
-                                    <%
-                                        totalIda = ((flightTo.getAdult_Fare() * adultosTo + flightTo.getAirport_Tax()) + (flightTo.getChild_Fare() * ninosTo + (flightTo.getAirport_Tax() * impuestosNinosTo)));
-                                        Date doj = FlightSeat_Status.getFlightSeat_Status(flightTo.getFlight_No()).getDateOfJourney();
-                                        double descuento = booking.getDiscount();
-                                    %>
-                                    --------------------------------------------------<br />
-                                    Sub-Total Ida: $ <%=totalIda%><br />
-                                    --------------------------------------------------<br />
-                                    --------------------------------------------------<br />
-                                    Descuento Ida (<%=(Math.abs(descuento) * 100) + "%"%>): $ <%=(totalIda * descuento)%><br />
-                                    --------------------------------------------------<br />
-                                    --------------------------------------------------<br />
-                                    Total Ida: $ <%=(totalIda * (1 + descuento))%><br />
-                                    --------------------------------------------------<br />
-                                </span>
-                            </div>
-                            <% }%>
-                        </div>
-                        <h2>Nombres</h2>
-                        <!-- adultos -->
-                        <div class="wrapper under">
-                            <div class="wrapper">
-                                <h3>Adulto 1: Pasajero Principal</h3>
-                                <div class="form">
-                                    <label for="title1">T&iacute;tulo </label>
-                                    <select name="title1" id="title1">
-                                        <option>Sr.</option>
-                                        <option>Sra.</option>
-                                        <option>Srta.</option>
-                                    </select>
-                                </div>
-                                <div class="form">
-                                    <label for="lname1">Apellidos: </label>
-                                    <input type="text" name="lname1" id="lname1" />
-                                </div>
-                                <div class="form">
-                                    <label for="fname1">Nombre: </label>
-                                    <input type="text" name="fname1" id="fname1" />
-                                </div>
-                                <div class="form">
-                                    <label for="email">E-mail: </label>
-                                    <input type="text" name="email1" id="email1" />
-                                </div>
-                            </div>
-                        </div>
-                        <!-- ninos
-                        <div class="wrapper under">
-                            <div class="wrapper">
-                                <h3>Ni;ntilde;o 1</h3>
-                                <div class="form">
-                                    <label for="child-fname1">Nombre: </label>
-                                    <input type="text" name="child-fname1" id="child-fname1" />
-                                </div>
-                                <div class="form">
-                                    <label for="child-lname1">Apellidos: </label>
-                                    <input type="text" name="child-lname1" id="child-lname1" />
-                                </div>
-                            </div>
-                        </div> -->
+                        <!-- aqui iba la comlumna derecha -->
                         
-                        <!-- vuelo de regreso -->
-                        <% if (flightFrom != null) {
-
-                        %>
-                        <h3>Vuelo Regreso Reservado</h3>
-                        <div class="wrapper under2" style="margin-bottom:2em;">
-                            <form action="Cancelar" method="POST">
-                                <input type="hidden" name="flightFromBooking" value="<%=flightFromBooking.getBookingId()%>" />
-                                <div><table>
-                                        <tr>
-                                            <th>Aerol&iacute;nea</th>
-                                            <th>Or&iacute;gen</th>
-                                            <th>Destino</th>
-                                            <th>Tarifa Adulto</th>
-                                            <th>Tarifa Ni&ntilde;o</th>
-                                            <th>Cancelar</th>
-                                        </tr>
-
-                                        <tr>
-                                            <td><%=flightFrom.getAirline_Name()%></td>
-                                            <td><%=flightFrom.getSource().getCityName()%></td>
-                                            <td><%=flightFrom.getDestination().getCityName()%></td>
-                                            <td><%=flightFrom.getAdult_Fare()%></td>
-                                            <td><%=flightFrom.getChild_Fare()%></td>
-                                            <td><input type="submit" class="button" value="Cancelar" /></td>
-                                        </tr>
-
-                                    </table></div>
-                            </form>
-                        </div>                     
-                        <% } else {%>
-                        <h3> No Hay Vuelo de Regreso Reservado </h3>
-                        <% }
-                        %>                       
-
-                        <h2>Detalles Vuelo Regreso</h2>
-                        <div class="wrapper under">     
-                            <% if (flightFrom != null) {%>
-                            <div id="flightDetails2" class="under">
-                                <h3>Revisar Detalles del Vuelo</h3>
-                                <div><span class="city"><%=flightFrom.getSource().getCityName()%></span> --> <span class="city"><%=flightFrom.getDestination().getCityName()%></span></div>
-                                <div>
-                                    <table>
-                                        <tr>
-                                            <th>N&uacute;mero de Vuelo</th>
-                                            <th>Aerol&iacute;nea</th>
-                                            <th>Fecha de Salida</th>
-                                            <th>Fecha de Llegada</th>
-                                        </tr>
-                                        <tr>
-                                            <td><%=flightFrom.getFlight_No()%></td>
-                                            <td><%=flightFrom.getAirline_Name()%></td>
-                                            <td><%=flightFrom.getDeparture_Time()%></td>
-                                            <td><%=flightFrom.getArrival_Time()%></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <div id="fareDetails2">
-                                <h3>Revisar Detalles de la Tarifa</h3>
-                                <div>
-                                    <table>
-                                        <tr>
-                                            <th>Tipo de Tarifa</th>
-                                            <th>Asientos</th>
-                                            <th>Tarifa Base</th>
-                                            <th>Impuestos</th>
-                                            <th>Total incluyendo Impuestos</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Adultos</td>
-                                            <td><%=adultosFrom%></td>
-                                            <td>$ <%=flightFrom.getAdult_Fare() * adultosFrom%> (<%=flightFrom.getAdult_Fare()%> x <%=adultosFrom%>)</td>  
-                                            <td>$ <%=flightFrom.getAirport_Tax()%></td>
-                                            <td>$ <%=(flightFrom.getAdult_Fare() * adultosFrom + flightFrom.getAirport_Tax())%></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ni&ntilde;os</td>
-                                            <td><%=ninosFrom%></td>
-                                            <td>$ <%=flightFrom.getChild_Fare() * ninosFrom%> (<%=flightFrom.getChild_Fare()%> x <%=ninosFrom%>)</td>  
-                                            <td>$ <%=flightFrom.getAirport_Tax() * impuestosNinosFrom%></td>
-                                            <td>$ <%=(flightFrom.getChild_Fare() * ninosFrom + (flightFrom.getAirport_Tax() * impuestosNinosFrom))%></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <div>
-                                <br />
-                                <span class="floatRight">
-                                    <%
-                                        totalFrom = ((flightFrom.getAdult_Fare() * adultosFrom + flightFrom.getAirport_Tax()) + (flightFrom.getChild_Fare() * ninosFrom + (flightFrom.getAirport_Tax() * impuestosNinosFrom)));
-                                        Date doj = FlightSeat_Status.getFlightSeat_Status(flightFrom.getFlight_No()).getDateOfJourney();
-                                        double descuento = booking.getDiscount();
-                                    %>
-                                    --------------------------------------------------<br />
-                                    Sub-Total Ida: $ <%=totalFrom%><br />
-                                    --------------------------------------------------<br />
-                                    --------------------------------------------------<br />
-                                    Descuento Ida (<%=(Math.abs(descuento) * 100) + "%"%>): $ <%=(totalFrom * descuento)%><br />
-                                    --------------------------------------------------<br />
-                                    --------------------------------------------------<br />
-                                    Total Ida: $ <%=(totalFrom * (1 + descuento))%><br />
-                                    --------------------------------------------------<br />
-                                </span>
-                            </div>
-                            <% }%>
-                        </div>
-                        <h2>Nombres</h2>
-                        <!-- adultos -->
-                        <div class="wrapper under">
-                            <div class="wrapper">
-                                <h3>Adulto 1: Pasajero Principal</h3>
-                                <div class="form">
-                                    <label for="title1">T&iacute;tulo </label>
-                                    <select name="title1" id="title1">
-                                        <option>Sr.</option>
-                                        <option>Sra.</option>
-                                        <option>Srta.</option>
-                                    </select>
-                                </div>
-                                <div class="form">
-                                    <label for="fname1">Nombre: </label>
-                                    <input type="text" name="fname1" id="fname1" />
-                                </div>
-                                <div class="form">
-                                    <label for="lname1">Apellidos: </label>
-                                    <input type="text" name="lname1" id="lname1" />
-                                </div>
-                            </div>
-                        </div>
-                        <!-- ninos -->
-                        <div class="wrapper under">
-                            <div class="wrapper">
-                                <h3>Ni;ntilde;o 1</h3>
-                                <div class="form">
-                                    <label for="child-fname1">Nombre: </label>
-                                    <input type="text" name="child-fname1" id="child-fname1" />
-                                </div>
-                                <div class="form">
-                                    <label for="child-lname1">Apellidos: </label>
-                                    <input type="text" name="child-lname1" id="child-lname1" />
-                                </div>
-                            </div>
-                        </div>                        
-                        <!-- detalles hotel -->
-                        <% if (hotel != null) {
-
-                        %>
-                        <h3>Detalles Hotel Reservado</h3>
-                        <div class="wrapper under2" style="margin-bottom:2em;">
-                            <form action="Cancelar" method="POST">
-                                <input type="hidden" name="hotelBooking" value="<%=hotelBooking.getBookingId()%>" />
-                                <div><table>
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>Ciudad</th>
-                                            <th>Cuartos Delujo</th>
-                                            <th>Cuartos Ejecutivos</th>
-                                            <th>Tarifa Delujo Diaria</th>
-                                            <th>Tarifa Ejecutiva Diaria</th>
-                                            <th>Impuestos</th>
-                                            <th>Cancelar</th>
-                                        </tr>
-
-                                        <tr>
-                                            <th><%=hotel.getHotelName()%></th>
-                                            <th><%=hotel.getLocation().getCityName()%></th>
-                                            <th><%=hotel.getNoOfDeluxRooms()%></th>                                            
-                                            <th><%=hotel.getNoOfEXERooms()%></th>                                            
-                                            <th><%=hotel.getDeluxRoomFare_PerDay()%></th>                                            
-                                            <th><%=hotel.getEXERoomFarePerDay()%></th>                                            
-                                            <th><%=hotel.getHotelTax()%></th>                                            
-                                            <td><input type="submit" class="button" value="Cancelar" /></td>
-                                        </tr>
-
-                                    </table></div>
-                            </form>
-                        </div>                     
-                        <% } else {%>
-                        <h3> No Hay Hotel Reservado </h3>
-                        <% }
-                        %>     
-                    </article>
+                        <table>
+                            <tr>
+                                <td><%=folio%></td>
+                                <td><%=lastName%></td>
+                                <td><%=firstName%></td>
+                                <td><%=fecha%></td>
+                                <td><%=destination%></td>
+                            </tr>
+                            <tr>
+                                <td><%=vueloIda%></td>
+                                <td><%=vueloVuelta%>)</td>
+                                <td><%=nomHotel%></td>
+                                <td><%=noPersonas%></td>
+                                <td>Precio Total</td>
+                            </tr>
+                        </table>
                 </section>
                 <!-- / content -->
             </div>
