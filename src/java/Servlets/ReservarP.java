@@ -167,6 +167,8 @@ public class ReservarP extends HttpServlet {
                 
                 request.setAttribute("msg", "Registro Exitoso");
                 request.setAttribute("Package",pb);
+                String folio = pb.getId() + pb.getLastName().hashCode();
+                request.setAttribute("folio", folio);
                 RequestDispatcher rd = request.getRequestDispatcher("confirmacion.jsp");
                 rd.forward(request, response);
 
