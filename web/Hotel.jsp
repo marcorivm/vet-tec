@@ -91,8 +91,8 @@
                     </article>
                     <!-- columna derecha -->
                     <article class="col2 pad_left1">
-                        <% if (hotels != null) {
-                                if (hotels.length > 0) {%>
+                        <% if (request.getAttribute("consulta") != null) {
+                                if (hotels != null && hotels.length > 0) {%>
                                 <form name="hotelSelection" action="HotelReservation.jsp" method="post">
                                     <input type="hidden" value="${city}" name="city" id="city" />
                                     <input type="hidden" value="${date1}" name="date1" id="date1" />

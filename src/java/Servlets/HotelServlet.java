@@ -72,7 +72,7 @@ public class HotelServlet extends HttpServlet {
         habitacion += room_size;
         
         request.setAttribute("habitacion", habitacion);
-        
+        request.setAttribute("consulta", true);
         try {
             java.sql.Date start_date_s = new java.sql.Date(Long.parseLong(start_date));
             java.sql.Date finish_date_s = new java.sql.Date(Long.parseLong(finish_date));
