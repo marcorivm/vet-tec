@@ -65,7 +65,7 @@ public class FlightServlet extends HttpServlet {
         }
 
         RequestDispatcher rd = request.getRequestDispatcher("vuelos.jsp");
-        if (referer.equalsIgnoreCase("PrepareOfr")) {
+        if (referer != null && referer.equalsIgnoreCase("PrepareOfr")) {
             rd = request.getRequestDispatcher("/offerFlight.jsp");
         }
         rd.forward(request, response);
