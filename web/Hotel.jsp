@@ -1,8 +1,9 @@
 <%@page import="Clases.Hotel"%>
 <%@page import="Clases.City"%>
+<%@page import="java.util.ArrayList"%>
 <%
     City[] cities = City.getCities();
-    Hotel[] hotels;
+    Hotel hotels[];
     hotels = (Hotel[]) request.getAttribute("hotels");
     int cuartosDel = 0;
     int cuartosExe = 0;
@@ -53,21 +54,21 @@
                                     <div class="tabs_cont">
                                         <div class="bg">
 
-                                            <div class="wrapper"><label for="location">Ciudad</label>
-                                                <select name="location" id="location">
+                                            <div class="wrapper"><label for="city">Ciudad</label>
+                                                <select name="city" id="city">
                                                     <% if (cities != null)
                                                             for (City c : cities) {%>
                                                     <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
                                                     <% }%>
                                                 </select></div>
 
-                                            <div class="wrapper"><label for="start_date">Llegada (dd/mm/aaaa)</label>
-                                                <input type="text" name="start_date" id="start_date" /></div>
+                                            <div class="wrapper"><label for="date1">Llegada (dd/mm/aaaa)</label>
+                                                 <input type="text" name="date1" id="date1" /> <input type="hidden" name="start_date" id="start_date" /></div>
                                             <div id="regreso" class="wrapper"><label for="finish_date">Salida (dd/mm/aaaa)</label>
-                                                <input type="text" name="finish_date" id="finish_date" /></div>
+                                                <input type="text" name="date2" id="date2" /><input type="hidden" name="finish_date" id="finish_date" /></div>
                                             <div class="wrapper">
                                                 Tipo de Habitaci&oacute;n<br />
-                                                <select name="room_size">
+                                                <select name="type">
                                                     <option value="sencilla">Sencilla</option>
                                                     <option value="doble">Doble</option>
                                                     <option value="triple">Triple</option>
@@ -75,9 +76,9 @@
                                                 </select><br />
                                             </div>
                                             <div class="wrapper">
-                                                <input type ="radio" name="room_type" id="deluxe" value="2"/>                                                
+                                                <input type ="radio" name="tipoHabitacion" id="deluxe" value="2"/>                                                
                                                 <label for="deluxe">Cuartos Deluxe</label> <br/>
-                                                <input type="radio" name ="room_type" id="exe" value="1" checked="checked" />
+                                                <input type="radio" name ="tipoHabitacion" id="exe" value="1" checked="checked" />
                                                 <label for="exe">Cuartos Exe</label>
                                             </div>
                                             <div>
@@ -90,8 +91,8 @@
                     </article>
                     <!-- columna derecha -->
                     <article class="col2 pad_left1">
-                        <% if (hotels != null) {
-                                if (hotels.length > 0) {%>
+                        <% if (request.getAttribute("consulta") != null) {
+                                if (hotels != null && hotels.length > 0) {%>
                                 <form name="hotelSelection" action="HotelReservation.jsp" method="post">
                                     <input type="hidden" value="${city}" name="city" id="city" />
                                     <input type="hidden" value="${date1}" name="date1" id="date1" />
@@ -133,7 +134,7 @@
                                     <table>
                                         <tr>
                                             <th>Hotel</th>
-                                            <th>Tipo de HabitaciÛn</th>
+                                            <th>Tipo de Habitaci√≥n</th>
                                             <th>Tarifa Delujo por noche</th>
                                             <th>Tarifa Ejecutiva por noche</th>
                                             <th>Habitaciones Deluxe</th>
@@ -160,47 +161,46 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                                </form>
-                                <% } else {%>
+                        </form>
+                        <% } else { %>
                         <h3>No hay resultados</h3>
                         <article class="col2 pad_left1">
                             <h2>Hoteles Populares</h2>
                             <div class="wrapper under">
                                 <figure class="left marg_right1"><img src="images/page1_img4.jpg" alt=""></figure>
                                 <p class="pad_bot2"><strong>Helmsley Park Lane</strong></p>
-                                <p class="pad_bot2">Helmsley Park Lane Æ es un hotel de lujo de 46 historias con las vistas panor·micas de Central Park  y el horizonte de la Ciudad de Nueva York . Sus espacios son amplios, elegantes y sus suites ofrecen ventanales y vistas magnÌficas. Se disfruta de un ambiente cl·sico, comodidad y conveniencia para una experiencia &uacute;nica en la ciudad lÌder mundial m·s extraordinaria.</p>
+                                <p class="pad_bot2">Helmsley Park Lane ¬Æ es un hotel de lujo de 46 historias con las vistas panor√°micas de Central Park  y el horizonte de la Ciudad de Nueva York . Sus espacios son amplios, elegantes y sus suites ofrecen ventanales y vistas magn√≠ficas. Se disfruta de un ambiente cl√°sico, comodidad y conveniencia para una experiencia &uacute;nica en la ciudad l√≠der mundial m√°s extraordinaria.</p>
                                 <p class="pad_bot2"> Localizada en el Central Park en Nueva York, justo en el centro del distrito de negocios, este hotel esta a una corta distancia de la 5ta Avenida, Broadway, Radio City, entre otras atracciones.</p>
                                 <a href="#" class="marker_2"></a>
                             </div>
                             <div class="wrapper">
                                 <figure class="left marg_right1"><img src="images/page1_img5.jpg" alt=""></figure>
                                 <p class="pad_bot2"><strong>Belmont</strong></p>
-                                <p class="pad_bot2">El hotel Belmont es un establecimiento distendido de 3 estrellas. Dotado de un notable confort tecnolÛgico y unos espacios sorprendentes, es un remanso de paz con una atmÛsfera relajante. Nuestro amable personal le informar· sobre las visitas m·s interesantes de su barrio de los Campos ElÌseos para lograr que su estancia le resulte inolvidable.</p>
-                                <p class="pad_bot2">Situado a un centenar de metros de los Campos ElÌseos, el hotel Belmont le ofrece un acceso inmediato a las lujosas boutiques de las avenidas Montaigne y George V.</p>
+                                <p class="pad_bot2">El hotel Belmont es un establecimiento distendido de 3 estrellas. Dotado de un notable confort tecnol√≥gico y unos espacios sorprendentes, es un remanso de paz con una atm√≥sfera relajante. Nuestro amable personal le informar√° sobre las visitas m√°s interesantes de su barrio de los Campos El√≠seos para lograr que su estancia le resulte inolvidable.</p>
+                                <p class="pad_bot2">Situado a un centenar de metros de los Campos El√≠seos, el hotel Belmont le ofrece un acceso inmediato a las lujosas boutiques de las avenidas Montaigne y George V.</p>
                                 <a href="#" class="marker_2"></a>
                             </div>
                         </article>
-                                <% }
-                        } else {%>
+                        <% }
+                                } else {%>
                         <article class="col2 pad_left1">
                             <h2>Hoteles Populares</h2>
                             <div class="wrapper under">
                                 <figure class="left marg_right1"><img src="images/page1_img4.jpg" alt=""></figure>
                                 <p class="pad_bot2"><strong>Helmsley Park Lane</strong></p>
-                                <p class="pad_bot2">Helmsley Park Lane Æ es un hotel de lujo de 46 historias con las vistas panor·micas de Central Park  y el horizonte de la Ciudad de Nueva York . Sus espacios son amplios, elegantes y sus suites ofrecen ventanales y vistas magnÌficas. Se disfruta de un ambiente cl·sico, comodidad y conveniencia para una experiencia &uacute;nica en la ciudad lÌder mundial m·s extraordinaria.</p>
+                                <p class="pad_bot2">Helmsley Park Lane ¬Æ es un hotel de lujo de 46 historias con las vistas panor√°micas de Central Park  y el horizonte de la Ciudad de Nueva York . Sus espacios son amplios, elegantes y sus suites ofrecen ventanales y vistas magn√≠ficas. Se disfruta de un ambiente cl√°sico, comodidad y conveniencia para una experiencia &uacute;nica en la ciudad l√≠der mundial m√°s extraordinaria.</p>
                                 <p class="pad_bot2"> Localizada en el Central Park en Nueva York, justo en el centro del distrito de negocios, este hotel esta a una corta distancia de la 5ta Avenida, Broadway, Radio City, entre otras atracciones.</p>
                                 <a href="#" class="marker_2"></a>
                             </div>
                             <div class="wrapper">
                                 <figure class="left marg_right1"><img src="images/page1_img5.jpg" alt=""></figure>
                                 <p class="pad_bot2"><strong>Belmont</strong></p>
-                                <p class="pad_bot2">El hotel Belmont es un establecimiento distendido de 3 estrellas. Dotado de un notable confort tecnolÛgico y unos espacios sorprendentes, es un remanso de paz con una atmÛsfera relajante. Nuestro amable personal le informar· sobre las visitas m·s interesantes de su barrio de los Campos ElÌseos para lograr que su estancia le resulte inolvidable.</p>
-                                <p class="pad_bot2">Situado a un centenar de metros de los Campos ElÌseos, el hotel Belmont le ofrece un acceso inmediato a las lujosas boutiques de las avenidas Montaigne y George V.</p>
+                                <p class="pad_bot2">El hotel Belmont es un establecimiento distendido de 3 estrellas. Dotado de un notable confort tecnol√≥gico y unos espacios sorprendentes, es un remanso de paz con una atm√≥sfera relajante. Nuestro amable personal le informar√° sobre las visitas m√°s interesantes de su barrio de los Campos El√≠seos para lograr que su estancia le resulte inolvidable.</p>
+                                <p class="pad_bot2">Situado a un centenar de metros de los Campos El√≠seos, el hotel Belmont le ofrece un acceso inmediato a las lujosas boutiques de las avenidas Montaigne y George V.</p>
                                 <a href="#" class="marker_2"></a>
                             </div>
                         </article>
-                        <% } %>
+                        <% }%>
                     </article>
                 </section>
                 <!-- / content -->
@@ -214,13 +214,18 @@
         </div>
         <script type="text/javascript">
             Cufon.now();
-            $("#start_date").datepick({
+            $("#date1").datepick({
                 dateFormat: 'dd-mm-yyyy',
-                minDate: new Date()
+                minDate: new Date(),
+                altFormat: '@',
+                altField: '#start_date'
             });
-            $("#finish_date").datepick({
+            $("#date2").datepick({
                 dateFormat: 'dd-mm-yyyy',
-                minDate: new Date()
-            });</script>
+                minDate: new Date(),
+                altFormat: '@',
+                altField: '#finish_date'
+            });
+		</script>
     </body>
 </html>

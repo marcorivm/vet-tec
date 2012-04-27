@@ -554,3 +554,10 @@ table, table td, th, tr {
     border: none;    
     width: 116px;
 }
+
+table.tabla-datos, td.tabla-datos, tr.tabla-datos{
+    border-collapse: collapse;
+    padding: 5px;
+    text-align: left;
+    vertical-align: middle;
+}

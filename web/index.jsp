@@ -141,9 +141,9 @@
                                             </select></div>
 
                                         <div class="wrapper"><label for="date1">Llegada (dd/mm/aaaa)</label>
-                                            <input type="text" name="date1" id="date1" /></div>
+                                            <input type="text" name="date1" id="date1" /><input type="hidden" name="start_date" id="start_date" /></div>
                                         <div id="regreso" class="wrapper"><label for="date2">Salida (dd/mm/aaaa)</label>
-                                            <input type="text" name="date2" id="date2" /></div>
+                                            <input type="text" name="date2" id="date2" /><input type="hidden" name="finish_date" id="finish_date" /></div>
                                         <div class="wrapper">
                                             Tipo de Habitaci&oacute;n<br />
                                             <select name="tipoHabitacion">
@@ -232,11 +232,15 @@
             Cufon.now();
             $("#date1").datepick({
                 dateFormat: 'dd-mm-yyyy',
-                minDate: new Date()
+                minDate: new Date(),
+                altFormat: '@',
+                altField: '#start_date'
             });
             $("#date2").datepick({
                 dateFormat: 'dd-mm-yyyy',
-                minDate: new Date()
+                minDate: new Date(),
+                altFormat: '@',
+                altField: '#finish_date'
             });
         </script>
     </body>

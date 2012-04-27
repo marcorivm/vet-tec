@@ -1,7 +1,7 @@
 package Clases;
 
 import dbcp.ConnectionManager;
-import java.util.Date;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -101,9 +101,11 @@ public class Hotel {
      * @return 
      */
     public boolean isRoomAvailable(Date fromDate, Date toDate, int roomType) throws SQLException {
+        String fromDate_s = new java.text.SimpleDateFormat("yyyy-MM-dd").format(fromDate.getTime()*1000);
+        String toDate_s = new java.text.SimpleDateFormat("yyyy-MM-dd").format(toDate.getTime()*1000);
         String roomName;
         String hotelRooms;
-        String whereClause = "HotelId='"+this._hotelId+"' AND (HC.Dia >= "+fromDate+" AND HC.Dia <= "+toDate+")";
+        String whereClause = "HC.HotelId='"+this._hotelId+"' AND HD.HotelId='"+this._hotelId+"' AND (HC.Dia >='"+fromDate_s+"' AND HC.Dia <='"+toDate_s+"')";
         String tablesNames = "Tbl_Hotel_Details_GroupNo HD, Tbl_Hotel_Calendar HC";
         String fields[];
         ArrayList fieldsArrayList = new ArrayList();
@@ -191,5 +193,71 @@ public class Hotel {
             }            
         }
         return null;
+    }
+    
+    public static double getDiscount(String hId, Date DoB, Date DoC, double pd, int tipo)throws SQLException{
+        Hotel h = Hotel.getHotel(hId);
+        double discount = 1;
+        double totalCuartos=0;
+        double cuartosActual=0;
+        double capacidad;
+        double fare =0;
+        
+        /*Se declaran variables relacionadas con las fechas.
+         *Las que empiezan con "db" se relacionan con DateOfBooking.
+         *Las que empiezan con "dc" se relacionan con DateOfCheckIn.  
+         */
+        int dby = DoB.getYear();
+        int dcy = DoC.getYear();
+        int dbm = DoB.getMonth();
+        int dcm = DoC.getMonth();
+        int dbd = DoB.getDay();
+        int dcd = DoC.getDay();
+        //Se suma descuento por antelación.
+        if(dby == dcy+1){
+            dcm+=12;
+            if(dbm>dcm+2)
+                discount-=.2;
+            
+        }else if(dby == dcy){
+            if(dbm>dcm+2)
+                discount-=2;
+        }else{
+            discount-=2;
+        }
+        
+        //Se suma descuento por tipo de reservación.
+        discount-= 0.1*tipo;
+        
+        //Se suma descuento por paquete.
+        discount-=pd;
+        
+        //Se busca el Tbl_Hotel_Calendar para conseguir cuartos reservados actualmente.
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Hotel_Calendar", "HotelId= " + hId);
+        if (rs.next()) {
+            if(tipo==0)
+                cuartosActual = (double)rs.getInt("CuartosDelux");
+            else
+                cuartosActual = (double)rs.getInt("CuartosExec");
+        }
+        //Se consiguen datos de Tbl_Hotel_Details_GroupNo para capacidad total.
+        rs = ConnectionManager.selectAllColumns("Tbl_Hotel_Details_GroupNo","HotelId"+hId);
+        if (rs.next()) {
+            if(tipo==0)
+                totalCuartos = (double)rs.getInt("NoOfDeluxRooms");
+            else
+                totalCuartos = (double)rs.getInt("NoOfEXERooms");
+            
+        }
+        //80% = 20% mas
+        //-10% = 20% menos
+        //Se agrega descuento/aumento por capacidad.
+        capacidad = cuartosActual/totalCuartos;
+        if(capacidad>0.8)
+            discount += 0.2;
+        else if(capacidad<0.1)
+            discount -= 0.2;
+        
+        return discount;
     }
 }
