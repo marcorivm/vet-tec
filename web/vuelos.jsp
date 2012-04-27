@@ -178,7 +178,7 @@
                             </div>
                             <% } else if (f2) {%>
                             <h3> Vuelos de Ida no Disponibles </h3>
-                            <% } else {%>
+                            <% } else if((flights == null)&&(flights2 == null)){%>
                             <article class="col2 pad_left1">
                                 <h2>Nuestros Vuelos</h2>
                                 <div class="wrapper under">
