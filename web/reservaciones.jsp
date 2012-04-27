@@ -80,6 +80,7 @@
                                                 <hr />
                                                 <input type="text" placeholder="Apellido" name="lastName" />
                                                 <input type="text" placeholder="Nombre" name="firstName" />
+                                                <input type="text" placeholder="E-Mail" name="mail" />
                                             </div>                                           
 
 

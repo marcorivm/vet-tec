@@ -38,6 +38,7 @@ public class SearchReservation extends HttpServlet {
         String id = request.getParameter("bookingId");
         String lastName = request.getParameter("lastName");
         String firstName = request.getParameter("firstName");
+        String mail = request.getParameter("mail");
 
         Package_Booking booking;
 
@@ -46,6 +47,12 @@ public class SearchReservation extends HttpServlet {
         if (id != null && !id.equals("")) {
             // buscar por ID
             Package_Booking pb = Package_Booking.getPackage_Booking(id);
+            request.setAttribute("booking", pb);
+            // redireccionar a jsp
+            rd.forward(request, response);
+        } else if (mail != null && !mail.equals("")) {
+            // buscar por mail
+            Package_Booking pb = Package_Booking.getPackage_BookingMail(mail);
             request.setAttribute("booking", pb);
             // redireccionar a jsp
             rd.forward(request, response);
