@@ -248,7 +248,7 @@
             $("#form_1").bind("submit",function() {
                 var isValid = true;
                 if(!validator.isNumeric($("#date1")) || 
-                    (validator.getRaw(jQuery("[name='isRoundTrip']").get(0)) == "true" && 
+                    (jQuery("[name='isRoundTrip']").get(0).checked && 
                     !validator.isNumeric($("#date2")))){
                     // TODO: Validar rango de fechas
                     isValid = false;
