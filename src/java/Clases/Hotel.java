@@ -103,7 +103,7 @@ public class Hotel {
     public boolean isRoomAvailable(Date fromDate, Date toDate, int roomType) throws SQLException {
         String roomName;
         String hotelRooms;
-        String whereClause = "HC.HotelId='"+this._hotelId+"' HD.HotelId='"+this._hotelId+"' AND (HC.Dia >='"+fromDate.getTime()+"' AND HC.Dia <='"+toDate.toString()+"')";
+        String whereClause = "HC.HotelId='"+this._hotelId+"' HD.HotelId='"+this._hotelId+"' AND (HC.Dia >='"+fromDate.toString()+"' AND HC.Dia <='"+toDate.toString()+"')";
         String tablesNames = "Tbl_Hotel_Details_GroupNo HD, Tbl_Hotel_Calendar HC";
         String fields[];
         ArrayList fieldsArrayList = new ArrayList();
