@@ -84,7 +84,7 @@ var validator = {
         if(this.isRawEmpty(obj)) {
             return null;
         } else if(typeof(obj) == "object") {
-            obj =  (obj.jquery == "undefined")? obj : obj.get(0);
+            obj =  (obj.jquery == undefined)? obj : obj.get(0);
             if(this.isDomElement(obj)) {
                 switch(obj.tagName.toLowerCase()) {
                     case "input":
