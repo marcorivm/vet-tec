@@ -88,11 +88,14 @@
                             <div class="wrapper">
                                 <h3>Ingrese los datos de la reservacion.</h3>
                                 <div class="form">
+                                    <label for="customerId">Agente de Ventas:</label>
+                            
+                                    
                                     <label for="lname1">Client ID </label>
                                     <select name="clientId" id="clientId" />
                                           <% if (customer != null)
                                                for (Customer c : customer) {%>
-                                                <option value="<%=c.getCustomerID()%>"><%=c.getCustomerID()%></option>
+                                                <option value="<%=c.getCustomerID()%>"><%=c.getFirstName()%> <%=c.getLastName()%></option>
                                                <% }%>
                                     </select>
                                 </div>
