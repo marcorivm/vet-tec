@@ -57,7 +57,7 @@ public class HotelServlet extends HttpServlet {
         String date2 = request.getParameter("date2");
         String room_type = request.getParameter("tipoHabitacion");
         String room_size = request.getParameter("type");
-        
+        int room_type_num = (room_type.equals("deluxe"))? 2 : 1;
         
         request.setAttribute("city", location);
         request.setAttribute("date1", date1);
@@ -65,7 +65,7 @@ public class HotelServlet extends HttpServlet {
         request.setAttribute("type", room_type);
         request.setAttribute("tipoHabitacion", room_size);
         
-        String habitacion = (room_type.equals("2"))? "Delujo " : "Ejecutiva ";
+        String habitacion = (room_type.equals("deluxe"))? "Delujo " : "Ejecutiva ";
         habitacion += room_size;
         
         request.setAttribute("habitacion", habitacion);
@@ -76,7 +76,7 @@ public class HotelServlet extends HttpServlet {
             Hotel hoteles[] = Hotel.getHotels(City.getCity(location));
             ArrayList<Hotel> hoteles_disp = new  ArrayList<Hotel>();
             for(int i = 0; i < hoteles.length; i++) {
-              if(hoteles[i].isRoomAvailable(start_date_s, finish_date_s, Integer.parseInt(room_type))) {
+              if(hoteles[i].isRoomAvailable(start_date_s, finish_date_s, room_type_num)) {
                  hoteles_disp.add(hoteles[i]);
               }
                

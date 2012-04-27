@@ -70,9 +70,9 @@
                                                 </select><br />
                                             </div>
                                             <div class="wrapper">
-                                                <input type ="radio" name="tipoHabitacion" id="deluxe" value="2"/>                                                
+                                                <input type ="radio" name="tipoHabitacion" id="deluxe" value="deluxe"/>                                                
                                                 <label for="deluxe">Cuartos Deluxe</label> <br/>
-                                                <input type="radio" name ="tipoHabitacion" id="exe" value="1" checked="checked" />
+                                                <input type="radio" name ="tipoHabitacion" id="exe" value="exe" checked="checked" />
                                                 <label for="exe">Cuartos Exe</label>
                                             </div>
                                             <div>
@@ -87,12 +87,6 @@
                     <article class="col2 pad_left1">
                         <% if (request.getAttribute("consulta") != null) {
                                 if (hotels != null && hotels.length > 0) {%>
-                                <form name="hotelSelection" action="HotelReservation.jsp" method="post">
-                                    <input type="hidden" value="${city}" name="city" id="city" />
-                                    <input type="hidden" value="${date1}" name="date1" id="date1" />
-                                    <input type="hidden" value="${date2}" name="date2" id="date2" />
-                                    <input type="hidden" value="${type}" name="type" id="type" />
-                                    <input type="hidden" value="${tipoHabitacion}" name="tipoHabitacion" id="tipoHabitacion" />
                         <h2>Revisar Hotel</h2>
                         <div class="wrapper under">
                             <div id="hotelDetails" class="under">
@@ -140,6 +134,13 @@
                                         </tr>
                                         <% for (Hotel h : hotels) {%>
                                         <tr>
+                                            <form name="hotelSelection" action="HotelReservation.jsp" method="GET">
+                                            <input type="hidden" value="<%=h.getHotelId()%>" name="hotelNo"/>
+                                            <input type="hidden" value="${city}" name="city"/>
+                                            <input type="hidden" value="${date1}" name="date1"/>
+                                            <input type="hidden" value="${date2}" name="date2"/>
+                                            <input type="hidden" value="${type}" name="type"/>
+                                            <input type="hidden" value="${tipoHabitacion}" name="tipoHabitacion" id="tipoHabitacion" />
                                             <td><%=h.getHotelName()%></td>
                                             <td>${habitacion}</td>
                                             <td><%=h.getDeluxRoomFare_PerDay()%></td>
@@ -149,13 +150,13 @@
                                             <td><%=(((h.getDeluxRoomFare_PerDay()) * h.getNoOfDeluxRooms()) + ((h.getEXERoomFarePerDay()) * h.getNoOfEXERooms()))%></td>
                                             <td><%=h.getHotelTax()%></td>
                                             <td><%=(((h.getDeluxRoomFare_PerDay()) * h.getNoOfDeluxRooms()) + ((h.getEXERoomFarePerDay()) * h.getNoOfEXERooms()) + h.getHotelTax())%></td>
-                                            <td><a href="HotelReservation.jsp?hotelNo=<%=h.getHotelId()%>"><input type="button" class="button" value="Reservar" /></a></td>
+                                            <td><input type="submit" class="button" value="Reservar" /></td>
+                                            </form>
                                         </tr>
                                         <% }%>
                                     </table>
                                 </div>
                             </div>
-                        </form>
                         <% } else { %>
                         <h3>No hay resultados</h3>
                         <article class="col2 pad_left1">

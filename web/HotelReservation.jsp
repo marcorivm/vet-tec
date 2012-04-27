@@ -60,14 +60,15 @@
                                             <div class="wrapper">
                                                 Tipo de Habitaci&oacute;n<br />
                                                 <select name="tipoHabitacion">
-                                                    <option value="sencilla">Sencilla</option>
-                                                    <option value="doble">Doble</option>
-                                                    <option value="triple">Triple</option>
-                                                    <option value="cuadruple">Cu&aacute;druple</option>
+                                                    <option value="1">Sencilla</option>
+                                                    <option value="2">Doble</option>
+                                                    <option value="3">Triple</option>
+                                                    <option value="4">Cu&aacute;druple</option>
                                                 </select><br />
                                             </div>
+                                                <input type ="radio" name="type" id="type" value="2"  />                                                
                                             <div class="wrapper">
-                                                <input type ="radio" name="type" id="type" value="deluxe"/>                                                
+                                                <input type ="radio" name="type" id="type" value="deluxe"  />                                                
                                                 <label for="deluxe">Cuartos Deluxe</label> <br/>
                                                 <input type="radio" name ="type" id="type" value="exe" />
                                                 <label for="exe">Cuartos Exe</label>
@@ -82,10 +83,10 @@
                     </article>
                     <!-- columna derecha -->
                     <article class="col2 pad_left1">
-                        <form id="form_2" method="POST" action="SaveHB">
+                        <form id="form_2" method="POST" action="SaveHB" style="color:black">
                         <div class="wrapper under">
                             <div class="wrapper">
-                                <h3>Ingrese los datos de la reservaci&oacute;n.</h3>
+                                <h3>Ingrese los datos de la reservacion.</h3>
                                 <div class="form">
                                     <label for="lname1">Client ID </label>
                                     <select name="clientId" id="clientId" />
@@ -98,22 +99,24 @@
                                 <div class="wrapper">
                                                 Tipo de Habitaci&oacute;n<br />
                                                 <select name="capacidadHab">
-                                                    <option value="1">Sencilla</option>
-                                                    <option value="2">Doble</option>
-                                                    <option value="3">Triple</option>
-                                                    <option value="4">Cu&aacute;druple</option>
+                                                    <% String tipoH = request.getParameter("tipoHabitacion"); %>
+                                                    <option value="sencilla" <%=(tipoH.equalsIgnoreCase("sencilla"))? "selected='selected'": ""%>>Sencilla</option>
+                                                    <option value="doble" <%=(tipoH.equalsIgnoreCase("doble"))? "selected='selected'": ""%>>Doble</option>
+                                                    <option value="triple" <%=(tipoH.equalsIgnoreCase("triple"))? "selected='selected'": ""%>>Triple</option>
+                                                    <option value="cuadruple" <%=(tipoH.equalsIgnoreCase("cuadruple"))? "selected='selected'": ""%>>Cu&aacute;druple</option>
                                                 </select><br />
                                 </div>
                                 <div class="wrapper">
-                                                <input type ="radio" name="tipo" id="tipo" value="deluxe"/>                                                
+                                    <% String room_type = request.getParameter("type"); %>
+                                                <input type ="radio" name="tipo" id="tipo" value="deluxe" <%=(room_type.equalsIgnoreCase("deluxe"))? "checked='checked'": ""%>/>                                                
                                                 <label for="deluxe">Cuartos Deluxe</label> <br/>
-                                                <input type="radio" name ="tipo" id="tipo" value="exe" />
+                                                <input type="radio" name ="tipo" id="tipo" value="exe" <%=(room_type.equalsIgnoreCase("exe"))? "checked='checked'": ""%> />
                                                 <i<label for="exe">Cuartos Exe</label>
                                             </div>
                                 <div class="wrapper"><label for="date1">Llegada (dd/mm/aaaa)</label>
-                                                <input type="text" name="dateLleg" id="dateLleg" /></div>
+                                                <input type="text" name="dateLleg" id="dateLleg" value="<%=request.getParameter("date1")%>"/></div>
                                             <div id="regreso" class="wrapper"><label for="date2">Salida (dd/mm/aaaa)</label>
-                                                <input type="text" name="dateSal" id="dateSal" /></div>
+                                                <input type="text" name="dateSal" id="dateSal" value="<%=request.getParameter("date2")%>" /></div>
                             </div>
                         </div>
                         </form>
