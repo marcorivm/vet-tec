@@ -1,9 +1,8 @@
-<%@page import="java.util.ArrayList"%>
 <%@page import="Clases.Hotel"%>
 <%@page import="Clases.City"%>
 <%
     City[] cities = City.getCities();
-    Hotel hotels[];
+    Hotel[] hotels;
     hotels = (Hotel[]) request.getAttribute("hotels");
     int cuartosDel = 0;
     int cuartosExe = 0;
@@ -62,13 +61,13 @@
                                                     <% }%>
                                                 </select></div>
 
-                                            <div class="wrapper"><label for="date1">Llegada (dd/mm/aaaa)</label>
-                                                 <input type="text" name="date1" id="date1" /> <input type="hidden" name="start_date" id="start_date" /></div>
+                                            <div class="wrapper"><label for="start_date">Llegada (dd/mm/aaaa)</label>
+                                                <input type="text" name="start_date" id="start_date" /></div>
                                             <div id="regreso" class="wrapper"><label for="finish_date">Salida (dd/mm/aaaa)</label>
-                                                <input type="text" name="date2" id="date2" /><input type="hidden" name="finish_date" id="finish_date" /></div>
+                                                <input type="text" name="finish_date" id="finish_date" /></div>
                                             <div class="wrapper">
                                                 Tipo de Habitaci&oacute;n<br />
-                                                <select name="type">
+                                                <select name="tipoHabitacion">
                                                     <option value="sencilla">Sencilla</option>
                                                     <option value="doble">Doble</option>
                                                     <option value="triple">Triple</option>
@@ -76,9 +75,9 @@
                                                 </select><br />
                                             </div>
                                             <div class="wrapper">
-                                                <input type ="radio" name="tipoHabitacion" id="deluxe" value="2"/>                                                
+                                                <input type ="radio" name="type" id="type" value="deluxe"/>                                                
                                                 <label for="deluxe">Cuartos Deluxe</label> <br/>
-                                                <input type="radio" name ="tipoHabitacion" id="exe" value="1" checked="checked" />
+                                                <input type="radio" name ="type" id="type" value="exe" checked="checked" />
                                                 <label for="exe">Cuartos Exe</label>
                                             </div>
                                             <div>
@@ -91,7 +90,6 @@
                     </article>
                     <!-- columna derecha -->
                     <article class="col2 pad_left1">
-<<<<<<< HEAD
                         <% if (hotels != null) {
                                 if (hotels.length > 0) {%>
                         <form name="hotelSelection" action="HotelReservation.jsp" method="post">
@@ -102,6 +100,10 @@
                             <input type="hidden" value="${tipoHabitacion}" name="tipoHabitacion" id="tipoHabitacion" />
                             <h2>Revisar Hotel</h2>
                             <div class="wrapper under">
+                                <div id="continuar" class="under">
+                                    <h3>Tome la oportunidad de Reservar un Hotel</h3>
+                                    <h4> <a href="Package.jsp" class="button" >No, deseo continuar</a></h4>
+                                </div>
                                 <div id="fareDetails">
                                     <h3>Revisar Detalles de la Tarifa</h3>
                                     <div>
@@ -126,76 +128,6 @@
                                             <% }%>
                                         </table>
                                     </div>
-=======
-                        <% if (request.getAttribute("consulta") != null) {
-                                if (hotels != null && hotels.length > 0) {%>
-                                <form name="hotelSelection" action="HotelReservation.jsp" method="post">
-                                    <input type="hidden" value="${city}" name="city" id="city" />
-                                    <input type="hidden" value="${date1}" name="date1" id="date1" />
-                                    <input type="hidden" value="${date2}" name="date2" id="date2" />
-                                    <input type="hidden" value="${type}" name="type" id="type" />
-                                    <input type="hidden" value="${tipoHabitacion}" name="tipoHabitacion" id="tipoHabitacion" />
-                        <h2>Revisar Hotel</h2>
-                        <div class="wrapper under">
-                            <div id="hotelDetails" class="under">
-                                <h3>Revisar Detalles del Hotel</h3>
-                                <h4>
-                                    <div>En <span class="city"><%= City.getCity((String)request.getAttribute("city")).getCityName()%></span> del <span class="city">${date1}</span> al <span class="city">${date2}</span></div>
-                                <div>En <span class="city">${habitacion}</span></div>
-                                </h4>
-                                <div>
-                                    <table>
-                                        <tr>
-                                            <th>Hotel</th>
-                                            <th>Fecha Llegada</th>
-                                            <th>Fecha Salida</th>
-                                            <th>Tarifa Delujo por noche</th>
-                                            <th>Tarifa Ejecutiva por noche</th>
-                                        </tr>
-                                        <% for (Hotel h : hotels) {%>
-                                        <tr>
-                                            <td><%=h.getHotelName()%></td>
-                                            <td>FECHA LLEGADA</td>
-                                            <td>FECHA SALIDA</td>
-                                            <td><b><%=h.getDeluxRoomFare_PerDay()%></b></td>
-                                            <td><b><%=h.getEXERoomFarePerDay()%></b></td>
-                                        </tr>
-                                        <% }%>
-                                    </table>
-                                </div>
-                            </div>
-                            <div id="fareDetails">
-                                <h3>Revisar Detalles de la Tarifa</h3>
-                                <div>
-                                    <table>
-                                        <tr>
-                                            <th>Hotel</th>
-                                            <th>Tipo de Habitación</th>
-                                            <th>Tarifa Delujo por noche</th>
-                                            <th>Tarifa Ejecutiva por noche</th>
-                                            <th>Habitaciones Deluxe</th>
-                                            <th>Habitaciones Exe</th>
-                                            <th>Tarifa</th>
-                                            <th>Impuestos</th>
-                                            <th>Total</th>
-                                            <th>Reservar</th>
-                                        </tr>
-                                        <% for (Hotel h : hotels) {%>
-                                        <tr>
-                                            <td><%=h.getHotelName()%></td>
-                                            <td>Sencilla/Doble/Quad</td>
-                                            <td><%=h.getDeluxRoomFare_PerDay()%></td>
-                                            <td><%=h.getEXERoomFarePerDay()%></td>
-                                            <td><%=cuartosDel%></td>
-                                            <td><%=cuartosExe%></td>
-                                            <td><%=(((h.getDeluxRoomFare_PerDay()) * cuartosDel) + ((h.getEXERoomFarePerDay()) * cuartosExe))%></td>
-                                            <td><%=h.getHotelTax()%></td>
-                                            <td><%=(((h.getDeluxRoomFare_PerDay()) * cuartosDel) + ((h.getEXERoomFarePerDay()) * cuartosExe) + h.getHotelTax())%></td>
-                                            <td><a href="/Reservar?hotelNo=<%=h.getHotelId()%>"><button class="button" value="Reservar" /></a></td>
-                                        </tr>
-                                        <% }%>
-                                    </table>
->>>>>>> dae3bfc4d6b11a56dae6bfd95f41fdc1592b3b81
                                 </div>
                             </div>
                         </form>
@@ -219,7 +151,7 @@
                             </div>
                         </article>
                         <% }
-                                } else {%>
+                        } else {%>
                         <article class="col2 pad_left1">
                             <h2>Hoteles Populares</h2>
                             <div class="wrapper under">
@@ -237,7 +169,8 @@
                                 <a href="#" class="marker_2"></a>
                             </div>
                         </article>
-                        <% }%>
+                        <%                                                           }
+                        %>
                     </article>
                 </section>
                 <!-- / content -->
@@ -253,15 +186,11 @@
             Cufon.now();
             $("#date1").datepick({
                 dateFormat: 'dd-mm-yyyy',
-                minDate: new Date(),
-                altFormat: '@',
-                altField: '#start_date'
+                minDate: new Date()
             });
             $("#date2").datepick({
                 dateFormat: 'dd-mm-yyyy',
-                minDate: new Date(),
-                altFormat: '@',
-                altField: '#finish_date'
+                minDate: new Date()
             });</script>
     </body>
 </html>
