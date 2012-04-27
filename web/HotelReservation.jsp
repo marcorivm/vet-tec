@@ -70,7 +70,7 @@
                                                 <input type ="radio" name="type" id="type" value="deluxe"/>                                                
                                                 <label for="deluxe">Cuartos Deluxe</label> <br/>
                                                 <input type="radio" name ="type" id="type" value="exe" />
-                                                <i<label for="exe">Cuartos Exe</label>
+                                                <label for="exe">Cuartos Exe</label>
                                             </div>
                                             <div>
                                                 <input type="submit" class="button" value="Buscar" />

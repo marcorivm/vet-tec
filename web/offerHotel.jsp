@@ -3,15 +3,7 @@
 <%
     City[] cities = City.getCities();
     Hotel[] hotels;
-    hotels = (Hotel[]) request.getAttribute("hotels");
-    int cuartosDel = 0;
-    int cuartosExe = 0;
-    if (request.getAttribute("cuartosDel") != null) {
-        cuartosDel = Integer.parseInt((String) request.getAttribute("cuartosDel"));
-    }
-    if (request.getAttribute("cuartosExe") != null) {
-        cuartosExe = Integer.parseInt((String) request.getAttribute("cuartosExe"));
-    }
+    hotels = (Hotel[]) request.getAttribute("hotels");    
 %>
 
 <!DOCTYPE html>
@@ -107,7 +99,7 @@
                                 </div>
                                 <div id="fareDetails">
                                     <h3>Revisar Detalles de la Tarifa</h3>
-                                    <div>
+                                    <div class="scroll">
                                         <table>
                                             <tr>
                                                 <th>Hotel</th>
@@ -120,11 +112,11 @@
                                             <% for (Hotel h : hotels) {%>
                                             <tr>
                                                 <td><%=h.getHotelName()%></td>
-                                                <td>Sencilla/Doble/Quad</td>
+                                                <td>${habitacion}</td>
                                                 <td><%=h.getDeluxRoomFare_PerDay()%></td>
                                                 <td><%=h.getEXERoomFarePerDay()%></td>
                                                 <td><%=h.getHotelTax()%></td>
-                                                <td><a class="button" href="/Reservar?hotelNo=<%=h.getHotelId()%>">Reservar</a></td>
+                                                <td><a class="button" href="HotelReservation.jsp?hotelNo=<%=h.getHotelId()%>">Reservar</a></td>
                                             </tr>
                                             <% }%>
                                         </table>

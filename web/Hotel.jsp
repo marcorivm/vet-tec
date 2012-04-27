@@ -5,14 +5,7 @@
     City[] cities = City.getCities();
     Hotel hotels[];
     hotels = (Hotel[]) request.getAttribute("hotels");
-    int cuartosDel = 0;
-    int cuartosExe = 0;
-    if (request.getAttribute("cuartosDel") != null) {
-        cuartosDel = Integer.parseInt((String) request.getAttribute("cuartosDel"));
-    }
-    if (request.getAttribute("cuartosExe") != null) {
-        cuartosExe = Integer.parseInt((String) request.getAttribute("cuartosExe"));
-    }
+    
 %>
 
 <!DOCTYPE html>
@@ -120,8 +113,8 @@
                                         <% for (Hotel h : hotels) {%>
                                         <tr>
                                             <td><%=h.getHotelName()%></td>
-                                            <td>FECHA LLEGADA</td>
-                                            <td>FECHA SALIDA</td>
+                                            <td>${date1}</td>
+                                            <td>${date2}</td>
                                             <td><b><%=h.getDeluxRoomFare_PerDay()%></b></td>
                                             <td><b><%=h.getEXERoomFarePerDay()%></b></td>
                                         </tr>
@@ -131,11 +124,11 @@
                             </div>
                             <div id="fareDetails">
                                 <h3>Revisar Detalles de la Tarifa</h3>
-                                <div>
+                                <div class="scroll">
                                     <table>
                                         <tr>
                                             <th>Hotel</th>
-                                            <th>Tipo de Habitación</th>
+                                            <th>Tipo de Habitaci&oacute;n</th>
                                             <th>Tarifa Delujo por noche</th>
                                             <th>Tarifa Ejecutiva por noche</th>
                                             <th>Habitaciones Deluxe</th>
@@ -148,15 +141,15 @@
                                         <% for (Hotel h : hotels) {%>
                                         <tr>
                                             <td><%=h.getHotelName()%></td>
-                                            <td>Sencilla/Doble/Quad</td>
+                                            <td>${habitacion}</td>
                                             <td><%=h.getDeluxRoomFare_PerDay()%></td>
                                             <td><%=h.getEXERoomFarePerDay()%></td>
-                                            <td><%=cuartosDel%></td>
-                                            <td><%=cuartosExe%></td>
-                                            <td><%=(((h.getDeluxRoomFare_PerDay()) * cuartosDel) + ((h.getEXERoomFarePerDay()) * cuartosExe))%></td>
+                                            <td><%=h.getNoOfDeluxRooms()%></td>
+                                            <td><%=h.getNoOfEXERooms()%></td>
+                                            <td><%=(((h.getDeluxRoomFare_PerDay()) * h.getNoOfDeluxRooms()) + ((h.getEXERoomFarePerDay()) * h.getNoOfEXERooms()))%></td>
                                             <td><%=h.getHotelTax()%></td>
-                                            <td><%=(((h.getDeluxRoomFare_PerDay()) * cuartosDel) + ((h.getEXERoomFarePerDay()) * cuartosExe) + h.getHotelTax())%></td>
-                                            <td><a href="/Reservar?hotelNo=<%=h.getHotelId()%>"><button class="button" value="Reservar" /></a></td>
+                                            <td><%=(((h.getDeluxRoomFare_PerDay()) * h.getNoOfDeluxRooms()) + ((h.getEXERoomFarePerDay()) * h.getNoOfEXERooms()) + h.getHotelTax())%></td>
+                                            <td><a href="HotelReservation.jsp?hotelNo=<%=h.getHotelId()%>"><input type="button" class="button" value="Reservar" /></a></td>
                                         </tr>
                                         <% }%>
                                     </table>
