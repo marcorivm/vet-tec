@@ -203,7 +203,7 @@
                                     <br />
                                     <span class="floatRight">
                                         <%
-                                            totalRegreso = ((flightida.getAdult_Fare() * adultos + flightregreso.getAirport_Tax()) + (flightregreso.getChild_Fare() * ninos + (flightregreso.getAirport_Tax() * impuestoNinos)));
+                                            totalRegreso = ((flightregreso.getAdult_Fare() * adultos + flightregreso.getAirport_Tax()) + (flightregreso.getChild_Fare() * ninos + (flightregreso.getAirport_Tax() * impuestoNinos)));
                                             Date doj = FlightSeat_Status.getFlightSeat_Status(flightregreso.getFlight_No()).getDateOfJourney();
                                             double descuento = Flight.getDiscount(flightregreso.getFlight_No(), new Date(), doj, 0);
                                         %>
