@@ -70,6 +70,9 @@ public class SaveFB extends HttpServlet {
             String[] dates = date1.split("-");
             Date DoJTo = Date.valueOf(dates[2] + "-" + dates[1] + "-" + dates[0]);
             fbTo.setDateOfJourney(DoJTo);
+            dates = date2.split("-");
+            DoJTo = Date.valueOf(dates[2] + "-" + dates[1] + "-" + dates[0]);
+            fbTo.setDateOfBooking(DoJTo);
 
             Flight_Booking fbFrom = null;
 

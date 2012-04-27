@@ -58,6 +58,8 @@ public class PrepareOfr extends HttpServlet {
             Hotel hotels[] = Hotel.getHotels(destino);
             String date1 = "13-10-2012";
             String date2 = "13-10-2012";
+            date1 = fbTo.getDateOfBooking().toString();
+            date2 = fbTo.getDateOfJourney().toString();
             String type = "sencilla";
             String tipoH = "exe";
             String city = flight.getDestination().getCityCode();
