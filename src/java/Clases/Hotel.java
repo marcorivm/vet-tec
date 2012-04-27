@@ -1,6 +1,7 @@
 package Clases;
 
 import dbcp.ConnectionManager;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -91,7 +92,51 @@ public class Hotel {
     public void setHotelTax(double aHotelTax) {
         this._hotelTax = aHotelTax;
     }
-
+    
+    /**
+     * Method that checks if a specific room type is available in the Hotel
+     * for the given dates.
+     * @param fromDate
+     * @param toDate
+     * @param roomType 0 - Any room. 1 - Deluxe. 2 - Executive.
+     * @return 
+     */
+    public boolean isRoomAvailable(Date fromDate, Date toDate, int roomType) throws SQLException {
+        String fromDate_s = new java.text.SimpleDateFormat("yyyy-MM-dd").format(fromDate.getTime()*1000);
+        String toDate_s = new java.text.SimpleDateFormat("yyyy-MM-dd").format(toDate.getTime()*1000);
+        String roomName;
+        String hotelRooms;
+        String whereClause = "HC.HotelId='"+this._hotelId+"' AND HD.HotelId='"+this._hotelId+"' AND (HC.Dia >='"+fromDate_s+"' AND HC.Dia <='"+toDate_s+"')";
+        String tablesNames = "Tbl_Hotel_Details_GroupNo HD, Tbl_Hotel_Calendar HC";
+        String fields[];
+        ArrayList fieldsArrayList = new ArrayList();
+        boolean isAvailable = true;
+        switch(roomType) {
+            case 1:
+                roomName = "HC.CuartosExec as Total";
+                hotelRooms = "HD.NoOfEXERooms as Htotal";
+                break;
+            case 2:
+                roomName = "HC.CuartosDelux as Total";
+                hotelRooms = "HD.NoOfDeluxRooms as Htotal";
+                break;
+            case 3:
+            default:
+                roomName = "(HC.CuartosDelux + HC.CuartosDelux) as Total"; 
+                hotelRooms = "(HD.NoOfDeluxRooms + HD.NoOfEXERooms) as Htotal";
+        }
+        fieldsArrayList.add(roomName);
+        fieldsArrayList.add(hotelRooms);
+        fields = new String[fieldsArrayList.size()];
+        fieldsArrayList.toArray(fields);
+        ResultSet rs = ConnectionManager.select(fields, tablesNames, whereClause);
+        if(rs.next()){
+            do {
+                isAvailable = isAvailable && (rs.getInt("Total") < rs.getInt("Htotal"));
+            } while(rs.next());
+        }
+        return isAvailable;
+    }
     /**
      * Method that creates an object according to its defined WHERE clause and
      * received variables
@@ -102,10 +147,16 @@ public class Hotel {
      * new Hotel
      */
     public static Hotel getHotel(String _hotelId) throws SQLException {
-        ResultSet rs = ConnectionManager.selectAllColumns("Hotel", "_hotelId= " + _hotelId);
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Hotel_Details_GroupNo", "HotelId='" + _hotelId + "'");
         if (rs.next()) {
-            Hotel h = new Hotel(rs.getString("_hotelId"), rs.getString("_hotelName"), City.getCity(rs.getString("_cityCode")), rs.getInt("_noOfDeluxeRooms"),
-                    rs.getInt("_numOfEXERooms"), rs.getDouble("_deluxRoomsFare_PerDay"), rs.getDouble("_eXERoomFarePerDay"), rs.getDouble("_hotelTax"));
+            Hotel h = new Hotel(rs.getString("HotelId"), 
+                                            rs.getString("HotelName"), 
+                                            City.getCity(rs.getString("Location")), 
+                                            rs.getInt("NoOfDeluxRooms"),
+                                            rs.getInt("NoOfEXERooms"), 
+                                            rs.getDouble("deluxRoomFare_PerDay"), 
+                                            rs.getDouble("EXERoomFare_PerDay"), 
+                                            rs.getDouble("HotelTax"));
             return h;
         } else {
             return null;

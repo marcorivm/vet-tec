@@ -2,17 +2,19 @@ package Servlets;
 
 
 
+import Clases.City;
+import Clases.Customer;
+import Clases.Flight;
 import Clases.Flight_Booking;
 import dbcp.ConnectionManager;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.SimpleDateFormat;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -44,68 +46,32 @@ public class ReservarVuelo extends HttpServlet {
         ResultSet resultados;
         //Obtenemos la conexión e iniciamos la transacción IMPORTANTE cerrar conexión (commit o rollback)
         Connection con = ConnectionManager.initTransaction();
-        
-        try {
             
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD hh:mm:ss");
             
-            //Introducciòn de parametros
-	    String campos[][] = {{"FlightNo",request.getParameter("FlightNo")},
-                                {"AirlinesName",request.getParameter("AirlinesName")},
-                                {"Source",request.getParameter("Source")},
-                                {"Destination",request.getParameter("Destination")},
-                                {"DepartureTime",request.getParameter("DepartureTime")},
-                                {"ArrivalTime",request.getParameter("ArrivalTime")},
-                                {"TotalSeats",request.getParameter("TotalSeats")},
-                                {"AdultFare",request.getParameter("AdultFare")},
-                                {"ChildFare",request.getParameter("ChildFare")}};
             boolean isRound = (request.getParameter("isRoundTrip").equalsIgnoreCase("true"));
+            Flight flightTo = Flight.getFlight(Integer.parseInt(request.getParameter("flightTo")));
+            request.getSession().setAttribute("flightTo", flightTo);
             
-            //Se inserta el dato y se guarda la reservaciòn
-            int ciudades = ConnectionManager.insertAndGetKey(campos,"Tbl_Flight_GroupNo", con);
-            String camposregistro[][] = {{"BookingId",Flight_Booking.getNextId()},{"FlightNo","" + ciudades},
-                                         {"CustomerId",request.getParameter("CustomerId")},
-                                         {"DateofBooking",(sdf.format(cal.getTime()))},
-                                         {"DateOfJourney",request.getParameter("DateOfJourney")},
-                                         {"NoOfAdults",request.getParameter("NoOfAdults")},
-                                         {"NoOfChildren",request.getParameter("NoOfChildren")}};
-      	    boolean vuelo_1 = ConnectionManager.insert(camposregistro,"Tbl_Flight_Booking_GroupNo",con);
-            
+            Flight_Booking fbTo = new Flight_Booking(Flight_Booking.getNextId(), Date.valueOf((sdf.format(cal.getTime()))),
+                                Date.valueOf(request.getParameter("DateOfJourney")), Customer.getCustomer(Integer.parseInt(request.getParameter("CustomerId"))),
+                                flightTo, Integer.parseInt(request.getParameter("NoOfAdults")), Integer.parseInt(request.getParameter("NoOfChildren")));
             // Inicializar la variable de control para el segundo vuelo
+            request.getSession().setAttribute("fbTo", fbTo);
             boolean vuelo_2 = true; 
             if(isRound)
             {
-                // Falta completar los campos, ¿¿¿de donde viene el request???
-                String campos_2[][] = {{"FlightNo",request.getParameter("FlightNo")},
-                                       {"AirlinesName",request.getParameter("AirlinesName")},
-                                       {"Source",request.getParameter("Source")},
-                                       {"Destination",request.getParameter("Destination")},
-                                       {"DepartureTime",request.getParameter("DepartureTime")},
-                                       {"ArrivalTime",request.getParameter("ArrivalTime")},
-                                       {"TotalSeats",request.getParameter("TotalSeats")},
-                                       {"AdultFare",request.getParameter("AdultFare")},
-                                       {"ChildFare",request.getParameter("ChildFare")}};
-                ciudades = ConnectionManager.insertAndGetKey(campos,"Tbl_Flight_GroupNo", con);
-                String camposregistro_2[][] = {{"BookingId",Flight_Booking.getNextId()},
-                                               {"FlightNo","" + ciudades},
-                                               {"CustomerId",request.getParameter("CustomerId")},
-                                               {"DateofBooking",(sdf.format(cal.getTime()))},
-                                               {"DateOfJourney",request.getParameter("DateOfJourney")},
-                                               {"NoOfAdults",request.getParameter("NoOfAdults")},
-                                               {"NoOfChildren",request.getParameter("NoOfChildren")}};
-                ConnectionManager.insert(camposregistro,"Tbl_Flight_Booking_GroupNo");
+                
+                Flight flightFrom = Flight.getFlight(Integer.parseInt(request.getParameter("flightFrom")));
+                request.getSession().setAttribute("flightFrom", flightFrom);
+                Flight_Booking fbFrom = new Flight_Booking(Flight_Booking.getNextId(), Date.valueOf((sdf.format(cal.getTime()))),
+                                Date.valueOf(request.getParameter("DateOfJourney")), Customer.getCustomer(Integer.parseInt(request.getParameter("CustomerId"))),
+                                flightFrom, Integer.parseInt(request.getParameter("NoOfAdults")), Integer.parseInt(request.getParameter("NoOfChildren")));
+                request.getSession().setAttribute("fbFrom", fbFrom);
             }
-            
-            //Si alguno de los inserts no fue exitoso
-            if(!vuelo_1 || !vuelo_2) { 
-                ConnectionManager.rollback(con);
-            }
-        } catch (SQLException ex){
-            ConnectionManager.rollback(con);
-        } finally {            
-            ConnectionManager.commit(con);
-        }
+            RequestDispatcher rd = request.getRequestDispatcher("PrepareOfr");
+            rd.forward(request, response);
     }
 
  

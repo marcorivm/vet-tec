@@ -24,7 +24,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>About</title>
+        <title>Vuelos</title>
         <meta charset="utf-8">
         <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/layout.css" type="text/css" media="all">
@@ -98,31 +98,30 @@
                                                 <label for="timeTo">a</label>
                                                 <select name="timeTo" id="timeTo">
                                                     <%
-                                                        for (int i = 7; i <= 23; i++) {
+                                                        for (int i = 7; i < 23; i++) {
                                                     %>
                                                     <option value="<%=i%>"><%=i%></option>    
                                                     <%
                                                         }
                                                     %>
+                                                    <option value="23" selected="selected">23</option>
                                                 </select>
                                             </div>
                                             <div class="wrapper pad_bot1">
                                                 Adultos<br />
                                                 <select name="adults">
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                    <option value="35">35</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
                                                 </select><br />
-                                                Niños<br />
+                                                Ni&ntilde;os<br />
                                                 <select name="kids">
-                                                    <option>0</option>
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                    <option>5</option>
+                                                    <option value="0">0</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
                                                 </select><br />
                                             </div>
                                             <div>
@@ -142,8 +141,11 @@
                     <!-- columna derecha -->
                     <article class="col2 pad_left1">
                         <form method="POST" action="reservar.jsp">
-                            <input type="hidden" name="adultos" value="<%=request.getAttribute("adultos")%>"/>
-                            <input type="hidden" name="ninos" value="<%=request.getAttribute("ninos")%>"/>
+                            <input type="hidden" name="adultos" id="adultos" value="<%=request.getAttribute("adultos")%>"/>
+                            <input type="hidden" name="ninos" id="ninos" value="<%=request.getAttribute("ninos")%>"/>
+                            <input type="hidden" name="date1" id="date1" value="${date1}"/>
+                            <input type="hidden" name="date2" id="date2" value="${date2}"/>
+                            
                             <% if (f1) {
 
                             %>
@@ -168,7 +170,7 @@
                                             <td><%=f.getDestination().getCityName()%></td>
                                             <td><%=f.getAdult_Fare()%></td>
                                             <td><%=f.getChild_Fare()%></td>
-                                            <td><input name="flight1" type="radio" value="<%=f.getFlight_No()%>" /></td>
+                                            <td><input name="flightTo" type="radio" value="<%=f.getFlight_No()%>" /></td>
                                         </tr>
                                         <%
                                             }%>
@@ -176,7 +178,7 @@
                             </div>
                             <% } else if (f2) {%>
                             <h3> Vuelos de Ida no Disponibles </h3>
-                            <% } else {%>
+                            <% } else if((flights == null)&&(flights2 == null)){%>
                             <article class="col2 pad_left1">
                                 <h2>Nuestros Vuelos</h2>
                                 <div class="wrapper under">
@@ -217,7 +219,7 @@
                                             <td><%=f.getDestination().getCityName()%></td>
                                             <td><%=f.getAdult_Fare()%></td>
                                             <td><%=f.getChild_Fare()%></td>
-                                            <td><input name ="flight2" type="radio" value="<%=f.getFlight_No()%>" /></a></td>
+                                            <td><input name ="flightFrom" type="radio" value="<%=f.getFlight_No()%>" /></a></td>
                                         </tr>
                                         <%
                                             }%>
@@ -232,7 +234,7 @@
                             <input type="submit" class="button" value="Reservar" />
                             <%                                }%>
                         </form>
-                        <h2>Datos de Pago</h2>
+                        <!--<h2>Datos de Pago</h2>
                         <div class="wrapper">
                             Boleto de <span class="city">Bangalore</span> to <span class="city">Chennai</span><br />
                             Adultos <span class="bold">3</span><br />
@@ -242,7 +244,7 @@
                             Impuestos <span class="bold">$ 800</span><br />
                             Total <span class="bold">$ 9800</span><br />
                             <input type="button" class="button" value="Hacer Pago" onclick="(function() { alert('Payment Succesful!'); })();" /><br />
-                        </div>                        
+                        </div> -->                       
                     </article>
                 </section>
                 <!-- / content -->
