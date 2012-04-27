@@ -253,7 +253,7 @@
                     isValid = false;
                     alert("El origen y el destino no pueden ser iguales!");
                 }
-                return false;
+                return isValid;
             })
             
             $("#date1").datepick({
