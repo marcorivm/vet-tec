@@ -257,6 +257,23 @@
             </div>
         </div>
         <script type="text/javascript">
+            $("#form_1").bind("submit",function() {
+                var isValid = true;
+                if(!validator.isNumeric($("#date1")) || 
+                    (jQuery("[name='isRoundTrip']").get(0).checked && 
+                    !validator.isNumeric($("#date2")))){
+                    // TODO: Validar rango de fechas
+                    isValid = false;
+                    alert("Debes seleccionar un rango de fechas!");
+                }
+                if(!validator.isEqual($("#source"), $("#destiny"))){
+                    isValid = false;
+                    alert("El origen y el destino no pueden ser iguales!");
+                }
+                
+                
+                return isValid;
+            })
             Cufon.now();
             $("#date1").datepick({
                 dateFormat: 'dd-mm-yyyy',
