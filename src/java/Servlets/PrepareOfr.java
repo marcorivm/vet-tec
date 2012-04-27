@@ -49,15 +49,27 @@ public class PrepareOfr extends HttpServlet {
             // recibi un vuelo, checar que hoteles hay en esa ciudad
             Flight_Booking fbTo = (Flight_Booking) request.getSession().getAttribute("fbTo");
             Flight flight = fbTo.getFlight();
+            
             City destino = fbTo.getFlight().getDestination();
 
             /**
              * Buscar Hoteles con misma ciudad destino
              */
             Hotel hotels[] = Hotel.getHotels(destino);
+            String date1 = "13-10-2012";
+            String date2 = "13-10-2012";
+            String type = "sencilla";
+            String tipoH = "exe";
+            String city = flight.getDestination().getCityCode();
             request.setAttribute("hotels", hotels);
+            request.setAttribute("city", destino.getCityCode());
+            request.setAttribute("date1", date1);
+            request.setAttribute("date2", date2);
+            request.setAttribute("type", "sencilla");
+            request.setAttribute("tipoHabitacion", "exe");
 
-            rd = request.getRequestDispatcher("/offerHotel.jsp");
+            rd = request.getRequestDispatcher("/offerHotel.jsp?type=" + type + "&tipoHabitacion="
+                    + tipoH + "&date1=" + date1 + "&date2=" + date2 + "&city=" + city);
             rd.forward(request, response);
 
             /**
@@ -75,10 +87,10 @@ public class PrepareOfr extends HttpServlet {
 
             Flight ida[] = Flight.getFlightsTo(destino);
             Flight regreso[] = Flight.getFlightsFrom(destino);
-            
+
             request.setAttribute("flights", ida);
             request.setAttribute("flights2", regreso);
-            
+
             rd = request.getRequestDispatcher("/offerFlight.jsp");
             rd.forward(request, response);
 
