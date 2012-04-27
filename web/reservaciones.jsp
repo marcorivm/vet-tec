@@ -8,89 +8,7 @@
 <%@page import="Clases.Package_Booking"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Date"%>
-<%
-    Package_Booking booking = null;
-    Flight_Booking flightToBooking = null;
-    Flight_Booking flightFromBooking = null;
-    Hotel_Booking hotelBooking = null;
-    Flight flightTo = null;
-    Flight flightFrom = null;
-    Hotel hotel = null;
-    FlightSeat_Status FSS = null;
-    String folio = "";
-    String firstName = "";
-    String lastName = "";
-    int noPersonas;
-    int precio;
-    String nomHotel = "";
-    String fecha;
-    int idTempVuelo = 0;
-    String source = "";
-    String destination = "";
-    int vueloIda = 0;
-    int vueloVuelta = 0;
-    int adultosTo = 1;
-    int adultosFrom = 1;
-    int ninosTo = 0;
-    int ninosFrom = 0;
-        
-    if (request.getAttribute("booking") != null) {
-        booking = (Package_Booking) request.getAttribute("booking");
-        RequestDispatcher rd = request.getRequestDispatcher("");
-        rd.forward(request, response);
-    }
-        
-    if (booking != null) {
-        flightToBooking = booking.getFlightTo();
-        flightFromBooking = booking.getFlightFrom();
-        hotelBooking = booking.getHotel();
-    }
-        
-    if (flightToBooking != null) {
-        flightTo = flightToBooking.getFlight();
-        adultosTo = flightToBooking.getNoOfAdults();
-        ninosTo = flightToBooking.getNoOfChildren();
-    }
-    if (flightFromBooking != null) {
-        flightFrom = flightFromBooking.getFlight();
-        adultosFrom = flightFromBooking.getNoOfAdults();
-        ninosFrom = flightFromBooking.getNoOfChildren();
-    }
-    if (booking.getHotel().getDateOfBooking() == null) {
-        idTempVuelo = flightFrom.getFlight_No();
-        FSS = FlightSeat_Status.getFlightSeat_Status(idTempVuelo);
-        fecha = FSS.getDateOfJourney().toString();
-    } else {
-        fecha = booking.getHotel().getDateOfBooking().toString();
-    }
-    folio = booking.getId();
-    //fecha lista
-    firstName = booking.getName();
-    lastName = booking.getLastName();
-    source = flightFrom.getSource().getCityName();
-    destination = flightTo.getDestination().getCityName();
-    vueloIda = booking.getFlightFrom().getFlight().getFlight_No();
-    vueloVuelta = booking.getFlightTo().getFlight().getFlight_No();
-    if (hotelBooking.getHotel().getHotelName() == null) {
-        nomHotel = "No hay";
-    } else {
-        nomHotel = hotelBooking.getHotel().getHotelName();
-    }
-    //noPersonas listo
-        if (flightFromBooking == null) {
-            if (hotelBooking.getHotel().getNoOfDeluxRooms() == 0) {
-                noPersonas = hotelBooking.getHotel().getNoOfEXERooms();
-            } else {
-                noPersonas = hotelBooking.getHotel().getNoOfDeluxRooms();
-            }
-        } else {
-            noPersonas = adultosFrom + ninosFrom;
-        }
-    String idTempHotel = hotelBooking.getHotel().getHotelId();
-    //hp = Hotel_Payment.getHotel_Payment(_paymentId)
-    //precio = Hp.
-    
-%>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -129,7 +47,7 @@
                         <h3>Buscar</h3>
                         <div class="pad">
                             <div class="wrapper under">
-                                <form id="form_1" method="POST" action="Reservaciones">
+                                <form id="form_1" method="POST" action="SearchReservation">
                                     <div class="tabs_cont">
                                         <div class="bg">
                                             <div class="wrapper">
@@ -158,23 +76,144 @@
                     </article>
                     <!-- columna derecha -->
                         <!-- aqui iba la comlumna derecha -->
-                        
-                        <table>
-                            <tr>
-                                <td><%=folio%></td>
-                                <td><%=lastName%></td>
-                                <td><%=firstName%></td>
-                                <td><%=fecha%></td>
-                                <td><%=destination%></td>
-                            </tr>
-                            <tr>
-                                <td><%=vueloIda%></td>
-                                <td><%=vueloVuelta%>)</td>
-                                <td><%=nomHotel%></td>
-                                <td><%=noPersonas%></td>
-                                <td>Precio Total</td>
-                            </tr>
-                        </table>
+                        <article>
+                        <%
+                            Package_Booking bookings[]= (Package_Booking[])request.getAttribute("bookings");
+                            if(bookings!=null){
+                                for(Package_Booking booking : bookings){
+                            
+                                    Flight_Booking flightToBooking = null;
+                                    Flight_Booking flightFromBooking = null;
+                                    Hotel_Booking hotelBooking = null;
+                                    Flight flightTo = null;
+                                    Flight flightFrom = null;
+                                    Hotel hotel = null;
+                                    FlightSeat_Status FSS = null;
+                                    String folio = "";
+                                    String firstName = "";
+                                    String lastName = "";
+                                    int noPersonas;
+                                    int precio;
+                                    String nomHotel = "";
+                                    String fecha;
+                                    int idTempVuelo = 0;
+                                    String source = "";
+                                    String destination = "";
+                                    int vueloIda = 0;
+                                    int vueloVuelta = 0;
+                                    int adultosTo = 1;
+                                    int adultosFrom = 1;
+                                    int ninosTo = 0;
+                                    int ninosFrom = 0;
+
+                                    /*
+                                    if (request.getAttribute("booking") != null) {
+                                        booking = (Package_Booking) request.getAttribute("booking");
+                                        RequestDispatcher rd = request.getRequestDispatcher("");
+                                        rd.forward(request, response);
+                                    }*/
+
+                                    if (booking != null) {
+                                        flightToBooking = booking.getFlightTo();
+                                        flightFromBooking = booking.getFlightFrom();
+                                        hotelBooking = booking.getHotel();
+                                    }
+
+                                    if (flightToBooking != null) {
+                                        flightTo = flightToBooking.getFlight();
+                                        adultosTo = flightToBooking.getNoOfAdults();
+                                        ninosTo = flightToBooking.getNoOfChildren();
+                                    }
+                                    if (flightFromBooking != null) {
+                                        flightFrom = flightFromBooking.getFlight();
+                                        adultosFrom = flightFromBooking.getNoOfAdults();
+                                        ninosFrom = flightFromBooking.getNoOfChildren();
+                                    }
+                                    if (booking.getHotel().getDateOfBooking() == null) {
+                                        idTempVuelo = flightFrom.getFlight_No();
+                                        FSS = FlightSeat_Status.getFlightSeat_Status(idTempVuelo);
+                                        fecha = FSS.getDateOfJourney().toString();
+                                    } else {
+                                        fecha = booking.getHotel().getDateOfBooking().toString();
+                                    }
+                                    folio = booking.getId();
+                                    //fecha lista
+                                    firstName = booking.getName();
+                                    lastName = booking.getLastName();
+                                    source = flightFrom.getSource().getCityName();
+                                    destination = flightTo.getDestination().getCityName();
+                                    vueloIda = booking.getFlightFrom().getFlight().getFlight_No();
+                                    vueloVuelta = booking.getFlightTo().getFlight().getFlight_No();
+                                    if (hotelBooking.getHotel().getHotelName() == null) {
+                                        nomHotel = "No hay";
+                                    } else {
+                                        nomHotel = hotelBooking.getHotel().getHotelName();
+                                    }
+                                    //noPersonas listo
+                                        if (flightFromBooking == null) {
+                                            if (hotelBooking.getHotel().getNoOfDeluxRooms() == 0) {
+                                                noPersonas = hotelBooking.getHotel().getNoOfEXERooms();
+                                            } else {
+                                                noPersonas = hotelBooking.getHotel().getNoOfDeluxRooms();
+                                            }
+                                        } else {
+                                            noPersonas = adultosFrom + ninosFrom;
+                                        }
+                                    String idTempHotel = hotelBooking.getHotel().getHotelId();
+                                    //hp = Hotel_Payment.getHotel_Payment(_paymentId)
+                                    //precio = Hp.
+
+                                    %>
+                                    <h2>Revise la informacion de sus reservaciones</h2>
+                            <div class="wrapper under">
+                                
+                                <div id="fareDetails">
+                                    <h3>Reservacion</h3>
+                                    <div>
+                                        <table>
+                                        <tr>
+                                            <th>Folio</th>
+                                            <th>Apellido</th>
+                                            <th>Nombre</th>
+                                            <th>Fecha</th>
+                                            <th>Destino</th>
+                                        </tr>
+                                        <tr>
+                                            <td><%=folio%></td>
+                                            <td><%=lastName%></td>
+                                            <td><%=firstName%></td>
+                                            <td><%=fecha%></td>
+                                            <td><%=destination%></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Ida</th>
+                                            <th>Vuelta</th>
+                                            <th>Hotel</th>
+                                            <th>Personas</th>
+                                            <th>Precio Total</th>
+                                        </tr>
+                                        <tr>
+                                            <td><%=vueloIda%></td>
+                                            <td><%=vueloVuelta%>)</td>
+                                            <td><%=nomHotel%></td>
+                                            <td><%=noPersonas%></td>
+                                            <td>Precio Total</td>
+                                        </tr>
+                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                                    
+                            <%  }
+                                
+                            }else{%>
+                                <article class="col2 pad_left1">
+                                    <h2>Busque aqui sus reservaciones.</h2>
+                           
+                            
+                                </article>
+                            <% }%>
+                        </article>
                 </section>
                 <!-- / content -->
             </div>

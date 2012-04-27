@@ -46,20 +46,21 @@ public class SearchReservation extends HttpServlet {
 
         if (id != null && !id.equals("")) {
             // buscar por ID
-            Package_Booking pb = Package_Booking.getPackage_Booking(id);
-            request.setAttribute("booking", pb);
+            Package_Booking pb[]=new Package_Booking[1];
+            pb[0]= Package_Booking.getPackage_Booking(id);
+            request.setAttribute("bookings", pb);
             // redireccionar a jsp
             rd.forward(request, response);
         } else if (mail != null && !mail.equals("")) {
             // buscar por mail
-            Package_Booking pb = Package_Booking.getPackage_BookingMail(mail);
-            request.setAttribute("booking", pb);
+            Package_Booking pb[] = Package_Booking.getPackage_BookingMail(mail);
+            request.setAttribute("bookings", pb);
             // redireccionar a jsp
             rd.forward(request, response);
         } else if (lastName != null && firstName != null) {
             // buscar por nombre completo            
-            Package_Booking pb = Package_Booking.getPackage_Booking(lastName, firstName);
-            request.setAttribute("booking", pb);
+            Package_Booking pb[] = Package_Booking.getPackage_Booking(lastName, firstName);
+            request.setAttribute("bookings", pb);
             // redireccionar a jsp
             rd.forward(request, response);
         } else {

@@ -7,6 +7,7 @@ package Clases;
 import dbcp.ConnectionManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -124,14 +125,22 @@ public class Package_Booking {
      * @return Package_Booking object
      * @throws SQLException
      */
-    public static Package_Booking getPackage_BookingMail(String mail) throws SQLException {
+    public static Package_Booking[] getPackage_BookingMail(String mail) throws SQLException {
         ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Packages", "Email='" + mail + "'");
+        
         if (rs.next()) {
-            Package_Booking pb = new Package_Booking(rs.getString("idTbl_Packages"), Flight_Booking.getFlightBooking(rs.getString("Tbl_Flight_Booking_GroupNo_BookingId")), Flight_Booking.getFlightBooking(rs.getString("Tbl_Flight_Booking_GroupNo_BookingId1")), Hotel_Booking.getHotelBooking(rs.getInt("Tbl_Hotel_Booking_GroupNo_BookingId")), rs.getFloat("Discount"), rs.getString("Name"), rs.getString("LastName"), mail);
-            return pb;
-        } else {
-            return null;
+            ArrayList pbArrayList = new ArrayList();
+            Package_Booking pb[];
+            do {
+                pbArrayList.add(new Package_Booking(rs.getString("idTbl_Packages"), Flight_Booking.getFlightBooking(rs.getString("Tbl_Flight_Booking_GroupNo_BookingId")), Flight_Booking.getFlightBooking(rs.getString("Tbl_Flight_Booking_GroupNo_BookingId1")), Hotel_Booking.getHotelBooking(rs.getInt("Tbl_Hotel_Booking_GroupNo_BookingId")), rs.getFloat("Discount"), rs.getString("Name"), rs.getString("LastName"), mail));
+            } while (rs.next());
+            if(pbArrayList.size()>0){
+                pb = new Package_Booking[pbArrayList.size()];
+                pbArrayList.toArray(pb);
+                return pb;
+            }            
         }
+        return null;
     }
 
     /**
@@ -143,13 +152,22 @@ public class Package_Booking {
      * @return Package_Booking object that matched search
      * @throws SQLException
      */
-    public static Package_Booking getPackage_Booking(String lastName, String firstName) throws SQLException {
+    public static Package_Booking[] getPackage_Booking(String lastName, String firstName) throws SQLException {
         ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Packages", "Name='" + firstName + "' AND LastName ='" + lastName + "'");
+        
         if (rs.next()) {
-            Package_Booking pb = new Package_Booking(rs.getString("idTbl_Packages"), Flight_Booking.getFlightBooking(rs.getString("Tbl_Flight_Booking_GroupNo_BookingId")), Flight_Booking.getFlightBooking(rs.getString("Tbl_Flight_Booking_GroupNo_BookingId1")), Hotel_Booking.getHotelBooking(rs.getInt("Tbl_Hotel_Booking_GroupNo_BookingId")), rs.getFloat("Discount"), firstName, lastName, rs.getString("Email"));
-            return pb;
-        } else {
-            return null;
+            ArrayList pbArrayList = new ArrayList();
+            Package_Booking pb[];
+            do {
+                pbArrayList.add(new Package_Booking(rs.getString("idTbl_Packages"), Flight_Booking.getFlightBooking(rs.getString("Tbl_Flight_Booking_GroupNo_BookingId")), Flight_Booking.getFlightBooking(rs.getString("Tbl_Flight_Booking_GroupNo_BookingId1")), Hotel_Booking.getHotelBooking(rs.getInt("Tbl_Hotel_Booking_GroupNo_BookingId")), rs.getFloat("Discount"), rs.getString("Name"), rs.getString("LastName"), rs.getString("Email")));
+            } while (rs.next());
+            if(pbArrayList.size()>0){
+                pb = new Package_Booking[pbArrayList.size()];
+                pbArrayList.toArray(pb);
+                return pb;
+            }            
         }
+        return null;
     }
+    
 }
