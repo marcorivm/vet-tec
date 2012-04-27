@@ -85,6 +85,20 @@ public class ReservarP extends HttpServlet {
                     if (!isOk) {
                         throw new SQLException("Error registering Flight_Booking To ");
                     }
+
+                    // update flightseat_status
+                    int remainingSeats = fbTo.getFlight().getRemainingSeats();
+                    remainingSeats -= fbTo.getNoOfAdults() + fbTo.getNoOfChildren();
+                    String fields2[][] = {
+                        {"FlightNo", fbTo.getFlight().getFlight_No() + ""},
+                        {"DateOfJourney", fbTo.getDateOfJourney() + ""},                       
+                        {"RemainingSeats", remainingSeats + ""}
+                    };
+                    
+                    isOk = ConnectionManager.insert(fields2, "Tbl_FlightSeat_Status_GroupNo", con);
+                    if (!isOk) {
+                        throw new SQLException("Error updating FlightSeat_Status");
+                    }
                 }
 
 
@@ -107,6 +121,20 @@ public class ReservarP extends HttpServlet {
                     isOk = ConnectionManager.insert(fields, "Tbl_Flight_Booking_GroupNo", con);
                     if (!isOk) {
                         throw new SQLException("Error registering Flight_Booking From ");
+                    }
+                    
+                    // update flightseat_status
+                    int remainingSeats = fbFrom.getFlight().getRemainingSeats();
+                    remainingSeats -= fbFrom.getNoOfAdults() + fbFrom.getNoOfChildren();
+                    String fields2[][] = {
+                        {"FlightNo", fbFrom.getFlight().getFlight_No() + ""},
+                        {"DateOfJourney", fbFrom.getDateOfJourney() + ""},                       
+                        {"RemainingSeats", remainingSeats + ""}
+                    };
+                    
+                    isOk = ConnectionManager.insert(fields2, "Tbl_FlightSeat_Status_GroupNo", con);
+                    if (!isOk) {
+                        throw new SQLException("Error updating FlightSeat_Status");
                     }
                 }
 
@@ -164,9 +192,9 @@ public class ReservarP extends HttpServlet {
                     throw new SQLException("Error registering Package_Booking ");
                 }
                 ConnectionManager.commit(con);
-                
+
                 request.setAttribute("msg", "Registro Exitoso");
-                request.setAttribute("Package",pb);
+                request.setAttribute("Package", pb);
                 String folio = pb.getId() + pb.getLastName().hashCode();
                 request.setAttribute("folio", folio);
                 RequestDispatcher rd = request.getRequestDispatcher("confirmacion.jsp");
