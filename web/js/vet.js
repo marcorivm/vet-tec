@@ -51,6 +51,12 @@ var validator = {
             return false;
         }
     },
+    isDate: function(obj){
+      var real_val = this.getRaw(obj);
+      var date_pttrn = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
+      var matches = real_val.match(date_pttrn);
+      return !this.isRawEmpty(matches);
+    },
     /**
      * Metodo que recibe un objeto, ya sea un elemento DOM o una variable, recupera
      * su valor real y valida que este no se encuentre vacio.
