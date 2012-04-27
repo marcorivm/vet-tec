@@ -35,6 +35,17 @@ public class Package_Booking {
         this.email = email;
     }
 
+    public Package_Booking() {
+        this.id = null;
+        this.flightTo = null;
+        this.flightFrom = null;
+        this.hotel = null;
+        this.discount = 0.0;
+        this.name = null;
+        this.lastName = null;
+        this.email = null;
+    }
+
     public String getEmail() {
         return email;
     }
