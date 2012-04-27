@@ -206,9 +206,26 @@ public class ReservarP extends HttpServlet {
                     {"LastName", "'" + lastName + "'"},
                     {"Name", "'" + name + "'"},
                     {"Email", "'" + email + "'"},};
-
+                
+                
+                /*
+                String[][] fieldsFrom = {
+                    {"PaymentId", (fbToId.isEmpty()) ? "NULL" : "'" + fbToId + "'"},
+                    {"_bookingId", (fbToId.isEmpty()) ? "NULL" : "'" + fbToId + "'"},
+                    {"TotalCharges", (hotelId.isEmpty()) ? "NULL" : "'" + hotelId + "'"},
+                    {"TotalTaxAmount", flight.getDiscount(fbToId, ) ""},
+                    {"DiscountAvailed", }};*/
+                
+                
                 int id = ConnectionManager.insertAndGetKey(fields, "Tbl_Packages", con);
+                
+                //Se insertan tablas de los diferentes payments
+               /* ConnectionManager.insert(fieldsFrom, "Tbl_Flight_Payment_GroupNo");
+                ConnectionManager.insert(fieldsTo, "Tbl_Flight_Payment_GroupNo");
+                ConnectionManager.insert(fieldsHotel, "Tbl_Hotel_Payment_GroupNo");*/
+                
                 isOk = (id > 0);
+                
 
                 if (!isOk) {
                     throw new SQLException("Error registering Package_Booking ");
