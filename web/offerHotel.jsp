@@ -85,7 +85,7 @@
                     <article class="col2 pad_left1">
                         <% if (hotels != null) {
                                 if (hotels.length > 0) {%>
-                        <form name="hotelSelection" action="HotelReservation.jsp" method="post">
+                        <form name="hotelSelection" action="HotelReservation.jsp" method="post">                            
                             <input type="hidden" value="${city}" name="city" id="city" />
                             <input type="hidden" value="${date1}" name="date1" id="date1" />
                             <input type="hidden" value="${date2}" name="date2" id="date2" />
@@ -112,11 +112,11 @@
                                             <% for (Hotel h : hotels) {%>
                                             <tr>
                                                 <td><%=h.getHotelName()%></td>
-                                                <td>${habitacion}</td>
+                                                <td>${type}</td>
                                                 <td><%=h.getDeluxRoomFare_PerDay()%></td>
                                                 <td><%=h.getEXERoomFarePerDay()%></td>
                                                 <td><%=h.getHotelTax()%></td>
-                                                <td><a class="button" href="HotelReservation.jsp?hotelNo=<%=h.getHotelId()%>">Reservar</a></td>
+                                                <td><a class="button" href="HotelReservation.jsp?hotelNo=<%=h.getHotelId()%>&tipoHabitacion=${tipoHabitacion}&type=${type}&date1=${date1}&date2=${date2}&city=${city}">Reservar</a></td>
                                             </tr>
                                             <% }%>
                                         </table>
