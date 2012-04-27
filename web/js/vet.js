@@ -88,10 +88,11 @@ var validator = {
             if(this.isDomElement(obj)) {
                 switch(obj.tagName.toLowerCase()) {
                     case "input":
+                    case "select":
                         /**
                          * Tipos a verificar:
                          * button
-                         * checkbox
+                         * checkbox 
                          * file
                          * hidden
                          * image
@@ -112,9 +113,13 @@ var validator = {
                             case "reset":
                             case "submit":
                             case "text":
+                            case "select-one":
+                             default:
                                 return obj.value;
                                 break;
                         }
+                        
+                            
                         break;
                 }
             } else {
