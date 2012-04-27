@@ -12,13 +12,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>About</title>
+        <title>Vuelos</title>
         <meta charset="utf-8">
         <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/layout.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/style.css" type="text/css" media="all">
         <style type="text/css">@import "css/jquery.datepick.css";</style>
-        <script type="text/javascript" src="js/jquery-1.4.2.js" ></script>
+        <script type="text/javascript" src="js/jquery-1.7.1.min.js" ></script>
         <script type="text/javascript" src="js/cufon-yui.js"></script>
         <script type="text/javascript" src="js/cufon-replace.js"></script>
         <script type="text/javascript" src="js/Myriad_Pro_600.font.js"></script>
@@ -33,10 +33,7 @@
         <div class="extra">
             <div class="main">
                 <!-- header -->
-                <header>
-                    <div class="wrapper">
-                        <h1><a href="index.html" id="logo">Vuelos</a></h1>                     
-                    </div>
+                <header>                    
                     <jsp:include page="includes/navbar.jsp" />
                 </header>
                 <!-- / header -->
@@ -80,6 +77,8 @@
                         <%
                             Package_Booking bookings[]= (Package_Booking[])request.getAttribute("bookings");
                             if(bookings!=null){
+                                if(bookings[0]!=null){
+                            
                                 for(Package_Booking booking : bookings){
                             
                                     Flight_Booking flightToBooking = null;
@@ -92,6 +91,7 @@
                                     String folio = "";
                                     String firstName = "";
                                     String lastName = "";
+                                    String email="";
                                     int noPersonas;
                                     int precio;
                                     String nomHotel = "";
@@ -138,10 +138,11 @@
                                     }
                                     folio = booking.getId();
                                     //fecha lista
+                                    email=booking.getEmail();
                                     firstName = booking.getName();
                                     lastName = booking.getLastName();
                                     source = flightFrom.getSource().getCityName();
-                                    destination = flightTo.getDestination().getCityName();
+                                    destination = flightFrom.getDestination().getCityName();
                                     vueloIda = booking.getFlightFrom().getFlight().getFlight_No();
                                     vueloVuelta = booking.getFlightTo().getFlight().getFlight_No();
                                     if (hotelBooking.getHotel().getHotelName() == null) {
@@ -176,6 +177,7 @@
                                             <th>Apellido</th>
                                             <th>Nombre</th>
                                             <th>Fecha</th>
+                                            <th>Salida</th>
                                             <th>Destino</th>
                                         </tr>
                                         <tr>
@@ -183,9 +185,11 @@
                                             <td><%=lastName%></td>
                                             <td><%=firstName%></td>
                                             <td><%=fecha%></td>
+                                            <td><%=source%></td>
                                             <td><%=destination%></td>
                                         </tr>
                                         <tr>
+                                            <th>E-mail</th>
                                             <th>Ida</th>
                                             <th>Vuelta</th>
                                             <th>Hotel</th>
@@ -193,6 +197,7 @@
                                             <th>Precio Total</th>
                                         </tr>
                                         <tr>
+                                            <td><%=email%></td>
                                             <td><%=vueloIda%></td>
                                             <td><%=vueloVuelta%>)</td>
                                             <td><%=nomHotel%></td>
@@ -206,11 +211,14 @@
                                     
                             <%  }
                                 
+                               }else {%>
+                                <article class="col2 pad_left1">
+                                    <h2>Reservacion invalida.</h2>
+                                </article>
+                            <% }
                             }else{%>
                                 <article class="col2 pad_left1">
                                     <h2>Busque aqui sus reservaciones.</h2>
-                           
-                            
                                 </article>
                             <% }%>
                         </article>
