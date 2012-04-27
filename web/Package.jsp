@@ -72,7 +72,7 @@
                             <% if (fbTo != null) {%>
                             <h3>Datos de Vuelo de Ida</h3>
                             <div class="wrapper">
-                                Boleto de <span class="city"><%= (flightTo.getSource()).getCityName()%></span> a <span class="city"><%= (flightTo.getDestination()).getCityName()%></span><br />
+                                Boleto de <span class="city"><%= (flightTo.getSource()).getCityName()%></span> to <span class="city"><%= (flightTo.getDestination()).getCityName()%></span><br />
                                 Adultos <span class="bold"><%= fbTo.getNoOfAdults()%></span><br />
                                 Ni&ntilde;os <span class="bold"><%= fbTo.getNoOfChildren()%></span><br />
                                 Tarifa Total Adultos <span class="bold">$ <%= totalAdultTo%></span><br />
@@ -85,7 +85,7 @@
                             <% if (fbFrom != null) {%>
                             <h3>Datos de Vuelo de VUELTA</h3>
                             <div class="wrapper">
-                                Boleto de <span class="city"><%= (flightFrom.getSource()).getCityName()%></span> a <span class="city"><%= (flightFrom.getDestination()).getCityName()%></span><br />
+                                Boleto de <span class="city"><%= (flightFrom.getSource()).getCityName()%></span> to <span class="city"><%= (flightFrom.getDestination()).getCityName()%></span><br />
                                 Adultos <span class="bold"><%= fbFrom.getNoOfAdults()%></span><br />
                                 Ni&ntilde;os <span class="bold"><%= fbFrom.getNoOfChildren()%></span><br />
                                 Tarifa Total Adultos <span class="bold">$ <%= totalAdultFrom%></span><br />
