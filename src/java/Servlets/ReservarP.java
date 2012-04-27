@@ -10,6 +10,7 @@ import Clases.Package_Booking;
 import dbcp.ConnectionManager;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -91,11 +92,13 @@ public class ReservarP extends HttpServlet {
                     remainingSeats -= fbTo.getNoOfAdults() + fbTo.getNoOfChildren();
                     String fields2[][] = {
                         {"FlightNo", fbTo.getFlight().getFlight_No() + ""},
-                        {"DateOfJourney", fbTo.getDateOfJourney() + ""},                       
+                        {"DateOfJourney", fbTo.getDateOfJourney() + ""},
                         {"RemainingSeats", remainingSeats + ""}
                     };
-                    
-                    isOk = ConnectionManager.insert(fields2, "Tbl_FlightSeat_Status_GroupNo", con);
+
+                    isOk = ConnectionManager.update(fields2, "Tbl_FlightSeat_Status_GroupNo",
+                            "FlightNo = '" + fbTo.getFlight().getFlight_No() + "' AND DATE(DateOfJourney) = '"
+                            + fbTo.getDateOfJourney() + "'", con);
                     if (!isOk) {
                         throw new SQLException("Error updating FlightSeat_Status");
                     }
@@ -122,17 +125,19 @@ public class ReservarP extends HttpServlet {
                     if (!isOk) {
                         throw new SQLException("Error registering Flight_Booking From ");
                     }
-                    
+
                     // update flightseat_status
                     int remainingSeats = fbFrom.getFlight().getRemainingSeats();
                     remainingSeats -= fbFrom.getNoOfAdults() + fbFrom.getNoOfChildren();
                     String fields2[][] = {
                         {"FlightNo", fbFrom.getFlight().getFlight_No() + ""},
-                        {"DateOfJourney", fbFrom.getDateOfJourney() + ""},                       
+                        {"DateOfJourney", fbFrom.getDateOfJourney() + ""},
                         {"RemainingSeats", remainingSeats + ""}
                     };
-                    
-                    isOk = ConnectionManager.insert(fields2, "Tbl_FlightSeat_Status_GroupNo", con);
+
+                    isOk = ConnectionManager.update(fields2, "Tbl_FlightSeat_Status_GroupNo",
+                            "FlightNo = '" + fbFrom.getFlight().getFlight_No() + "' AND DATE(DateOfJourney) = '"
+                            + fbFrom.getDateOfJourney() + "'", con);
                     if (!isOk) {
                         throw new SQLException("Error updating FlightSeat_Status");
                     }
@@ -160,6 +165,21 @@ public class ReservarP extends HttpServlet {
                     if (!isOk) {
                         throw new SQLException("Error registering Hotel_Booking ");
                     }
+                    
+                    //Update Tbl_Hotel_Calendar
+                    String fields3[][] = {
+                        {"HotelId","HotelId"},
+                        {"Dia", "Dia"},
+                        {"CuartosExec", "CuartosExec + " + (hotel.getNoOfExeRooms()>0)},
+                        {"CuartosDelux","CuartosDelux + " + (hotel.getNoOfDeluxeRooms()>0)},
+                    };
+                    
+                    isOk = ConnectionManager.update(fields3, "Tbl_Hotel_Calendar",
+                            "HotelId='"+hotel.getHotel().getHotelId()+"'", con);
+                    if (!isOk) {
+                        throw new SQLException("Error updating Tbl_Hotel_Calendar");
+                    }
+                    
                 }
 
                 Package_Booking pb = new Package_Booking();
@@ -173,19 +193,19 @@ public class ReservarP extends HttpServlet {
                 String disc = (String) request.getAttribute("discount");
                 if (disc != null) {
                     discount = Double.parseDouble(disc);
-                }else{
+                } else {
                     discount = 0.0;
                 }
                 pb.setDiscount(discount);
 
                 String[][] fields = {
-                    {"Tbl_Flight_Booking_GroupNo_BookingId", (fbToId.isEmpty()) ? "NULL" : fbToId},
-                    {"Tbl_Flight_Booking_GroupNo_BookingId1", (fbFromId.isEmpty()) ? "NULL" : fbFromId},
-                    {"Tbl_Hotel_Booking_GroupNo_BookingId", (hotelId.isEmpty()) ? "NULL" : hotelId},
+                    {"Tbl_Flight_Booking_GroupNo_BookingId", (fbToId.isEmpty()) ? "NULL" : "'" + fbToId + "'"},
+                    {"Tbl_Flight_Booking_GroupNo_BookingId1", (fbFromId.isEmpty()) ? "NULL" : "'" + fbFromId + "'"},
+                    {"Tbl_Hotel_Booking_GroupNo_BookingId", (hotelId.isEmpty()) ? "NULL" : "'" + hotelId + "'"},
                     {"Discount", discount + ""},
-                    {"LastName", lastName},
-                    {"Name", name},
-                    {"Email", email},};
+                    {"LastName", "'" + lastName + "'"},
+                    {"Name", "'" + name + "'"},
+                    {"Email", "'" + email + "'"},};
 
                 int id = ConnectionManager.insertAndGetKey(fields, "Tbl_Packages", con);
                 isOk = (id > 0);
@@ -195,11 +215,11 @@ public class ReservarP extends HttpServlet {
                 }
                 ConnectionManager.commit(con);
 
-                request.setAttribute("msg", "Registro Exitoso");
+                request.setAttribute("msg", "success");
                 request.setAttribute("Package", pb);
                 String folio = pb.getId() + pb.getLastName().hashCode();
                 request.setAttribute("folio", folio);
-                RequestDispatcher rd = request.getRequestDispatcher("confirmacion.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("Confirmacion.jsp");
                 rd.forward(request, response);
 
 
@@ -207,7 +227,7 @@ public class ReservarP extends HttpServlet {
             } catch (SQLException e) {
                 ConnectionManager.rollback(con);
                 request.setAttribute("msg", "No se pudo completar el registro. Intentelo m&aacute;s tarde");
-                RequestDispatcher rd = request.getRequestDispatcher("confirmacion.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("Confirmacion.jsp");
                 rd.forward(request, response);
             }
 

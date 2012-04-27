@@ -57,6 +57,27 @@ public class ConnectionManager {
         Statement st = con.createStatement();
         return (st.executeUpdate(query) != 0);
     }
+    
+    /**
+     * Method that executes an update on a group of fields.
+     * @param fields String array which should contain the field and values to be updated as a key pair.
+     * @param table The table to be updated.
+     * @param whereClause Should the update use a where clause, it should be in the format <b>ID = 1 AND SecondID = 2</b> and so on, regular SQL operations apply.
+     * @param con Connection used for Transaction support.
+     * @return <b>True</b> if the update is successful.
+     * @throws SQLException  
+     */
+    public static boolean update(String[][] fields, String table, String whereClause, Connection con) throws SQLException {
+        String query = "UPDATE " + table + " SET " + fields[0][0] + "='" + fields[0][1] + "'";
+        for (int i = 1; i < fields.length; i++) {
+            query += ", " + fields[i][0] + "='" + fields[i][1] + "'";
+        }
+        if (!whereClause.isEmpty()) {
+            query += " WHERE " + whereClause;
+        }
+        Statement st = con.createStatement();
+        return (st.executeUpdate(query) != 0);
+    }
 
     /**
      * Method that selects all <tt>Rows</tt> in a specific table. Its equivalent to "<b>SELECT * FROM <tt>table</tt></b>".
