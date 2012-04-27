@@ -212,8 +212,8 @@
                 var isValid = true;
                 // TODO: Validar rango de fechas
                 
-                if(validator.isNumeric($("#finish_date")) &&
-                   validator.isNumeric($("#start_date"))){
+                if(!validator.isNumeric($("#finish_date")) &&
+                   !validator.isNumeric($("#start_date"))){
                     isValid = false;
                     alert("Debes seleccionar un rango de fechas!");
                 }

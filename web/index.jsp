@@ -256,7 +256,7 @@
                 }
                 if(!validator.isEqual($("#source"), $("#destiny"))){
                     isValid = false;
-                    alert("El origin y el destino no pueden ser iguales!");
+                    alert("El origen y el destino no pueden ser iguales!");
                 }
                 
                 
