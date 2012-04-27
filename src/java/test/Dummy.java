@@ -48,7 +48,7 @@ public class Dummy extends HttpServlet {
         Flight_Booking fbTo = new Flight_Booking("B100", doj, doj, c, flight, 2, 2);
         request.getSession().setAttribute("fbTo", fbTo);
         
-        request.setAttribute("LastName", "Beta");
+        request.setAttribute("lastName", "Beta");
         request.setAttribute("name","Tester");
         request.setAttribute("email", "error@System.edu");
         
