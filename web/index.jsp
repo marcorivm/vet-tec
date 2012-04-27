@@ -184,19 +184,16 @@
                                 <figure class="left marg_right1"><img src="images/page1_img1.jpg" alt=""></figure>
                                 <p class="pad_bot2"><strong>Las Vegas</strong></p>
                                 <p class="pad_bot2">M&aacute;s de 100 shows y m&aacute;s de 200 casinos, Las Vegas es el lugar ideal para disfrutar.</p>
-                                <a href="#" class="marker_1"></a>
                             </div>
                             <div class="wrapper under">
                                 <figure class="left marg_right1"><img src="images/page1_img2.jpg" alt=""></figure>
                                 <p class="pad_bot2"><strong>Canc&uacute;n</strong></p>
                                 <p class="pad_bot2">Disfruta de la relajaci&oacute;n de sus balnearios o la practica alguno de sus deportes acu&aacute;ticos</p>
-                                <a href="#" class="marker_1"></a>
                             </div>
                             <div class="wrapper">
                                 <figure class="left marg_right1"><img src="images/page1_img3.jpg" alt=""></figure>
                                 <p class="pad_bot2"><strong>Nueva York</strong></p>
                                 <p class="pad_bot2">Con sus m&aacute;s de 2000 tiendas, es el lugar perfecto para conseguir todo y conocer sus atracciones.</p>
-                                <a href="#" class="marker_1"></a>
                             </div>
                         </div>
                     </article>
@@ -207,14 +204,12 @@
                             <p class="pad_bot2"><strong>Helmsley Park Lane</strong></p>
                             <p class="pad_bot2">Helmsley Park Lane ® es un hotel de lujo de 46 historias con las vistas panorámicas de Central Park  y el horizonte de la Ciudad de Nueva York . Sus espacios son amplios, elegantes y sus suites ofrecen ventanales y vistas magníficas. Se disfruta de un ambiente clásico, comodidad y conveniencia para una experiencia &uacute;nica en la ciudad líder mundial más extraordinaria.</p>
                             <p class="pad_bot2"> Localizada en el Central Park en Nueva York, justo en el centro del distrito de negocios, este hotel esta a una corta distancia de la 5ta Avenida, Broadway, Radio City, entre otras atracciones.</p>
-                            <a href="#" class="marker_2"></a>
                         </div>
                         <div class="wrapper">
                             <figure class="left marg_right1"><img src="images/page1_img5.jpg" alt=""></figure>
                             <p class="pad_bot2"><strong>Belmont</strong></p>
                             <p class="pad_bot2">El hotel Belmont es un establecimiento distendido de 3 estrellas. Dotado de un notable confort tecnológico y unos espacios sorprendentes, es un remanso de paz con una atmósfera relajante. Nuestro amable personal le informará sobre las visitas más interesantes de su barrio de los Campos Elíseos para lograr que su estancia le resulte inolvidable.</p>
                             <p class="pad_bot2">Situado a un centenar de metros de los Campos Elíseos, el hotel Belmont le ofrece un acceso inmediato a las lujosas boutiques de las avenidas Montaigne y George V.</p>
-                            <a href="#" class="marker_2"></a>
                         </div>
                     </article>
                 </section>
@@ -255,7 +250,7 @@
                 }
                 if(!validator.isEqual($("#source"), $("#destiny"))){
                     isValid = false;
-                    alert("El origin y el destino no pueden ser iguales!");
+                    alert("El origen y el destino no pueden ser iguales!");
                 }
                 
                 

@@ -70,9 +70,9 @@
                                                 </select><br />
                                             </div>
                                             <div class="wrapper">
-                                                <input type ="radio" name="tipoHabitacion" id="deluxe" value="2"/>                                                
+                                                <input type ="radio" name="tipoHabitacion" id="deluxe" value="deluxe"/>                                                
                                                 <label for="deluxe">Cuartos Deluxe</label> <br/>
-                                                <input type="radio" name ="tipoHabitacion" id="exe" value="1" checked="checked" />
+                                                <input type="radio" name ="tipoHabitacion" id="exe" value="exe" checked="checked" />
                                                 <label for="exe">Cuartos Exe</label>
                                             </div>
                                             <div>
@@ -87,12 +87,6 @@
                     <article class="col2 pad_left1">
                         <% if (request.getAttribute("consulta") != null) {
                                 if (hotels != null && hotels.length > 0) {%>
-                                <form name="hotelSelection" action="HotelReservation.jsp" method="post">
-                                    <input type="hidden" value="${city}" name="city" id="city" />
-                                    <input type="hidden" value="${date1}" name="date1" id="date1" />
-                                    <input type="hidden" value="${date2}" name="date2" id="date2" />
-                                    <input type="hidden" value="${type}" name="type" id="type" />
-                                    <input type="hidden" value="${tipoHabitacion}" name="tipoHabitacion" id="tipoHabitacion" />
                         <h2>Revisar Hotel</h2>
                         <div class="wrapper under">
                             <div id="hotelDetails" class="under">
@@ -140,6 +134,13 @@
                                         </tr>
                                         <% for (Hotel h : hotels) {%>
                                         <tr>
+                                            <form name="hotelSelection" action="HotelReservation.jsp" method="GET">
+                                            <input type="hidden" value="<%=h.getHotelId()%>" name="hotelNo"/>
+                                            <input type="hidden" value="${city}" name="city"/>
+                                            <input type="hidden" value="${date1}" name="date1"/>
+                                            <input type="hidden" value="${date2}" name="date2"/>
+                                            <input type="hidden" value="${type}" name="type"/>
+                                            <input type="hidden" value="${tipoHabitacion}" name="tipoHabitacion" id="tipoHabitacion" />
                                             <td><%=h.getHotelName()%></td>
                                             <td>${habitacion}</td>
                                             <td><%=h.getDeluxRoomFare_PerDay()%></td>
@@ -149,13 +150,13 @@
                                             <td><%=(((h.getDeluxRoomFare_PerDay()) * h.getNoOfDeluxRooms()) + ((h.getEXERoomFarePerDay()) * h.getNoOfEXERooms()))%></td>
                                             <td><%=h.getHotelTax()%></td>
                                             <td><%=(((h.getDeluxRoomFare_PerDay()) * h.getNoOfDeluxRooms()) + ((h.getEXERoomFarePerDay()) * h.getNoOfEXERooms()) + h.getHotelTax())%></td>
-                                            <td><a href="HotelReservation.jsp?hotelNo=<%=h.getHotelId()%>"><input type="button" class="button" value="Reservar" /></a></td>
+                                            <td><input type="submit" class="button" value="Reservar" /></td>
+                                            </form>
                                         </tr>
                                         <% }%>
                                     </table>
                                 </div>
                             </div>
-                        </form>
                         <% } else { %>
                         <h3>No hay resultados</h3>
                         <article class="col2 pad_left1">
@@ -165,14 +166,12 @@
                                 <p class="pad_bot2"><strong>Helmsley Park Lane</strong></p>
                                 <p class="pad_bot2">Helmsley Park Lane ® es un hotel de lujo de 46 historias con las vistas panorámicas de Central Park  y el horizonte de la Ciudad de Nueva York . Sus espacios son amplios, elegantes y sus suites ofrecen ventanales y vistas magníficas. Se disfruta de un ambiente clásico, comodidad y conveniencia para una experiencia &uacute;nica en la ciudad líder mundial más extraordinaria.</p>
                                 <p class="pad_bot2"> Localizada en el Central Park en Nueva York, justo en el centro del distrito de negocios, este hotel esta a una corta distancia de la 5ta Avenida, Broadway, Radio City, entre otras atracciones.</p>
-                                <a href="#" class="marker_2"></a>
                             </div>
                             <div class="wrapper">
                                 <figure class="left marg_right1"><img src="images/page1_img5.jpg" alt=""></figure>
                                 <p class="pad_bot2"><strong>Belmont</strong></p>
                                 <p class="pad_bot2">El hotel Belmont es un establecimiento distendido de 3 estrellas. Dotado de un notable confort tecnológico y unos espacios sorprendentes, es un remanso de paz con una atmósfera relajante. Nuestro amable personal le informará sobre las visitas más interesantes de su barrio de los Campos Elíseos para lograr que su estancia le resulte inolvidable.</p>
                                 <p class="pad_bot2">Situado a un centenar de metros de los Campos Elíseos, el hotel Belmont le ofrece un acceso inmediato a las lujosas boutiques de las avenidas Montaigne y George V.</p>
-                                <a href="#" class="marker_2"></a>
                             </div>
                         </article>
                         <% }
@@ -184,14 +183,12 @@
                                 <p class="pad_bot2"><strong>Helmsley Park Lane</strong></p>
                                 <p class="pad_bot2">Helmsley Park Lane ® es un hotel de lujo de 46 historias con las vistas panorámicas de Central Park  y el horizonte de la Ciudad de Nueva York . Sus espacios son amplios, elegantes y sus suites ofrecen ventanales y vistas magníficas. Se disfruta de un ambiente clásico, comodidad y conveniencia para una experiencia &uacute;nica en la ciudad líder mundial más extraordinaria.</p>
                                 <p class="pad_bot2"> Localizada en el Central Park en Nueva York, justo en el centro del distrito de negocios, este hotel esta a una corta distancia de la 5ta Avenida, Broadway, Radio City, entre otras atracciones.</p>
-                                <a href="#" class="marker_2"></a>
                             </div>
                             <div class="wrapper">
                                 <figure class="left marg_right1"><img src="images/page1_img5.jpg" alt=""></figure>
                                 <p class="pad_bot2"><strong>Belmont</strong></p>
                                 <p class="pad_bot2">El hotel Belmont es un establecimiento distendido de 3 estrellas. Dotado de un notable confort tecnológico y unos espacios sorprendentes, es un remanso de paz con una atmósfera relajante. Nuestro amable personal le informará sobre las visitas más interesantes de su barrio de los Campos Elíseos para lograr que su estancia le resulte inolvidable.</p>
                                 <p class="pad_bot2">Situado a un centenar de metros de los Campos Elíseos, el hotel Belmont le ofrece un acceso inmediato a las lujosas boutiques de las avenidas Montaigne y George V.</p>
-                                <a href="#" class="marker_2"></a>
                             </div>
                         </article>
                         <% }%>
@@ -212,8 +209,8 @@
                 var isValid = true;
                 // TODO: Validar rango de fechas
                 
-                if(validator.isNumeric($("#finish_date")) &&
-                   validator.isNumeric($("#start_date"))){
+                if(!validator.isNumeric($("#finish_date")) &&
+                   !validator.isNumeric($("#start_date"))){
                     isValid = false;
                     alert("Debes seleccionar un rango de fechas!");
                 }
