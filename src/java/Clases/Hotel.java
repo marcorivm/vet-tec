@@ -101,9 +101,11 @@ public class Hotel {
      * @return 
      */
     public boolean isRoomAvailable(Date fromDate, Date toDate, int roomType) throws SQLException {
+        String fromDate_s = new java.text.SimpleDateFormat("yyyy-MM-dd").format(fromDate.getTime()*1000);
+        String toDate_s = new java.text.SimpleDateFormat("yyyy-MM-dd").format(toDate.getTime()*1000);
         String roomName;
         String hotelRooms;
-        String whereClause = "HC.HotelId='"+this._hotelId+"' HD.HotelId='"+this._hotelId+"' AND (HC.Dia >='"+fromDate.toString()+"' AND HC.Dia <='"+toDate.toString()+"')";
+        String whereClause = "HC.HotelId='"+this._hotelId+"' AND HD.HotelId='"+this._hotelId+"' AND (HC.Dia >='"+fromDate_s+"' AND HC.Dia <='"+toDate_s+"')";
         String tablesNames = "Tbl_Hotel_Details_GroupNo HD, Tbl_Hotel_Calendar HC";
         String fields[];
         ArrayList fieldsArrayList = new ArrayList();

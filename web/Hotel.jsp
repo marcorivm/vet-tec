@@ -216,13 +216,13 @@
         <script type="text/javascript">
             Cufon.now();
             $("#date1").datepick({
-                dateFormat: 'dd/mm/yyyy',
+                dateFormat: 'dd-mm-yyyy',
                 minDate: new Date(),
                 altFormat: '@',
                 altField: '#start_date'
             });
             $("#date2").datepick({
-                dateFormat: 'dd/mm/yyyy',
+                dateFormat: 'dd-mm-yyyy',
                 minDate: new Date(),
                 altFormat: '@',
                 altField: '#finish_date'
