@@ -130,10 +130,18 @@ public class Flight {
      */
     public static Flight getFlight(int id) throws SQLException {
         ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Flight_GroupNo", "FlightNo= " + id);
-        if (rs.next()) {
-            Flight f = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), rs.getTime("DepartureTime"), rs.getTime("ArrivalTime"),
-                    rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
-            return f;
+        if (rs.next()) {double dep = rs.getDouble("DepartureTime");
+                    double arr = rs.getDouble("ArrivalTime");
+                    int depM = (int) (dep % 1 * 100);
+                    int depH = (int) (dep / 1);
+                    int arrM = (int) (arr % 1 * 100);
+                    int arrH = (int) (arr / 1);
+                    
+                    Time departure = new Time(depH,depM,0);
+                    Time arrival = new Time(arrH,arrM,0);
+                    Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), departure, arrival,
+                            rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
+            return temp;
         } else {
             return null;
         }
@@ -156,8 +164,18 @@ public class Flight {
             ArrayList flightArrayList = new ArrayList();
             Flight f[];
             do {
-                flightArrayList.add(new Flight(rs.getInt("_flightNo"), rs.getString("_airline_Name"), City.getCity(rs.getString("_source")), City.getCity(rs.getString("_destination")), rs.getTime("_departure_Time"), rs.getTime("_arrival_Time"),
-                        rs.getInt("_total_Seats"), rs.getDouble("_adult_Fare"), rs.getDouble("_child_Fare"), rs.getDouble("_airport_Tax")));
+                double dep = rs.getDouble("DepartureTime");
+                    double arr = rs.getDouble("ArrivalTime");
+                    int depM = (int) (dep % 1 * 100);
+                    int depH = (int) (dep / 1);
+                    int arrM = (int) (arr % 1 * 100);
+                    int arrH = (int) (arr / 1);
+                    
+                    Time departure = new Time(depH,depM,0);
+                    Time arrival = new Time(arrH,arrM,0);
+                    Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), departure, arrival,
+                            rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
+                flightArrayList.add(temp);
             } while (rs.next());
             f = (Flight[]) flightArrayList.toArray();
             return f;
@@ -184,8 +202,18 @@ public class Flight {
             ArrayList flightArrayList = new ArrayList();
             Flight f[];
             do {
-                flightArrayList.add(new Flight(rs.getInt("_flightNo"), rs.getString("_airline_Name"), City.getCity(rs.getString("_source")), City.getCity(rs.getString("_destination")), rs.getTime("_departure_Time"), rs.getTime("_arrival_Time"),
-                        rs.getInt("_total_Seats"), rs.getDouble("_adult_Fare"), rs.getDouble("_child_Fare"), rs.getDouble("_airport_Tax")));
+                double dep = rs.getDouble("DepartureTime");
+                    double arr = rs.getDouble("ArrivalTime");
+                    int depM = (int) (dep % 1 * 100);
+                    int depH = (int) (dep / 1);
+                    int arrM = (int) (arr % 1 * 100);
+                    int arrH = (int) (arr / 1);
+                    
+                    Time departure = new Time(depH,depM,0);
+                    Time arrival = new Time(arrH,arrM,0);
+                    Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), departure, arrival,
+                            rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
+                flightArrayList.add(temp);
             } while (rs.next());
             f = (Flight[]) flightArrayList.toArray();
             return f;
@@ -213,8 +241,17 @@ public class Flight {
             ArrayList flightArrayList = new ArrayList();
 
             do {
-                Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), rs.getTime("DepartureTime"), rs.getTime("ArrivalTime"),
-                        rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
+                double dep = rs.getDouble("DepartureTime");
+                    double arr = rs.getDouble("ArrivalTime");
+                    int depM = (int) (dep % 1 * 100);
+                    int depH = (int) (dep / 1);
+                    int arrM = (int) (arr % 1 * 100);
+                    int arrH = (int) (arr / 1);
+                    
+                    Time departure = new Time(depH,depM,0);
+                    Time arrival = new Time(arrH,arrM,0);
+                    Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), departure, arrival,
+                            rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
                 if (temp.getRemainingSeats() >= _seats) {
                     flightArrayList.add(temp);
                 }
@@ -236,7 +273,16 @@ public class Flight {
 
             do {
                 try {
-                    Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), rs.getTime("DepartureTime"), rs.getTime("ArrivalTime"),
+                    double dep = rs.getDouble("DepartureTime");
+                    double arr = rs.getDouble("ArrivalTime");
+                    int depM = (int) (dep % 1 * 100);
+                    int depH = (int) (dep / 1);
+                    int arrM = (int) (arr % 1 * 100);
+                    int arrH = (int) (arr / 1);
+                    
+                    Time departure = new Time(depH,depM,0);
+                    Time arrival = new Time(arrH,arrM,0);
+                    Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), departure, arrival,
                             rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
                     //Date d = (Date) new DateFormat().parse(date);
                     DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
