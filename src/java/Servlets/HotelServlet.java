@@ -8,6 +8,8 @@ import Clases.City;
 import Clases.Hotel;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -43,11 +45,47 @@ public class HotelServlet extends HttpServlet {
          * Pametros esperados (GET/POST)
          * start_date - Fecha de inicio de la reservacion
          * finish_date - Fecha de finalización de la reservación
-         * location - Id del hotel
+         * location - ubicación del hotel
          * room_type - tipo de habitación
+         * room_size - tamaño de la habitación
          */
         
-        String city = request.getParameter("city");
+        String location = request.getParameter("location");
+        String start_date = request.getParameter("start_date");
+        String finish_date = request.getParameter("finish_date");
+        String room_type = request.getParameter("room_type");
+        String room_size = request.getParameter("room_size");
+        
+        
+        request.setAttribute("city", location);
+        request.setAttribute("date1", start_date);
+        request.setAttribute("date2", finish_date);
+        request.setAttribute("type", room_type);
+        request.setAttribute("tipoHabitacion", room_size);
+        
+        String habitacion = (room_type.equals("2"))? "Delujo " : "Ejecutiva ";
+        habitacion += room_size;
+        
+        request.setAttribute("habitacion", habitacion);
+        
+        try {
+            Hotel hoteles[] = Hotel.getHotels(City.getCity(location));
+            ArrayList<Hotel> hoteles_disp = new  ArrayList<Hotel>(); 
+            for(int i = 0; i < hoteles.length; i++) {
+//                if(hoteles[i].isRoomAvailable(new Date(start_date), new Date(finish_date), Integer.parseInt(room_type))) {
+//                    hoteles_disp.add(hoteles[i]);
+//                }
+                if(hoteles[i].isRoomAvailable(new Date(0), new Date(0), Integer.parseInt(room_type))) {
+                    hoteles_disp.add(hoteles[i]);
+                }
+            }
+            request.setAttribute("hotels", hoteles_disp.toArray());
+        } catch (SQLException ex) {
+            Logger.getLogger(HotelServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        /*
+        String city = request.getParameter("location");
         String date1 = request.getParameter("date1");
         String date2 = request.getParameter("date2");
         String tipo = request.getParameter("tipoHabitacion");
@@ -77,6 +115,7 @@ public class HotelServlet extends HttpServlet {
             Logger.getLogger(FlightServlet.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error (HotelServlet; " + ex.getMessage());
         }
+        */
 
         RequestDispatcher rd = request.getRequestDispatcher("Hotel.jsp");
         rd.forward(request, response);

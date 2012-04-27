@@ -131,9 +131,7 @@ public class Hotel {
             do {
                 isAvailable = isAvailable && (rs.getInt("Total") < rs.getInt("Htotal"));
             } while(rs.next());
-        } else {
-            isAvailable = false;
-        } 
+        }
         return isAvailable;
     }
     /**

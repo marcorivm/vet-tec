@@ -1,13 +1,7 @@
 <%@page import="Clases.Hotel"%>
 <%@page import="Clases.City"%>
 <%
-    City[] cities;
-    cities = (City[]) request.getAttribute("cities");
-    if (cities == null) {
-        request.setAttribute("referer", "Hotel.jsp");
-        RequestDispatcher rd = request.getRequestDispatcher("Ciudades");
-        rd.forward(request, response);
-    }
+    City[] cities = City.getCities();
     Hotel[] hotels;
     hotels = (Hotel[]) request.getAttribute("hotels");
     int cuartosDel = 0;
@@ -59,21 +53,21 @@
                                     <div class="tabs_cont">
                                         <div class="bg">
 
-                                            <div class="wrapper"><label for="city">Ciudad</label>
-                                                <select name="city" id="city">
+                                            <div class="wrapper"><label for="location">Ciudad</label>
+                                                <select name="location" id="location">
                                                     <% if (cities != null)
                                                             for (City c : cities) {%>
                                                     <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
                                                     <% }%>
                                                 </select></div>
 
-                                            <div class="wrapper"><label for="date1">Llegada (dd/mm/aaaa)</label>
-                                                <input type="text" name="date1" id="date1" /></div>
-                                            <div id="regreso" class="wrapper"><label for="date2">Salida (dd/mm/aaaa)</label>
-                                                <input type="text" name="date2" id="date2" /></div>
+                                            <div class="wrapper"><label for="start_date">Llegada (dd/mm/aaaa)</label>
+                                                <input type="text" name="start_date" id="start_date" /></div>
+                                            <div id="regreso" class="wrapper"><label for="finish_date">Salida (dd/mm/aaaa)</label>
+                                                <input type="text" name="finish_date" id="finish_date" /></div>
                                             <div class="wrapper">
                                                 Tipo de Habitaci&oacute;n<br />
-                                                <select name="tipoHabitacion">
+                                                <select name="room_size">
                                                     <option value="sencilla">Sencilla</option>
                                                     <option value="doble">Doble</option>
                                                     <option value="triple">Triple</option>
@@ -81,9 +75,9 @@
                                                 </select><br />
                                             </div>
                                             <div class="wrapper">
-                                                <input type ="radio" name="type" id="type" value="deluxe"/>                                                
+                                                <input type ="radio" name="room_type" id="deluxe" value="2"/>                                                
                                                 <label for="deluxe">Cuartos Deluxe</label> <br/>
-                                                <input type="radio" name ="type" id="type" value="exe" checked="checked" />
+                                                <input type="radio" name ="room_type" id="exe" value="1" checked="checked" />
                                                 <label for="exe">Cuartos Exe</label>
                                             </div>
                                             <div>
@@ -168,7 +162,7 @@
                             </div>
                         </div>
                                 </form>
-                        <% } else {%>
+                                <% } else {%>
                         <h3>No hay resultados</h3>
                         <article class="col2 pad_left1">
                             <h2>Hoteles Populares</h2>
@@ -187,7 +181,7 @@
                                 <a href="#" class="marker_2"></a>
                             </div>
                         </article>
-                        <% }
+                                <% }
                         } else {%>
                         <article class="col2 pad_left1">
                             <h2>Hoteles Populares</h2>
@@ -206,8 +200,7 @@
                                 <a href="#" class="marker_2"></a>
                             </div>
                         </article>
-                        <%                                                           }
-                        %>
+                        <% } %>
                     </article>
                 </section>
                 <!-- / content -->
@@ -221,11 +214,11 @@
         </div>
         <script type="text/javascript">
             Cufon.now();
-            $("#date1").datepick({
+            $("#start_date").datepick({
                 dateFormat: 'dd-mm-yyyy',
                 minDate: new Date()
             });
-            $("#date2").datepick({
+            $("#finish_date").datepick({
                 dateFormat: 'dd-mm-yyyy',
                 minDate: new Date()
             });</script>
