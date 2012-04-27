@@ -1,3 +1,6 @@
+<%@page import="Clases.FlightSeat_Status"%>
+<%@page import="java.sql.Time"%>
+<%@page import="java.util.Date"%>
 <%@page import="Clases.Customer"%>
 <%@page import="Clases.Flight"%>
 <%@page import="Clases.City"%>
@@ -26,7 +29,13 @@
         flightregreso = Flight.getFlight(flightNo2);
     }
 
-
+    int impuestoNinos = 1;
+    if (ninos == 0) {
+        impuestoNinos = 0;
+    }
+    
+    double totalIda = 0;
+    double totalRegreso = 0;
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +76,7 @@
                             <input type="hidden" name="ninos" id="ninos" value="<%=request.getParameter("ninos")%>" />
                             <input type="hidden" name="date1" id="date1" value="<%=request.getParameter("date1")%>" />
                             <input type="hidden" name="date2" id="date2" value="<%=request.getParameter("date2")%>" />
-                            
+
                             <h2>Reservar Vuelo</h2>
                             <% if (flightida != null) {%>
                             <div class="wrapper under">
@@ -113,8 +122,8 @@
                                                 <td>Ni&ntilde;os</td>
                                                 <td><%=ninos%></td>
                                                 <td>$ <%=flightida.getChild_Fare() * ninos%> (<%=flightida.getChild_Fare()%> x <%=ninos%>)</td>  
-                                                <td>$ <%=flightida.getAirport_Tax()%></td>
-                                                <td>$ <%=(flightida.getChild_Fare() * ninos + flightida.getAirport_Tax())%></td>
+                                                <td>$ <%=flightida.getAirport_Tax() * impuestoNinos%></td>
+                                                <td>$ <%=(flightida.getChild_Fare() * ninos + (flightida.getAirport_Tax() * impuestoNinos))%></td>
                                             </tr>
                                         </table>
                                     </div>
@@ -122,9 +131,20 @@
                                 <div>               
                                     <br />
                                     <span class="floatRight">
-                                        -------------------------<br />
-                                        Total: $ <%=((flightida.getAdult_Fare() * adultos + flightida.getAirport_Tax()) + (flightida.getChild_Fare() * ninos + flightida.getAirport_Tax()))%><br />
-                                        -------------------------
+                                        <%
+                                            totalIda = ((flightida.getAdult_Fare() * adultos + flightida.getAirport_Tax()) + (flightida.getChild_Fare() * ninos + (flightida.getAirport_Tax() * impuestoNinos)));
+                                            Date doj = FlightSeat_Status.getFlightSeat_Status(flightida.getFlight_No()).getDateOfJourney();
+                                            double descuento = Flight.getDiscount(flightida.getFlight_No(), new Date(), doj, 0);
+                                        %>
+                                        --------------------------------------------------<br />
+                                        Sub-Total Ida: $ <%=totalIda%><br />
+                                        --------------------------------------------------<br />
+                                        --------------------------------------------------<br />
+                                        Descuento Ida (<%=(Math.abs(descuento) * 100) + "%"%>): $ <%=(totalIda * descuento)%><br />
+                                        --------------------------------------------------<br />
+                                        --------------------------------------------------<br />
+                                        Total Ida: $ <%=(totalIda * (1 + descuento))%><br />
+                                        --------------------------------------------------<br />
                                     </span>
                                 </div>
                             </div>
@@ -173,8 +193,8 @@
                                                 <td>Ni&ntilde;os</td>
                                                 <td><%=ninos%></td>
                                                 <td>$ <%=flightregreso.getChild_Fare() * ninos%> (<%=flightregreso.getChild_Fare()%> x <%=ninos%>)</td>  
-                                                <td>$ <%=flightregreso.getAirport_Tax()%></td>
-                                                <td>$ <%=(flightregreso.getChild_Fare() * ninos + flightregreso.getAirport_Tax())%></td>
+                                                <td>$ <%=flightregreso.getAirport_Tax() * impuestoNinos%></td>
+                                                <td>$ <%=(flightregreso.getChild_Fare() * ninos + (flightregreso.getAirport_Tax()) * impuestoNinos)%></td>
                                             </tr>
                                         </table>
                                     </div>
@@ -182,10 +202,26 @@
                                 <div>               
                                     <br />
                                     <span class="floatRight">
-                                        -------------------------<br />
-                                        Total: $ <%=((flightregreso.getAdult_Fare() * adultos + flightregreso.getAirport_Tax()) + (flightregreso.getChild_Fare() * ninos + flightregreso.getAirport_Tax()))%><br />
-                                        -------------------------
+                                        <%
+                                            totalRegreso = ((flightida.getAdult_Fare() * adultos + flightregreso.getAirport_Tax()) + (flightregreso.getChild_Fare() * ninos + (flightregreso.getAirport_Tax() * impuestoNinos)));
+                                            Date doj = FlightSeat_Status.getFlightSeat_Status(flightregreso.getFlight_No()).getDateOfJourney();
+                                            double descuento = Flight.getDiscount(flightregreso.getFlight_No(), new Date(), doj, 0);
+                                        %>
+                                        --------------------------------------------------<br />
+                                        Sub-Total Regreso: $ <%=totalRegreso%><br />
+                                        --------------------------------------------------<br />
+                                        --------------------------------------------------<br />
+                                        Descuento Regreso (<%=(Math.abs(descuento) * 100) + "%"%>): $ <%=(totalRegreso * descuento)%><br />
+                                        --------------------------------------------------<br />
+                                        --------------------------------------------------<br />
+                                        Total Regreso: $ <%=(totalRegreso * (1 + descuento))%><br />
+                                        --------------------------------------------------<br />
                                     </span>
+                                </div>
+                            </div>
+                            <div class="wrapper under">
+                                <div class="fareDetails">
+                                    <h3>Gran Total: $<%=totalIda+totalRegreso%></h3>
                                 </div>
                             </div>
                             <% }%>
@@ -200,9 +236,9 @@
                                             <td><label for="title1">T&iacute;tulo </label></td>
                                             <td>
                                                 <select name="title1" id="title1">
-                                                <option>Sr.</option>
-                                                <option>Sra.</option>
-                                                <option>Srta.</option>
+                                                    <option>Sr.</option>
+                                                    <option>Sra.</option>
+                                                    <option>Srta.</option>
                                                 </select>
                                             </td>
                                         </div>   
@@ -238,9 +274,9 @@
                                             <td><label for="title<%=i%>">T&iacute;tulo </label></td>
                                             <td>
                                                 <select name="title<%=i%>" id="title<%=i%>">
-                                                <option>Sr.</option>
-                                                <option>Sra.</option>
-                                                <option>Srta.</option>
+                                                    <option>Sr.</option>
+                                                    <option>Sra.</option>
+                                                    <option>Srta.</option>
                                                 </select>
                                             </td>
                                         </div>   
@@ -266,7 +302,7 @@
                                     </table>
                                 </div>
                                 <%
-                                }%>
+                                    }%>
                             </div>
                             <!-- ninos -->
                             <div class="wrapper under">
@@ -285,12 +321,12 @@
                                 <% }%>
                             </div>
                             <input type="submit" class="button" value="Reservar" />
-                            <% Customer[] customers = Customer.getCustomers(); %>
+                            <% Customer[] customers = Customer.getCustomers();%>
                             <label for="customerId">Agente de Ventas:</label>
                             <select name="customerId" id="customerId">
-                                <% for(int i = 0; i < customers.length; i++){ %>
-                                <option value="<%= customers[i].getCustomerID() %>"><%= customers[i].getFirstName() %> <%= customers[i].getLastName() %></option>
-                                <% } %>
+                                <% for (int i = 0; i < customers.length; i++) {%>
+                                <option value="<%= customers[i].getCustomerID()%>"><%= customers[i].getFirstName()%> <%= customers[i].getLastName()%></option>
+                                <% }%>
                             </select>
                         </form>
                     </article>

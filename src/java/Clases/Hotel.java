@@ -1,7 +1,7 @@
 package Clases;
 
 import dbcp.ConnectionManager;
-import java.util.Date;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -101,9 +101,11 @@ public class Hotel {
      * @return 
      */
     public boolean isRoomAvailable(Date fromDate, Date toDate, int roomType) throws SQLException {
+        String fromDate_s = new java.text.SimpleDateFormat("yyyy-MM-dd").format(fromDate.getTime()*1000);
+        String toDate_s = new java.text.SimpleDateFormat("yyyy-MM-dd").format(toDate.getTime()*1000);
         String roomName;
         String hotelRooms;
-        String whereClause = "HotelId='"+this._hotelId+"' AND (HC.Dia >= "+fromDate+" AND HC.Dia <= "+toDate+")";
+        String whereClause = "HC.HotelId='"+this._hotelId+"' AND HD.HotelId='"+this._hotelId+"' AND (HC.Dia >='"+fromDate_s+"' AND HC.Dia <='"+toDate_s+"')";
         String tablesNames = "Tbl_Hotel_Details_GroupNo HD, Tbl_Hotel_Calendar HC";
         String fields[];
         ArrayList fieldsArrayList = new ArrayList();
@@ -131,9 +133,7 @@ public class Hotel {
             do {
                 isAvailable = isAvailable && (rs.getInt("Total") < rs.getInt("Htotal"));
             } while(rs.next());
-        } else {
-            isAvailable = false;
-        } 
+        }
         return isAvailable;
     }
     /**
