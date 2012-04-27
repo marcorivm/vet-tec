@@ -50,6 +50,7 @@
                         <div class="pad">
                             <div class="wrapper under">
                                 <form id="form_1" method="POST" action="HotelServlet">
+                                    <input type="hidden" name="referer" id="referer" value="offerHotel.jsp" />
                                     <div class="tabs_cont">
                                         <div class="bg">
 
@@ -67,7 +68,7 @@
                                                 <input type="text" name="finish_date" id="finish_date" /></div>
                                             <div class="wrapper">
                                                 Tipo de Habitaci&oacute;n<br />
-                                                <select name="tipoHabitacion">
+                                                <select name="type">
                                                     <option value="sencilla">Sencilla</option>
                                                     <option value="doble">Doble</option>
                                                     <option value="triple">Triple</option>
@@ -75,9 +76,9 @@
                                                 </select><br />
                                             </div>
                                             <div class="wrapper">
-                                                <input type ="radio" name="type" id="type" value="deluxe"/>                                                
+                                                <input type ="radio" name="tipoHabitacion" id="type" value="2"/>                                                
                                                 <label for="deluxe">Cuartos Deluxe</label> <br/>
-                                                <input type="radio" name ="type" id="type" value="exe" checked="checked" />
+                                                <input type="radio" name ="tipoHabitacion" id="type" value="1" checked="checked" />
                                                 <label for="exe">Cuartos Exe</label>
                                             </div>
                                             <div>

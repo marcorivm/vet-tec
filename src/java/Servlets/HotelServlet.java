@@ -9,10 +9,6 @@ import Clases.Hotel;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -53,6 +49,7 @@ public class HotelServlet extends HttpServlet {
          * room_size - tamaño de la habitación
          */
         
+        String referer = request.getParameter("referer");
         String location = request.getParameter("city");
         String start_date = request.getParameter("start_date");
         String finish_date = request.getParameter("finish_date");
@@ -90,7 +87,7 @@ public class HotelServlet extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(HotelServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        RequestDispatcher rd = request.getRequestDispatcher("Hotel.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher(referer);
         rd.forward(request, response);
 
 

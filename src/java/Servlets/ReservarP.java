@@ -52,7 +52,7 @@ public class ReservarP extends HttpServlet {
             double discount = 0.0;
             Calendar today = Calendar.getInstance();
             SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
-            String DoB = formater.format(today);
+            String DoB = formater.format(today.getTime());
             String name = (String) request.getAttribute("name");
             String lastName = (String) request.getAttribute("lastName");
             String email = (String) request.getAttribute("email");
@@ -173,6 +173,8 @@ public class ReservarP extends HttpServlet {
                 String disc = (String) request.getAttribute("discount");
                 if (disc != null) {
                     discount = Double.parseDouble(disc);
+                }else{
+                    discount = 0.0;
                 }
                 pb.setDiscount(discount);
 
@@ -182,8 +184,8 @@ public class ReservarP extends HttpServlet {
                     {"Tbl_Hotel_Booking_GroupNo_BookingId", (hotelId.isEmpty()) ? "NULL" : hotelId},
                     {"Discount", discount + ""},
                     {"LastName", lastName},
-                    {"name", name},
-                    {"email", email},};
+                    {"Name", name},
+                    {"Email", email},};
 
                 int id = ConnectionManager.insertAndGetKey(fields, "Tbl_Packages", con);
                 isOk = (id > 0);

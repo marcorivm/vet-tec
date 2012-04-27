@@ -54,6 +54,10 @@
         <servlet-name>HotelVerifyAvailability</servlet-name>
         <servlet-class>Servlets.HotelVerifyAvailability</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Dummy</servlet-name>
+        <servlet-class>test.Dummy</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>FlightServlet</servlet-name>
         <url-pattern>/FlightServlet</url-pattern>
@@ -97,6 +101,10 @@
     <servlet-mapping>
         <servlet-name>HotelVerifyAvailability</servlet-name>
         <url-pattern>/HotelVerifyAvailability</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dummy</servlet-name>
+        <url-pattern>/Dummy</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

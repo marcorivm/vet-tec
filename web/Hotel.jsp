@@ -51,6 +51,7 @@
                         <div class="pad">
                             <div class="wrapper under">
                                 <form id="form_1" method="POST" action="HotelServlet">
+                                    <input type="hidden" name="referer" id="referer" value="Hotel.jsp" />
                                     <div class="tabs_cont">
                                         <div class="bg">
 
