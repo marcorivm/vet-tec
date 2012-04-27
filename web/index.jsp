@@ -124,10 +124,11 @@
                                             <option value="4">4</option>
                                         </select><br />
                                     </div>
-                                    <div><a href="#" class="button" onclick="document.getElementById('form_1').submit()">Buscar</a></div>
+                                    <div><a href="#" class="button" onclick='$("#form_1").submit();'>Buscar</a></div>
                                 </div>
                             </form>
                             <form  style="display: none" id="form_2" method="POST" action="HotelServlet" >
+                                <input type="hidden" name="referer" id="referer" value="Hotel.jsp" />
                                 <div class="tabs_cont">
                                     <div class="bg">
 
@@ -139,10 +140,10 @@
                                                 <% }%>
                                             </select></div>
 
-                                        <div class="wrapper"><label for="date1">Llegada (dd/mm/aaaa)</label>
-                                            <input type="text" name="date1" id="date1" /><input type="hidden" name="start_date" id="start_date" /></div>
-                                        <div id="regreso" class="wrapper"><label for="date2">Salida (dd/mm/aaaa)</label>
-                                            <input type="text" name="date2" id="date2" /><input type="hidden" name="finish_date" id="finish_date" /></div>
+                                        <div class="wrapper"><label for="date_1">Llegada (dd/mm/aaaa)</label>
+                                            <input type="text" name="date1" id="date_1" /><input type="hidden" name="start_date" id="start_date" /></div>
+                                        <div id="regreso" class="wrapper"><label for="date_2">Salida (dd/mm/aaaa)</label>
+                                            <input type="text" name="date2" id="date_2" /><input type="hidden" name="finish_date" id="finish_date" /></div>
                                         <div class="wrapper">
                                             Tipo de Habitaci&oacute;n<br />
                                             <select name="tipoHabitacion">
@@ -153,7 +154,7 @@
                                             </select><br />
                                         </div>
                                         <div class="wrapper">
-                                            <input type ="radio" name="type" id="type" value="deluxe"/>                                                
+                                            <input type ="radio" name="type" id="type" value="deluxe" checked="checked"/>                                                
                                             <label for="deluxe">Cuartos Deluxe</label> <br/>
                                             <input type="radio" name ="type" id="type" value="exe" />
                                             <label for="exe">Cuartos Exe</label>
@@ -227,9 +228,9 @@
             $("#form_2").bind("submit",function() {
                 var isValid = true;
                 
-                if(!validator.isDate($("#date1")) && 
-                    !validator.isDate($("#date2")) && 
-                    !validator.isNumeric($("#finish_date")) &&
+                if(!validator.isDate($("#date_1")) ||
+                    !validator.isDate($("#date_2")) || 
+                    !validator.isNumeric($("#finish_date")) ||
                     !validator.isNumeric($("#start_date"))){
                     // TODO: Validar rango de fechas
                     isValid = false;
@@ -248,22 +249,28 @@
                     isValid = false;
                     alert("Debes seleccionar un rango de fechas!");
                 }
-                if(!validator.isEqual($("#source"), $("#destiny"))){
+                if(validator.isEqual($("#source"), $("#destiny"))){
                     isValid = false;
                     alert("El origen y el destino no pueden ser iguales!");
                 }
-                
-                
-                return isValid;
+                return false;
             })
             
             $("#date1").datepick({
+                dateFormat: 'dd-mm-yyyy',
+                minDate: new Date()
+            });
+            $("#date2").datepick({
+                dateFormat: 'dd-mm-yyyy',
+                minDate: new Date()
+            });
+            $("#date_1").datepick({
                 dateFormat: 'dd-mm-yyyy',
                 minDate: new Date(),
                 altFormat: '@',
                 altField: '#start_date'
             });
-            $("#date2").datepick({
+            $("#date_2").datepick({
                 dateFormat: 'dd-mm-yyyy',
                 minDate: new Date(),
                 altFormat: '@',
