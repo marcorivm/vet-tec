@@ -1,3 +1,5 @@
+<%@page import="Clases.FlightSeat_Status"%>
+<%@page import="java.util.Date"%>
 <%@page import="Clases.Hotel_Booking"%>
 <%@page import="Clases.Hotel"%>
 <%@page import="Clases.Flight"%>
@@ -15,6 +17,10 @@
     int adultosFrom = 1;
     int ninosTo = 0;
     int ninosFrom = 0;
+    int impuestosNinosTo = 0;
+    int impuestosNinosFrom = 0;
+    double totalIda = 0;
+    double totalFrom = 0;
 
     if (request.getAttribute("booking") != null) {
         booking = (Package_Booking) request.getAttribute("booking");
@@ -30,11 +36,17 @@
         flightTo = flightToBooking.getFlight();
         adultosTo = flightToBooking.getNoOfAdults();
         ninosTo = flightToBooking.getNoOfChildren();
+        if (ninosTo > 0) {
+            impuestosNinosTo = 1;
+        }
     }
     if (flightFromBooking != null) {
         flightFrom = flightFromBooking.getFlight();
         adultosFrom = flightFromBooking.getNoOfAdults();
         ninosFrom = flightFromBooking.getNoOfChildren();
+        if (ninosFrom > 0) {
+            impuestosNinosFrom = 1;
+        }
     }
 %>
 <!DOCTYPE html>
@@ -179,20 +191,30 @@
                                         <tr>
                                             <td>Ni&ntilde;os</td>
                                             <td><%=ninosTo%></td>
-                                            <td>$ <%=flightTo.getChild_Fare() * ninosTo%> flightToflight.getChild_Fare()%> x <%=ninosTo%>)</td>  
-                                            <td>$ <%=flightTo.getAirport_Tax()%></td>
-                                            <td>$ <%=(flightTo.getChild_Fare() * ninosTo + flightTo.getAirport_Tax())%></td>
+                                            <td>$ <%=flightTo.getChild_Fare() * ninosTo%> (<%=flightTo.getChild_Fare()%> x <%=ninosTo%>)</td>  
+                                            <td>$ <%=flightTo.getAirport_Tax() * impuestosNinosTo%></td>
+                                            <td>$ <%=(flightTo.getChild_Fare() * ninosTo + (flightTo.getAirport_Tax() * impuestosNinosTo))%></td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
-                            <div>
-                                <span><input type="button" class="button" value="Reservar Vuelo" /></span>
+                            <div>                              
                                 <br />
                                 <span class="floatRight">
-                                    -------------------------<br />
-                                    Total: $ <%=((flightTo.getAdult_Fare() * adultosTo + flightTo.getAirport_Tax()) + (flightTo.getChild_Fare() * ninosTo + flightTo.getAirport_Tax()))%><br />
-                                    -------------------------
+                                    <%
+                                        totalIda = ((flightTo.getAdult_Fare() * adultosTo + flightTo.getAirport_Tax()) + (flightTo.getChild_Fare() * ninosTo + (flightTo.getAirport_Tax() * impuestosNinosTo)));
+                                        Date doj = FlightSeat_Status.getFlightSeat_Status(flightTo.getFlight_No()).getDateOfJourney();
+                                        double descuento = booking.getDiscount();
+                                    %>
+                                    --------------------------------------------------<br />
+                                    Sub-Total Ida: $ <%=totalIda%><br />
+                                    --------------------------------------------------<br />
+                                    --------------------------------------------------<br />
+                                    Descuento Ida (<%=(Math.abs(descuento) * 100) + "%"%>): $ <%=(totalIda * descuento)%><br />
+                                    --------------------------------------------------<br />
+                                    --------------------------------------------------<br />
+                                    Total Ida: $ <%=(totalIda * (1 + descuento))%><br />
+                                    --------------------------------------------------<br />
                                 </span>
                             </div>
                             <% }%>
@@ -238,17 +260,7 @@
                                 </div>
                             </div>
                         </div> -->
-                        <h2>Datos de Pago</h2>
-                        <div class="wrapper">
-                            Boleto de <span class="city">Bangalore</span> to <span class="city">Chennai</span><br />
-                            Adultos <span class="bold">3</span><br />
-                            Ni&ntilde;os <span class="bold">2</span><br />
-                            Tarifa Total Adultos <span class="bold">$ 5000</span><br />
-                            Tarifa Total Ni&ntilde;os <span class="bold">$ 4000</span><br />
-                            Impuestos <span class="bold">$ 800</span><br />
-                            Total <span class="bold">$ 9800</span><br />
-                            <input type="button" class="button" value="Hacer Pago" onclick="(function() { alert('Payment Succesful!'); })();" /><br />
-                        </div>
+                        
                         <!-- vuelo de regreso -->
                         <% if (flightFrom != null) {
 
@@ -329,19 +341,29 @@
                                             <td>Ni&ntilde;os</td>
                                             <td><%=ninosFrom%></td>
                                             <td>$ <%=flightFrom.getChild_Fare() * ninosFrom%> (<%=flightFrom.getChild_Fare()%> x <%=ninosFrom%>)</td>  
-                                            <td>$ <%=flightFrom.getAirport_Tax()%></td>
-                                            <td>$ <%=(flightFrom.getChild_Fare() * ninosFrom + flightFrom.getAirport_Tax())%></td>
+                                            <td>$ <%=flightFrom.getAirport_Tax() * impuestosNinosFrom%></td>
+                                            <td>$ <%=(flightFrom.getChild_Fare() * ninosFrom + (flightFrom.getAirport_Tax() * impuestosNinosFrom))%></td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
                             <div>
-                                <span><input type="button" class="button" value="Reservar Vuelo" /></span>
                                 <br />
                                 <span class="floatRight">
-                                    -------------------------<br />
-                                    Total: $ <%=((flightFrom.getAdult_Fare() * adultosFrom + flightFrom.getAirport_Tax()) + (flightFrom.getChild_Fare() * ninosFrom + flightFrom.getAirport_Tax()))%><br />
-                                    -------------------------
+                                    <%
+                                        totalFrom = ((flightFrom.getAdult_Fare() * adultosFrom + flightFrom.getAirport_Tax()) + (flightFrom.getChild_Fare() * ninosFrom + (flightFrom.getAirport_Tax() * impuestosNinosFrom)));
+                                        Date doj = FlightSeat_Status.getFlightSeat_Status(flightFrom.getFlight_No()).getDateOfJourney();
+                                        double descuento = booking.getDiscount();
+                                    %>
+                                    --------------------------------------------------<br />
+                                    Sub-Total Ida: $ <%=totalFrom%><br />
+                                    --------------------------------------------------<br />
+                                    --------------------------------------------------<br />
+                                    Descuento Ida (<%=(Math.abs(descuento) * 100) + "%"%>): $ <%=(totalFrom * descuento)%><br />
+                                    --------------------------------------------------<br />
+                                    --------------------------------------------------<br />
+                                    Total Ida: $ <%=(totalFrom * (1 + descuento))%><br />
+                                    --------------------------------------------------<br />
                                 </span>
                             </div>
                             <% }%>
@@ -382,18 +404,7 @@
                                     <input type="text" name="child-lname1" id="child-lname1" />
                                 </div>
                             </div>
-                        </div>
-                        <h2>Datos de Pago</h2>
-                        <div class="wrapper">
-                            Boleto de <span class="city">Bangalore</span> to <span class="city">Chennai</span><br />
-                            Adultos <span class="bold">3</span><br />
-                            Ni&ntilde;os <span class="bold">2</span><br />
-                            Tarifa Total Adultos <span class="bold">$ 5000</span><br />
-                            Tarifa Total Ni&ntilde;os <span class="bold">$ 4000</span><br />
-                            Impuestos <span class="bold">$ 800</span><br />
-                            Total <span class="bold">$ 9800</span><br />
-                            <input type="button" class="button" value="Hacer Pago" onclick="(function() { alert('Payment Succesful!'); })();" /><br />
-                        </div> 
+                        </div>                        
                         <!-- detalles hotel -->
                         <% if (hotel != null) {
 
@@ -415,13 +426,13 @@
                                         </tr>
 
                                         <tr>
-                                            <th><%=hotel.getHotelName() %></th>
-                                            <th><%=hotel.getLocation().getCityName() %></th>
-                                            <th><%=hotel.getNoOfDeluxRooms() %></th>                                            
-                                            <th><%=hotel.getNoOfEXERooms() %></th>                                            
-                                            <th><%=hotel.getDeluxRoomFare_PerDay() %></th>                                            
-                                            <th><%=hotel.getEXERoomFarePerDay() %></th>                                            
-                                            <th><%=hotel.getHotelTax() %></th>                                            
+                                            <th><%=hotel.getHotelName()%></th>
+                                            <th><%=hotel.getLocation().getCityName()%></th>
+                                            <th><%=hotel.getNoOfDeluxRooms()%></th>                                            
+                                            <th><%=hotel.getNoOfEXERooms()%></th>                                            
+                                            <th><%=hotel.getDeluxRoomFare_PerDay()%></th>                                            
+                                            <th><%=hotel.getEXERoomFarePerDay()%></th>                                            
+                                            <th><%=hotel.getHotelTax()%></th>                                            
                                             <td><input type="submit" class="button" value="Cancelar" /></td>
                                         </tr>
 
