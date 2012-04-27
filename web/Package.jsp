@@ -47,7 +47,7 @@
                                 double totalAdultFrom = 0;
                                 double totalChildFrom = 0;
                                 double totalFrom = 0;
-                                double discountTo = 0;
+                                //double discountTo = 0;
                                 int noAdults = 0;
                                 int noChild = 0;
                                 if (request.getSession().getAttribute("fbTo") != null) {
@@ -58,7 +58,6 @@
                                     totalTo = totalAdultTo + totalChildTo + flightTo.getAirport_Tax();
                                     noAdults = fbTo.getNoOfAdults();
                                     noChild = fbTo.getNoOfChildren();
-                                    discountTo =
                                 }
                                 if (request.getSession().getAttribute("fbFrom") != null) {
                                     fbFrom = (Flight_Booking) (request.getSession().getAttribute("fbFrom"));

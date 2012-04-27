@@ -1,4 +1,3 @@
-
 <%@page import="Clases.Hotel"%>
 <%@page import="Clases.City"%>
 <%@page import="java.util.ArrayList"%>
