@@ -63,7 +63,7 @@
                                     </div>
                                     <!-- div class="wrapper"><input name="source" type="text" class="input">Origen</div -->
                                     <div class="wrapper"><label for="source">Salida</label>
-                                        <select name="source" id="source">
+                                        <select name="source" id="source" class="floatRight">
                                             <% if (cities != null)
                                                     for (City c : cities) {%>
                                             <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
@@ -71,7 +71,7 @@
                                         </select></div>
                                     <!-- div class="wrapper"><input name="destiny" type="text" class="input">Destino</div -->
                                     <div class="wrapper"><label for="destination">Destino</label>
-                                        <select name="destiny" id="destiny">
+                                        <select name="destiny" id="destiny" class="floatRight">
                                             <% if (cities != null)
                                                     for (City c : cities) {%>
                                             <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
@@ -85,7 +85,7 @@
                                         <input type="text" name="date2" id="date2" /></div>                                    
                                     <div class="wrapper pad_bot1">
                                         <label for="timeFrom">Hora</label>
-                                        <select name="timeFrom" id="timeFrom">
+                                        <select name="timeFrom" id="timeFrom" class="floatRight">
                                             <%
                                                 for (int i = 6; i <= 22; i++) {
                                             %>
@@ -96,7 +96,7 @@
                                         </select>
                                         <br />
                                         <label for="timeTo">a</label>
-                                        <select name="timeTo" id="timeTo">
+                                        <select name="timeTo" id="timeTo" class="floatRight">
                                             <%
                                                 for (int i = 7; i < 23; i++) {
                                             %>
@@ -108,24 +108,23 @@
                                         </select>
                                     </div>
                                     <div class="wrapper pad_bot1">
-                                        <a href="#" class="button" onclick="document.getElementById('form_1').submit()">Buscar</a>
-                                        Adultos<br />
-                                        <select name="adults">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                        </select>
-                                        Niños<br />
-                                        <select name="kids">
-                                            <option>0</option>
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                        </select>
+                                        Adultos
+                                        <select name="adults" class="floatRight">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                        </select><br />
+                                        Ni&ntilde;os
+                                        <select name="kids" class="floatRight">
+                                            <option value="0">0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                        </select><br />
                                     </div>
+                                    <div><a href="#" class="button" onclick="document.getElementById('form_1').submit()">Buscar</a></div>
                                 </div>
                             </form>
                             <form  style="display: none" id="form_2" method="POST" action="HotelServlet" >
@@ -234,10 +233,10 @@
                 var isValid = true;
                 
                 if(!validator.isNumeric($("#date1")) && 
-                   !validator.isNumeric($("#date2")) && 
-                   !validator.isNumeric($("#finish_date")) &&
-                   !validator.isNumeric($("#start_date"))){
-                   // TODO: Validar rango de fechas
+                    !validator.isNumeric($("#date2")) && 
+                    !validator.isNumeric($("#finish_date")) &&
+                    !validator.isNumeric($("#start_date"))){
+                    // TODO: Validar rango de fechas
                     isValid = false;
                     alert("Debes seleccionar un rango de fechas!");
                 }

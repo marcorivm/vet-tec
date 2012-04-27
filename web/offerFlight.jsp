@@ -6,7 +6,7 @@
     City[] cities;
     cities = (City[]) request.getAttribute("cities");
     if (cities == null) {
-        request.setAttribute("referer", "vuelos.jsp");
+        request.setAttribute("referer", "offerFlight.jsp");
         RequestDispatcher rd = request.getRequestDispatcher("Ciudades");
         rd.forward(request, response);
     }
@@ -66,14 +66,14 @@
                                                 <div class="radio"><input type="radio" name="isRoundTrip" value="false" onclick="ocultarRegreso()">Simple</div>
                                             </div>                                           
                                             <div class="wrapper"><label for="source">Origen</label>
-                                                <select name="source" id="source">
+                                                <select name="source" id="source" class="floatRight">
                                                     <% if (cities != null)
                                                             for (City c : cities) {%>
                                                     <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
                                                     <% }%>
                                                 </select></div>                                           
                                             <div class="wrapper"><label for="destiny">Destino</label>
-                                                <select name="destiny" id="destiny">
+                                                <select name="destiny" id="destiny" class="floatRight">
                                                     <% if (cities != null)
                                                             for (City c : cities) {%>
                                                     <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
@@ -85,7 +85,7 @@
                                                 <input type="text" name="date2" id="date2" /></div>                                    
                                             <div class="wrapper pad_bot1d">
                                                 <label for="timeFrom">Hora</label>
-                                                <select name="timeFrom" id="timeFrom">
+                                                <select name="timeFrom" id="timeFrom" class="floatRight">
                                                     <%
                                                         for (int i = 6; i <= 22; i++) {
                                                     %>
@@ -96,7 +96,7 @@
                                                 </select>
                                                 <br />
                                                 <label for="timeTo">a</label>
-                                                <select name="timeTo" id="timeTo">
+                                                <select name="timeTo" id="timeTo" class="floatRight">
                                                     <%
                                                         for (int i = 7; i < 23; i++) {
                                                     %>
@@ -108,15 +108,15 @@
                                                 </select>
                                             </div>
                                             <div class="wrapper pad_bot1">
-                                                Adultos<br />
-                                                <select name="adults">
+                                                Adultos
+                                                <select name="adults" class="floatRight">
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
                                                     <option value="3">3</option>
                                                     <option value="4">4</option>
                                                 </select><br />
-                                                Ni&ntilde;os<br />
-                                                <select name="kids">
+                                                Ni&ntilde;os
+                                                <select name="kids" class="floatRight">
                                                     <option value="0">0</option>
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
@@ -140,83 +140,104 @@
                     </article>
                     <!-- columna derecha -->
                     <article class="col2 pad_left1">
-                        <% if (flights != null) {
-                                if (flights.length > 0) {%>
-                        <form name="hotelSelection" action="HotelReservation.jsp" method="post">
-                            <input type="hidden" value="${city}" name="city" id="city" />
-                            <input type="hidden" value="${date1}" name="date1" id="date1" />
-                            <input type="hidden" value="${date2}" name="date2" id="date2" />
-                            <input type="hidden" value="${type}" name="type" id="type" />
-                            <input type="hidden" value="${tipoHabitacion}" name="tipoHabitacion" id="tipoHabitacion" />
-                            <h2>Revisar Hotel</h2>
-                            <div class="wrapper under">
-                                <div id="continuar" class="under">
-                                    <h3>Tome la oportunidad de Reservar un Vuelo</h3>
-                                    <h4> <a href="Package.jsp" class="button" >No, deseo continuar</a></h4>
-                                </div>
-                                <div id="fareDetails">
-                                    <h3>Revisar Detalles de la Tarifa</h3>
-                                    <div>
-                                        <table>
-                                            <tr>
-                                                <th>Aerol&iacute;nea</th>
-                                                <th>Or&iacute;gen</th>
-                                                <th>Destino</th>
-                                                <th>Tarifa Adulto</th>
-                                                <th>Tarifa Ni&ntilde;o</th>
-                                                <th>Reservar</th>
-                                            </tr>
-                                            <% for (Flight f : flights) {%>
-                                            <tr>
-                                                td><%=f.getAirline_Name()%></td>
+                        <div id="continuar" class="under">
+                            <h3>Tome la oportunidad de Reservar un Vuelo</h3>
+                            <h4> <a href="Package.jsp" class="button" >No, deseo continuar</a></h4>
+                        </div>
+                        <form method="POST" action="reservar.jsp">
+                            <input type="hidden" name="adultos" id="adultos" value="<%=request.getAttribute("adultos")%>"/>
+                            <input type="hidden" name="ninos" id="ninos" value="<%=request.getAttribute("ninos")%>"/>
+                            <input type="hidden" name="date1" id="date1" value="${date1}"/>
+                            <input type="hidden" name="date2" id="date2" value="${date2}"/>
+
+                            <% if (f1) {
+
+                            %>
+
+                            <h3>Vuelos Disponibles Ida</h3>
+                            <div class="wrapper under2" style="margin-bottom:2em;">                            
+                                <div><table>
+                                        <tr>
+                                            <th>Aerol&iacute;nea</th>
+                                            <th>Or&iacute;gen</th>
+                                            <th>Destino</th>
+                                            <th>Tarifa Adulto</th>
+                                            <th>Tarifa Ni&ntilde;o</th>
+                                            <th>Reservar</th>
+                                        </tr>
+                                        <%
+                                            for (Flight f : flights) {
+                                        %>
+                                        <tr>
+                                            <td><%=f.getAirline_Name()%></td>
                                             <td><%=f.getSource().getCityName()%></td>
                                             <td><%=f.getDestination().getCityName()%></td>
                                             <td><%=f.getAdult_Fare()%></td>
                                             <td><%=f.getChild_Fare()%></td>
-                                                <td><a class="button" href="/Reservar?hotelNo=<%=f.getFlight_No()%>">Reservar</a></td>
-                                            </tr>
-                                            <% }%>
-                                        </table>
-                                    </div>
-                                </div>
+                                            <td><input name="flightTo" type="radio" value="<%=f.getFlight_No()%>" /></td>
+                                        </tr>
+                                        <%
+                                            }%>
+                                    </table></div>                           
                             </div>
+                            <% } else if (f2) {%>
+                            <h3> Vuelos de Ida no Disponibles </h3>
+                            <% } else if ((flights == null) && (flights2 == null)) {%>
+                            <article class="col2 pad_left1">
+                                <h2>Nuestros Vuelos</h2>
+                                <div class="wrapper under">
+                                    <figure class="left marg_right1"><img src="images/vuelos1.jpg" alt=""></figure>
+                                    <p class="pad_bot2"><strong>Vuelos Directos a Turqu&iacute;a</strong></p>
+                                    <p class="pad_bot2">Recientemente hemos adquirido más vuelos partiendo hacia y desde Turqu&iacute;a. Tenemos una gran variedad de vuelos con escalas, as&iacute; como vuelos directos.</p>
+                                    <p class="pad_bot2">Si quieres visitar Turqu&iacute;a no puedes dejar pasar esta oportunidad. Reserva tu vuelo y de paso podr&aacute;s reservar en uno de los mejores hoteles para hacer de tus vacaciones una estancia inolvidable.</p>                          
+                                </div>
+                                <div class="wrapper">
+                                    <figure class="left marg_right1"><img src="images/vuelos2.jpg" alt=""></figure>
+                                    <p class="pad_bot2"><strong>Vuelos a Sudam&eacute;rica</strong></p>
+                                    <p class="pad_bot2">Contamos con la mayor cantidad de vuelos con los destinos m&aacute;s populares en el continente americano. Destinos como Chile, Buenos Aires, Bogot&aacute;, Lima, Rio de Janeiro, entre otros est&aacute;n disponibles para que armes tu viaje perfecto.</p>
+                                    <p class="pad_bot2">Consulte los vuelos que tenemos disponibles ahora mismo. Contamos con vuelos diarios a las principales ciudades sudamericanas.</p>                          
+                                </div>
+                            </article>
+                            <% }
+                                if (f2) {
+
+                            %>
+                            <h3>Vuelos Disponibles Retorno</h3>
+                            <div class="wrapper under">
+
+                                <div><table>
+                                        <tr>
+                                            <th>Aerol&iacute;nea</th>
+                                            <th>Or&iacute;gen</th>
+                                            <th>Destino</th>
+                                            <th>Tarifa Adulto</th>
+                                            <th>Tarifa Ni&ntilde;o</th>
+                                            <th>Reservar</th>
+                                        </tr>
+                                        <%
+                                            for (Flight f : flights2) {
+                                        %>
+                                        <tr>
+                                            <td><%=f.getAirline_Name()%></td>
+                                            <td><%=f.getSource().getCityName()%></td>
+                                            <td><%=f.getDestination().getCityName()%></td>
+                                            <td><%=f.getAdult_Fare()%></td>
+                                            <td><%=f.getChild_Fare()%></td>
+                                            <td><input name ="flightFrom" type="radio" value="<%=f.getFlight_No()%>" /></a></td>
+                                        </tr>
+                                        <%
+                                            }%>
+                                    </table></div>
+
+                            </div>
+
+                            <% } else if (f1 && flights2 != null) {%>
+                            <h3> Vuelos de Retorno no Disponibles </h3>
+                            <% }
+                                if (f1 | f2) {%>
+                            <input type="submit" class="button" value="Reservar" />
+                            <%                                }%>
                         </form>
-                        <% } else {%>
-                        <h3>No hay resultados</h3>
-                        <article class="col2 pad_left1">
-                                <h2>Nuestros Vuelos</h2>
-                                <div class="wrapper under">
-                                    <figure class="left marg_right1"><img src="images/vuelos1.jpg" alt=""></figure>
-                                    <p class="pad_bot2"><strong>Vuelos Directos a Turqu&iacute;a</strong></p>
-                                    <p class="pad_bot2">Recientemente hemos adquirido más vuelos partiendo hacia y desde Turqu&iacute;a. Tenemos una gran variedad de vuelos con escalas, as&iacute; como vuelos directos.</p>
-                                    <p class="pad_bot2">Si quieres visitar Turqu&iacute;a no puedes dejar pasar esta oportunidad. Reserva tu vuelo y de paso podr&aacute;s reservar en uno de los mejores hoteles para hacer de tus vacaciones una estancia inolvidable.</p>                          
-                                </div>
-                                <div class="wrapper">
-                                    <figure class="left marg_right1"><img src="images/vuelos2.jpg" alt=""></figure>
-                                    <p class="pad_bot2"><strong>Vuelos a Sudam&eacute;rica</strong></p>
-                                    <p class="pad_bot2">Contamos con la mayor cantidad de vuelos con los destinos m&aacute;s populares en el continente americano. Destinos como Chile, Buenos Aires, Bogot&aacute;, Lima, Rio de Janeiro, entre otros est&aacute;n disponibles para que armes tu viaje perfecto.</p>
-                                    <p class="pad_bot2">Consulte los vuelos que tenemos disponibles ahora mismo. Contamos con vuelos diarios a las principales ciudades sudamericanas.</p>                          
-                                </div>
-                            </article>
-                        <% }
-                        } else {%>
-                        <article class="col2 pad_left1">
-                                <h2>Nuestros Vuelos</h2>
-                                <div class="wrapper under">
-                                    <figure class="left marg_right1"><img src="images/vuelos1.jpg" alt=""></figure>
-                                    <p class="pad_bot2"><strong>Vuelos Directos a Turqu&iacute;a</strong></p>
-                                    <p class="pad_bot2">Recientemente hemos adquirido más vuelos partiendo hacia y desde Turqu&iacute;a. Tenemos una gran variedad de vuelos con escalas, as&iacute; como vuelos directos.</p>
-                                    <p class="pad_bot2">Si quieres visitar Turqu&iacute;a no puedes dejar pasar esta oportunidad. Reserva tu vuelo y de paso podr&aacute;s reservar en uno de los mejores hoteles para hacer de tus vacaciones una estancia inolvidable.</p>                          
-                                </div>
-                                <div class="wrapper">
-                                    <figure class="left marg_right1"><img src="images/vuelos2.jpg" alt=""></figure>
-                                    <p class="pad_bot2"><strong>Vuelos a Sudam&eacute;rica</strong></p>
-                                    <p class="pad_bot2">Contamos con la mayor cantidad de vuelos con los destinos m&aacute;s populares en el continente americano. Destinos como Chile, Buenos Aires, Bogot&aacute;, Lima, Rio de Janeiro, entre otros est&aacute;n disponibles para que armes tu viaje perfecto.</p>
-                                    <p class="pad_bot2">Consulte los vuelos que tenemos disponibles ahora mismo. Contamos con vuelos diarios a las principales ciudades sudamericanas.</p>                          
-                                </div>
-                            </article>
-                        <%                                                           }
-                        %>
                     </article>
                 </section>
                 <!-- / content -->

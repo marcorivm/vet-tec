@@ -39,16 +39,13 @@ public class HotelServlet extends HttpServlet {
             throws ServletException, IOException {
 
         /*
-         * Por motivmos de tiempo no hay revisiones de seguridad e integridad pero
-         * se debe realizar si hay tiempo
-         * Pametros esperados (GET/POST)
-         * start_date - Fecha de inicio de la reservacion
-         * finish_date - Fecha de finalización de la reservación
-         * location - ubicación del hotel
-         * room_type - tipo de habitación
-         * room_size - tamaño de la habitación
+         * Por motivmos de tiempo no hay revisiones de seguridad e integridad
+         * pero se debe realizar si hay tiempo Pametros esperados (GET/POST)
+         * start_date - Fecha de inicio de la reservacion finish_date - Fecha de
+         * finalización de la reservación location - ubicación del hotel
+         * room_type - tipo de habitación room_size - tamaño de la habitación
          */
-        
+
         String referer = request.getParameter("referer");
         String location = request.getParameter("city");
         String start_date = request.getParameter("start_date");
@@ -57,29 +54,29 @@ public class HotelServlet extends HttpServlet {
         String date2 = request.getParameter("date2");
         String room_type = request.getParameter("tipoHabitacion");
         String room_size = request.getParameter("type");
-        
-        
+
+
         request.setAttribute("city", location);
         request.setAttribute("date1", date1);
         request.setAttribute("date2", date2);
         request.setAttribute("type", room_type);
         request.setAttribute("tipoHabitacion", room_size);
-        
-        String habitacion = (room_type.equals("2"))? "Delujo " : "Ejecutiva ";
+
+        String habitacion = (room_type.equals("2")) ? "Delujo " : "Ejecutiva ";
         habitacion += room_size;
-        
+
         request.setAttribute("habitacion", habitacion);
         request.setAttribute("consulta", true);
         try {
             java.sql.Date start_date_s = new java.sql.Date(Long.parseLong(start_date));
             java.sql.Date finish_date_s = new java.sql.Date(Long.parseLong(finish_date));
             Hotel hoteles[] = Hotel.getHotels(City.getCity(location));
-            ArrayList<Hotel> hoteles_disp = new  ArrayList<Hotel>();
-            for(int i = 0; i < hoteles.length; i++) {
-              if(hoteles[i].isRoomAvailable(start_date_s, finish_date_s, Integer.parseInt(room_type))) {
-                 hoteles_disp.add(hoteles[i]);
-              }
-               
+            ArrayList<Hotel> hoteles_disp = new ArrayList<Hotel>();
+            for (int i = 0; i < hoteles.length; i++) {
+                if (hoteles[i].isRoomAvailable(start_date_s, finish_date_s, Integer.parseInt(room_type))) {
+                    hoteles_disp.add(hoteles[i]);
+                }
+
             }
             Hotel valids[] = new Hotel[hoteles_disp.size()];
             hoteles_disp.toArray(valids);

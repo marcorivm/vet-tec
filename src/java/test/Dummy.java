@@ -4,10 +4,7 @@
  */
 package test;
 
-import Clases.Customer;
-import Clases.Flight;
-import Clases.FlightSeat_Status;
-import Clases.Flight_Booking;
+import Clases.*;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -38,23 +35,35 @@ public class Dummy extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        Flight flight = Flight.getFlight(1);
-        FlightSeat_Status seat = FlightSeat_Status.getFlightSeat_Status(1);
-        Date doj = (Date) seat.getDateOfJourney();
-        Date now = (Date) doj.clone();
-        Customer c = Customer.getCustomer(1);
-        
-        Flight_Booking fbTo = new Flight_Booking("B100", doj, doj, c, flight, 2, 2);
-        request.getSession().setAttribute("fbTo", fbTo);
-        
-        request.setAttribute("lastName", "Beta");
-        request.setAttribute("name","Tester");
-        request.setAttribute("email", "error@System.edu");
-        
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/ReservarP");
+
+//        Flight flight = Flight.getFlight(1);
+//        FlightSeat_Status seat = FlightSeat_Status.getFlightSeat_Status(1);
+//        Date doj = (Date) seat.getDateOfJourney();
+//        Date now = (Date) doj.clone();
+//        Customer c = Customer.getCustomer(1);
+//        
+//        Flight_Booking fbTo = new Flight_Booking("B100", doj, doj, c, flight, 2, 2);
+//        request.getSession().setAttribute("fbTo", fbTo);
+//        
+//        request.setAttribute("lastName", "Beta");
+//        request.setAttribute("name","Tester");
+//        request.setAttribute("email", "error@System.edu");
+//        
+//        RequestDispatcher rd = getServletContext().getRequestDispatcher("/ReservarP");
+//        rd.forward(request, response);
+
+//        Flight_Booking fbTo = Flight_Booking.getFlightBooking("B000");
+//        request.getSession().setAttribute("fbTo", fbTo);        
+//        
+//        RequestDispatcher rd = getServletContext().getRequestDispatcher("/PrepareOfr");
+//        rd.forward(request, response);
+
+        Hotel_Booking hb = Hotel_Booking.getHotelBooking(603);
+        request.getSession().setAttribute("HB", hb);
+
+        RequestDispatcher rd = getServletContext().getRequestDispatcher("/PrepareOfr");
         rd.forward(request, response);
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

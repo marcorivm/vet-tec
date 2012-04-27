@@ -36,6 +36,7 @@ public class FlightServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        String referer = request.getParameter("referer");
         boolean isRoundTrip = request.getParameter("isRoundTrip").equalsIgnoreCase("true");
         String source = request.getParameter("source");
         String destiny = request.getParameter("destiny");
@@ -53,7 +54,7 @@ public class FlightServlet extends HttpServlet {
             request.setAttribute("ninos", kids);
             request.setAttribute("date1", date1);
             request.setAttribute("date2", date2);
-            
+
             if (isRoundTrip) {
                 Flight[] fs2 = Flight.getFlights(destiny, source, adults + kids, date2, h1, h2);
                 request.setAttribute("flights2", fs2);
@@ -64,6 +65,9 @@ public class FlightServlet extends HttpServlet {
         }
 
         RequestDispatcher rd = request.getRequestDispatcher("vuelos.jsp");
+        if (referer.equalsIgnoreCase("PrepareOfr")) {
+            rd = request.getRequestDispatcher("/offerFlight.jsp");
+        }
         rd.forward(request, response);
 
 
