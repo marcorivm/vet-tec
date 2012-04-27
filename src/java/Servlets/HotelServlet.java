@@ -90,42 +90,6 @@ public class HotelServlet extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(HotelServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        //<editor-fold defaultstate="collapsed" desc="older">
-        /*
-         * String city = request.getParameter("location");
-         * String date1 = request.getParameter("date1");
-         * String date2 = request.getParameter("date2");
-         * String tipo = request.getParameter("tipoHabitacion");
-         * String cat = request.getParameter("type");
-         * 
-         * request.setAttribute("city", city);
-         * request.setAttribute("date1", date1);
-         * request.setAttribute("date2", date2);
-         * request.setAttribute("type", cat);
-         * request.setAttribute("tipoHabitacion", tipo);
-         * 
-         * String habitacion = (cat.equals("deluxe"))? "Delujo " : "Ejecutiva ";
-         * habitacion += tipo;
-         * 
-         * request.setAttribute("habitacion", habitacion);
-         * //String arriva1 = request.getParameter("arrival");
-         * //String departure = request.getParameter("departure");
-         * 
-         * //int people = Integer.parseInt(request.getParameter("people"));
-         * try {
-         * 
-         * City location = City.getCity(city);
-         * Hotel[] hs = Hotel.getHotels(location);
-         * request.setAttribute("hotels", hs);
-         * 
-         * } catch (SQLException ex) {
-         * Logger.getLogger(FlightServlet.class.getName()).log(Level.SEVERE, null, ex);
-         * System.out.println("Error (HotelServlet; " + ex.getMessage());
-         * }
-         */
-        //</editor-fold>
-
         RequestDispatcher rd = request.getRequestDispatcher("Hotel.jsp");
         rd.forward(request, response);
 
