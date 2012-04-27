@@ -215,6 +215,17 @@
         </div>
         <script type="text/javascript">
             Cufon.now();
+            $("#form_1").bind("submit",function() {
+                var isValid = true;
+                // TODO: Validar rango de fechas
+                
+                if(validator.isNumeric($("#finish_date")) &&
+                   validator.isNumeric($("#start_date"))){
+                    isValid = false;
+                    alert("Debes seleccionar un rango de fechas!");
+                }
+                return isValid;
+            })
             $("#date1").datepick({
                 dateFormat: 'dd-mm-yyyy',
                 minDate: new Date(),
@@ -227,6 +238,6 @@
                 altFormat: '@',
                 altField: '#finish_date'
             });
-		</script>
+	</script>
     </body>
 </html>

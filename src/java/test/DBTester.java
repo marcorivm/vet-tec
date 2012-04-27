@@ -35,9 +35,6 @@ public class DBTester extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            /*
-             * TODO output your page here. You may use following sample code.
-             */
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet DBTester</title>");            

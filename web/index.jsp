@@ -230,6 +230,39 @@
         </div>
         <script type="text/javascript">
             Cufon.now();
+            $("#form_2").bind("submit",function() {
+                var isValid = true;
+                
+                if(!validator.isNumeric($("#date1")) && 
+                   !validator.isNumeric($("#date2")) && 
+                   !validator.isNumeric($("#finish_date")) &&
+                   !validator.isNumeric($("#start_date"))){
+                   // TODO: Validar rango de fechas
+                    isValid = false;
+                    alert("Debes seleccionar un rango de fechas!");
+                }
+                
+                return isValid;
+            })
+            
+            $("#form_1").bind("submit",function() {
+                var isValid = true;
+                if(!validator.isNumeric($("#date1")) || 
+                    (validator.getRaw(jQuery("[name='isRoundTrip']").get(0)) == "true" && 
+                    !validator.isNumeric($("#date2")))){
+                    // TODO: Validar rango de fechas
+                    isValid = false;
+                    alert("Debes seleccionar un rango de fechas!");
+                }
+                if(!validator.isEqual($("#source"), $("#destiny"))){
+                    isValid = false;
+                    alert("El origin y el destino no pueden ser iguales!");
+                }
+                
+                
+                return isValid;
+            })
+            
             $("#date1").datepick({
                 dateFormat: 'dd-mm-yyyy',
                 minDate: new Date(),
