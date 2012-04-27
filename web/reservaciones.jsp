@@ -72,7 +72,7 @@
                         <h3>Buscar</h3>
                         <div class="pad">
                             <div class="wrapper under">
-                                <form id="form_1" method="POST" action="Reservacion">
+                                <form id="form_1" method="POST" action="SearchReservation">
                                     <div class="tabs_cont">
                                         <div class="bg">
                                             <div class="wrapper">
