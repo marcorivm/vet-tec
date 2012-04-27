@@ -53,13 +53,13 @@ public class HotelServlet extends HttpServlet {
          * room_size - tamaño de la habitación
          */
         
-        String location = request.getParameter("location");
+        String location = request.getParameter("city");
         String start_date = request.getParameter("start_date");
         String finish_date = request.getParameter("finish_date");
         String date1 = request.getParameter("date1");
         String date2 = request.getParameter("date2");
-        String room_type = request.getParameter("room_type");
-        String room_size = request.getParameter("room_size");
+        String room_type = request.getParameter("tipoHabitacion");
+        String room_size = request.getParameter("type");
         
         
         request.setAttribute("city", location);

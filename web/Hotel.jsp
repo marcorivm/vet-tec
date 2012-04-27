@@ -54,8 +54,8 @@
                                     <div class="tabs_cont">
                                         <div class="bg">
 
-                                            <div class="wrapper"><label for="location">Ciudad</label>
-                                                <select name="location" id="location">
+                                            <div class="wrapper"><label for="city">Ciudad</label>
+                                                <select name="city" id="city">
                                                     <% if (cities != null)
                                                             for (City c : cities) {%>
                                                     <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
@@ -68,7 +68,7 @@
                                                 <input type="text" name="date2" id="date2" /><input type="hidden" name="finish_date" id="finish_date" /></div>
                                             <div class="wrapper">
                                                 Tipo de Habitaci&oacute;n<br />
-                                                <select name="room_size">
+                                                <select name="type">
                                                     <option value="sencilla">Sencilla</option>
                                                     <option value="doble">Doble</option>
                                                     <option value="triple">Triple</option>
@@ -76,9 +76,9 @@
                                                 </select><br />
                                             </div>
                                             <div class="wrapper">
-                                                <input type ="radio" name="room_type" id="deluxe" value="2"/>                                                
+                                                <input type ="radio" name="tipoHabitacion" id="deluxe" value="2"/>                                                
                                                 <label for="deluxe">Cuartos Deluxe</label> <br/>
-                                                <input type="radio" name ="room_type" id="exe" value="1" checked="checked" />
+                                                <input type="radio" name ="tipoHabitacion" id="exe" value="1" checked="checked" />
                                                 <label for="exe">Cuartos Exe</label>
                                             </div>
                                             <div>
