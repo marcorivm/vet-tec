@@ -315,9 +315,9 @@ public class Flight {
         }
         
         // descuento por capacidad
-        int asientosDisponibles = flight.getRemainingSeats(DoJ);
+        int asientosDisponibles = flight.getRemainingSeats();
         int asientosVuelo = flight.getTotal_Seats();
-        double ratioOcupado = (asientosVuelo - asientosDisponibles) / asientosVuelo;               
+        double ratioOcupado = (asientosVuelo - asientosDisponibles) / (double) asientosVuelo;               
         // si hay 80% del vuelo ocupado, vender mas caro
         if (ratioOcupado >= 0.8) {
             descuento += 0.2; // 20% mas caro
