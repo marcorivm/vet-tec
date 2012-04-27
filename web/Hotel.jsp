@@ -1,8 +1,9 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="Clases.Hotel"%>
 <%@page import="Clases.City"%>
 <%
     City[] cities = City.getCities();
-    Hotel[] hotels;
+    Hotel hotels[];
     hotels = (Hotel[]) request.getAttribute("hotels");
     int cuartosDel = 0;
     int cuartosExe = 0;
@@ -61,10 +62,10 @@
                                                     <% }%>
                                                 </select></div>
 
-                                            <div class="wrapper"><label for="start_date">Llegada (dd/mm/aaaa)</label>
-                                                <input type="text" name="start_date" id="start_date" /></div>
+                                            <div class="wrapper"><label for="date1">Llegada (dd/mm/aaaa)</label>
+                                                 <input type="text" name="date1" id="date1" /> <input type="hidden" name="start_date" id="start_date" /></div>
                                             <div id="regreso" class="wrapper"><label for="finish_date">Salida (dd/mm/aaaa)</label>
-                                                <input type="text" name="finish_date" id="finish_date" /></div>
+                                                <input type="text" name="date2" id="date2" /><input type="hidden" name="finish_date" id="finish_date" /></div>
                                             <div class="wrapper">
                                                 Tipo de Habitaci&oacute;n<br />
                                                 <select name="room_size">
@@ -214,13 +215,17 @@
         </div>
         <script type="text/javascript">
             Cufon.now();
-            $("#start_date").datepick({
-                dateFormat: 'dd-mm-yyyy',
-                minDate: new Date()
+            $("#date1").datepick({
+                dateFormat: 'dd/mm/yyyy',
+                minDate: new Date(),
+                altFormat: '@',
+                altField: '#start_date'
             });
-            $("#finish_date").datepick({
-                dateFormat: 'dd-mm-yyyy',
-                minDate: new Date()
+            $("#date2").datepick({
+                dateFormat: 'dd/mm/yyyy',
+                minDate: new Date(),
+                altFormat: '@',
+                altField: '#finish_date'
             });</script>
     </body>
 </html>
