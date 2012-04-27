@@ -98,7 +98,7 @@ public class Flight_Booking {
      */
     public static Flight_Booking getFlightBooking(String id) throws SQLException{
         dbcp.ConnectionManager.init();
-        ResultSet rs = dbcp.ConnectionManager.selectAllColumns("Tbl_Flight_Booking_GroupNo", "BookingId = "+id);
+        ResultSet rs = dbcp.ConnectionManager.selectAllColumns("Tbl_Flight_Booking_GroupNo", "BookingId = '"+id+"'");
         
         if(rs.next()){
             Flight_Booking fb = new Flight_Booking(id,rs.getDate("DateOfBooking"),rs.getDate("DateOfJourney"), Customer.getCustomer(rs.getInt("CustomerId")),Flight.getFlight(rs.getInt("FlightNo")),rs.getInt("NoOfAdults"),rs.getInt("NoOfChildren"));

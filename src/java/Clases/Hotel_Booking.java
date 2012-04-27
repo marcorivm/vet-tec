@@ -160,7 +160,7 @@ public class Hotel_Booking {
         Hotel_Booking hb;
         
         if(rs.next()){
-            hb = new Hotel_Booking(rs.getString("BookingId"), rs.getInt("NoOfDeluxeRooms"), 
+            hb = new Hotel_Booking(rs.getString("BookingId"), rs.getInt("NoOfDeluxRooms"), 
                                           rs.getInt("NoOfExeRooms"), Hotel.getHotel(rs.getString("HotelId")), 
                                           Customer.getCustomer(rs.getInt("CustomerId")), rs.getDate("DateOfBooking"), 
                                           rs.getDate("CheckInDate"), rs.getDate("CheckOutDate"));
