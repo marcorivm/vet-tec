@@ -40,9 +40,9 @@ public class PrepareOfr extends HttpServlet {
              * NOTA!!!! CHECAR QUE EL HOTEL BOOKING ESTE GUARDADO EN SESSION
              * BAJO EL NOMBRE HB!!!!
              */
-        } else if (request.getSession().getAttribute("HB") == null) {
+        /*} else if (request.getSession().getAttribute("HB") == null) {
             rd = request.getRequestDispatcher("OferFlight.jsp");
-            rd.forward(request, response);
+            rd.forward(request, response);*/
         } else {
             rd = request.getRequestDispatcher("Package.jsp");
             rd.forward(request, response);
