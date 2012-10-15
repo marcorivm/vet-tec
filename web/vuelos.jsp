@@ -1,9 +1,15 @@
+<%@page import="java.util.Set"%>
 <%@page import="Clases.Flight"%>
 <%@page import="Clases.City"%>
 <%@page import="java.util.ArrayList"%>
 <%
     City[] cities;
     cities = (City[]) request.getAttribute("cities");
+    if (cities == null) {
+        request.setAttribute("referer", "vuelos.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("Ciudades");
+        rd.forward(request, response);
+    }
     Flight flights[];
     flights = (Flight[]) request.getAttribute("flights");
     Flight flights2[];
@@ -14,20 +20,22 @@
     f1 = (flights != null) && (flights.length > 0);
     f2 = (flights2 != null) && (flights2.length > 0);
 %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>About</title>
+        <title>Vuelos</title>
         <meta charset="utf-8">
         <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/layout.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/style.css" type="text/css" media="all">
         <style type="text/css">@import "css/jquery.datepick.css";</style>
-        <script type="text/javascript" src="js/jquery-1.4.2.js" ></script>
+        <script type="text/javascript" src="js/jquery-1.7.1.min.js" ></script>
         <script type="text/javascript" src="js/cufon-yui.js"></script>
         <script type="text/javascript" src="js/cufon-replace.js"></script>
         <script type="text/javascript" src="js/Myriad_Pro_600.font.js"></script>
         <script type="text/javascript" src="js/jquery.datepick.js"></script>
+        <script type="text/javascript" src="js/vet.js"></script>
         <!--[if lt IE 9]>
                 <script type="text/javascript" src="http://info.template-help.com/files/ie6_warning/ie6_script_other.js"></script>
                 <script type="text/javascript" src="js/html5.js"></script>
@@ -37,29 +45,7 @@
         <div class="extra">
             <div class="main">
                 <!-- header -->
-                <header>
-                    <div class="wrapper">
-                        <h1><a href="index.html" id="logo">Vuelos</a></h1>
-                        <div class="right">
-                            <div class="wrapper">
-                                <form id="search" action="" method="post">
-                                    <div class="bg">
-                                        <input type="submit" class="submit" value="">
-                                        <input type="text" class="input">
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="wrapper">
-                                <nav>
-                                    <ul id="top_nav">
-                                        <li><a href="#">Register</a></li>
-                                        <li><a href="#">Log In</a></li>
-                                        <li><a href="#">Help</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
+                <header>                    
                     <jsp:include page="includes/navbar.jsp" />
                 </header>
                 <!-- / header -->
@@ -70,84 +56,79 @@
                         <h3>Buscar Vuelo</h3>
                         <div class="pad">
                             <div class="wrapper under">
-                                <form id="form_1" method="POST" action="FlightSearch">
+                                <form id="form_1" method="POST" action="FlightServlet">
                                     <div class="tabs_cont">
-                                        <div><label for="customerId">Id Cliente</label>
-                                            <select name="customerId" id="customerId">
-                                                <option value="blank">---------------</option>
-                                            </select>
+                                        <div class="bg">
+                                            <div class="wrapper">
+                                                <div class="radio">
+                                                    <input type="radio" name="isRoundTrip" value="true" checked onclick="mostrarRegreso()">Redondo
+                                                </div>
+                                                <div class="radio"><input type="radio" name="isRoundTrip" value="false" onclick="ocultarRegreso()">Simple</div>
+                                            </div>                                           
+                                            <div class="wrapper"><label for="source">Origen</label>
+                                                <select name="source" id="source" class="floatRight">
+                                                    <% if (cities != null)
+                                                            for (City c : cities) {%>
+                                                    <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
+                                                    <% }%>
+                                                </select></div>                                           
+                                            <div class="wrapper"><label for="destiny">Destino</label>
+                                                <select name="destiny" id="destiny" class="floatRight">
+                                                    <% if (cities != null)
+                                                            for (City c : cities) {%>
+                                                    <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
+                                                    <% }%>
+                                                </select></div>
+                                            <div class="wrapper"><label for="date1">Salida (dd/mm/aaaa)</label>
+                                                <input type="text" name="date1" id="date1" /></div>
+                                            <div id="regreso" class="wrapper pad_bot1"><label for="date2">Regreso (dd/mm/aaaa)</label>
+                                                <input type="text" name="date2" id="date2" /></div>                                    
+                                            <div class="wrapper pad_bot1">
+                                                <label for="timeFrom">Hora</label>
+                                                <select name="timeFrom" id="timeFrom" class="floatRight">
+                                                    <%
+                                                        for (int i = 6; i <= 22; i++) {
+                                                    %>
+                                                    <option value="<%=i%>"><%=i%></option>    
+                                                    <%
+                                                        }
+                                                    %>
+                                                </select>
+                                                <br />
+                                                <label for="timeTo">a</label>
+                                                <select name="timeTo" id="timeTo" class="floatRight">
+                                                    <%
+                                                        for (int i = 7; i < 23; i++) {
+                                                    %>
+                                                    <option value="<%=i%>"><%=i%></option>    
+                                                    <%
+                                                        }
+                                                    %>
+                                                    <option value="23" selected="selected">23</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="wrapper pad_bot1">
+                                                Adultos
+                                                <select name="adults" class="floatRight">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                </select><br />
+                                                Ni&ntilde;os
+                                                <select name="kids" class="floatRight">
+                                                    <option value="0">0</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                </select><br />
+                                            </div>
+                                            <div>
+                                                <input type="submit" class="button" value="Buscar" />                                            
+                                            </div>
                                         </div>
-                                        <div><label for="source">Salida</label>
-                                            <select name="source" id="source">
-                                                <% if (cities != null)
-                                                        for (City c : cities) {%>
-                                                <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
-                                                <% }%>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="destination">Destino</label>
-                                            <select name="destination" id="destination">
-                                                <% if (cities != null)
-                                                        for (City c : cities) {%>
-                                                <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
-                                                <% }%>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="timeFrom">Hora</label>
-                                            <select name="timeFrom" id="timeFrom">
-                                                <%
-                                                    for (int i = 6; i <= 22; i++) {
-                                                %>
-                                                <option value="<%=i%>"><%=i%></option>    
-                                                <%
-                                                    }
-                                                %>
-                                            </select>
-                                            <br />
-                                            <label for="timeTo">a</label>
-                                            <select name="timeTo" id="timeTo">
-                                                <%
-                                                    for (int i = 7; i <= 23; i++) {
-                                                %>
-                                                <option value="<%=i%>"><%=i%></option>    
-                                                <%
-                                                    }
-                                                %>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="departure">Fecha de Salida</label>
-                                            <input type="text" name="departure" id="departure" />                                           
-                                        </div>
-                                        <div>
-                                            <label for="adult">Adultos</label>
-                                            <select name="adult" id="adult">
-                                                <%
-                                                    for (int i = 1; i <= 4; i++) {
-                                                %>
-                                                <option value="<%=i%>"><%=i%></option>    
-                                                <%
-                                                    }
-                                                %>
-                                            </select>
-                                            <br />
-                                            <label for="children">Ni&ntilde;os</label>
-                                            <select name="children" id="children">
-                                                <%
-                                                    for (int i = 0; i <= 4; i++) {
-                                                %>
-                                                <option value="<%=i%>"><%=i%></option>    
-                                                <%
-                                                    }
-                                                %>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <input type="submit" class="button" value="Buscar" />                                            
-                                        </div>
-                                    </div>
                                 </form>
                             </div>
                             <!-- div class="wrapper">
@@ -160,12 +141,18 @@
                     </article>
                     <!-- columna derecha -->
                     <article class="col2 pad_left1">
-                        <% if (f1) {
+                        <form method="POST" action="reservar.jsp">
+                            <input type="hidden" name="adultos" id="adultos" value="<%=request.getAttribute("adultos")%>"/>
+                            <input type="hidden" name="ninos" id="ninos" value="<%=request.getAttribute("ninos")%>"/>
+                            <input type="hidden" name="date1" id="date1" value="${date1}"/>
+                            <input type="hidden" name="date2" id="date2" value="${date2}"/>
 
-                        %>
-                        <h3>Vuelos Disponibles Ida</h3>
-                        <div class="wrapper under2" style="margin-bottom:2em;">
-                            <form>
+                            <% if (f1) {
+
+                            %>
+
+                            <h3>Vuelos Disponibles Ida</h3>
+                            <div class="wrapper under2" style="margin-bottom:2em;">                            
                                 <div><table>
                                         <tr>
                                             <th>Aerol&iacute;nea</th>
@@ -184,24 +171,37 @@
                                             <td><%=f.getDestination().getCityName()%></td>
                                             <td><%=f.getAdult_Fare()%></td>
                                             <td><%=f.getChild_Fare()%></td>
-                                            <td><input type="button" class="button" value="Reservar" /></td>
+                                            <td><input name="flightTo" type="radio" value="<%=f.getFlight_No()%>" /></td>
                                         </tr>
                                         <%
                                             }%>
-                                    </table></div>
-                            </form>
-                        </div>
-                        <% } else if (f2) {%>
-                        <h3> Vuelos de Ida no Disponibles </h3>
-                        <% } else {%>
-                        <h3> No Hay Vuelos Disponibles </h3>
-                        <% }
-                            if (f2) {
+                                    </table></div>                           
+                            </div>
+                            <% } else if (f2) {%>
+                            <h3> Vuelos de Ida no Disponibles </h3>
+                            <% } else if ((flights == null) && (flights2 == null)) {%>
+                            <article class="col2 pad_left1">
+                                <h2>Nuestros Vuelos</h2>
+                                <div class="wrapper under">
+                                    <figure class="left marg_right1"><img src="images/vuelos1.jpg" alt=""></figure>
+                                    <p class="pad_bot2"><strong>Vuelos Directos a Turqu&iacute;a</strong></p>
+                                    <p class="pad_bot2">Recientemente hemos adquirido más vuelos partiendo hacia y desde Turqu&iacute;a. Tenemos una gran variedad de vuelos con escalas, as&iacute; como vuelos directos.</p>
+                                    <p class="pad_bot2">Si quieres visitar Turqu&iacute;a no puedes dejar pasar esta oportunidad. Reserva tu vuelo y de paso podr&aacute;s reservar en uno de los mejores hoteles para hacer de tus vacaciones una estancia inolvidable.</p>                          
+                                </div>
+                                <div class="wrapper">
+                                    <figure class="left marg_right1"><img src="images/vuelos2.jpg" alt=""></figure>
+                                    <p class="pad_bot2"><strong>Vuelos a Sudam&eacute;rica</strong></p>
+                                    <p class="pad_bot2">Contamos con la mayor cantidad de vuelos con los destinos m&aacute;s populares en el continente americano. Destinos como Chile, Buenos Aires, Bogot&aacute;, Lima, Rio de Janeiro, entre otros est&aacute;n disponibles para que armes tu viaje perfecto.</p>
+                                    <p class="pad_bot2">Consulte los vuelos que tenemos disponibles ahora mismo. Contamos con vuelos diarios a las principales ciudades sudamericanas.</p>                          
+                                </div>
+                            </article>
+                            <% }
+                                if (f2) {
 
-                        %>
-                        <h3>Vuelos Disponibles Retorno</h3>
-                        <div class="wrapper under">
-                            <form>
+                            %>
+                            <h3>Vuelos Disponibles Retorno</h3>
+                            <div class="wrapper under">
+
                                 <div><table>
                                         <tr>
                                             <th>Aerol&iacute;nea</th>
@@ -220,117 +220,22 @@
                                             <td><%=f.getDestination().getCityName()%></td>
                                             <td><%=f.getAdult_Fare()%></td>
                                             <td><%=f.getChild_Fare()%></td>
-                                            <td><input type="button" class="button" value="Reservar" /></td>
+                                            <td><input name ="flightFrom" type="radio" value="<%=f.getFlight_No()%>" /></a></td>
                                         </tr>
                                         <%
                                             }%>
                                     </table></div>
-                            </form>
-                        </div>
-                        <% } else if (f1 && flights2 != null) {%>
-                        <h3> Vuelos de Retorno no Disponibles </h3>
-                        <% }%>
 
+                            </div>
 
-
-                        <h2>Revisar Vuelo</h2>
-                        <div class="wrapper under">
-                            <div id="flightDetails" class="under">
-                                <h3>Revisar Detalles del Vuelo</h3>
-                                <div><span class="city">Bangalore</span> --> <span class="city">Chennai</span></div>
-                                <div>
-                                    <table>
-                                        <tr>
-                                            <th>N&uacute;mero de Vuelo</th>
-                                            <th>Aerol&iacute;nea</th>
-                                            <th>Fecha de Salida</th>
-                                            <th>Fecha de Llegada</th>
-                                        </tr>
-                                        <tr>
-                                            <td>F216</td>
-                                            <td>Kingfischer</td>
-                                            <td>16-Jan-2012 06:00 AM</td>
-                                            <td>16-Jan-2012 06:50 AM</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <div id="fareDetails">
-                                <h3>Revisar Detalles de la Tarifa</h3>
-                                <div>
-                                    <table>
-                                        <tr>
-                                            <th>Tipo de Tarifa</th>
-                                            <th>Asientos</th>
-                                            <th>Tarifa Base</th>
-                                            <th>Impuestos</th>
-                                            <th>Total incluyendo Impuestos</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Adultos</td>
-                                            <td>2</td>
-                                            <td>$ 1000 ($500 x 2)</td>
-                                            <td>$ 4080</td>
-                                            <td>$ 5080</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ni&ntilde;os</td>
-                                            <td>2</td>
-                                            <td>$ 1000 ($500 x 2)</td>
-                                            <td>$ 4080</td>
-                                            <td>$ 5080</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <div>
-                                <span><input type="button" class="button" value="Reservar Vuelo" /></span>
-                                <br />
-                                <span class="floatRight">
-                                    -------------------------<br />
-                                    Total: $ 10060<br />
-                                    -------------------------
-                                </span>
-                            </div>
-                        </div>
-                        <h2>Nombres</h2>
-                        <!-- adultos -->
-                        <div class="wrapper under">
-                            <div class="wrapper">
-                                <h3>Adulto 1: Pasajero Principal</h3>
-                                <div class="form">
-                                    <label for="title1">T&iacute;tulo </label>
-                                    <select name="title1" id="title1">
-                                        <option>Sr.</option>
-                                        <option>Sra.</option>
-                                        <option>Srta.</option>
-                                    </select>
-                                </div>
-                                <div class="form">
-                                    <label for="fname1">Nombre: </label>
-                                    <input type="text" name="fname1" id="fname1" />
-                                </div>
-                                <div class="form">
-                                    <label for="lname1">Apellidos: </label>
-                                    <input type="text" name="lname1" id="lname1" />
-                                </div>
-                            </div>
-                        </div>
-                        <!-- ninos -->
-                        <div class="wrapper under">
-                            <div class="wrapper">
-                                <h3>Infante 1</h3>
-                                <div class="form">
-                                    <label for="child-fname1">Nombre: </label>
-                                    <input type="text" name="child-fname1" id="child-fname1" />
-                                </div>
-                                <div class="form">
-                                    <label for="child-lname1">Apellidos: </label>
-                                    <input type="text" name="child-lname1" id="child-lname1" />
-                                </div>
-                            </div>
-                        </div>
-                        <h2>Datos de Pago</h2>
+                            <% } else if (f1 && flights2 != null) {%>
+                            <h3> Vuelos de Retorno no Disponibles </h3>
+                            <% }
+                                if (f1 | f2) {%>
+                            <input type="submit" class="button" value="Reservar" />
+                            <%                                }%>
+                        </form>
+                        <!--<h2>Datos de Pago</h2>
                         <div class="wrapper">
                             Boleto de <span class="city">Bangalore</span> to <span class="city">Chennai</span><br />
                             Adultos <span class="bold">3</span><br />
@@ -340,28 +245,7 @@
                             Impuestos <span class="bold">$ 800</span><br />
                             Total <span class="bold">$ 9800</span><br />
                             <input type="button" class="button" value="Hacer Pago" onclick="(function() { alert('Payment Succesful!'); })();" /><br />
-                        </div>
-                        <!-- div class="wrapper">
-                            <figure class="left marg_right1"><img src="images/page2_img1.jpg" alt=""></figure>
-                            <p><strong>Sed ut perspiciatis unde omnis iste natus</strong> error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorehjum ipsum quia dolor sit amet, consectetur vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.</p>
-                            <p><strong>Voluptatum deleniti atque corrupti quos</strong> dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa. Et harum quidem rerum facilisest et expedita distinctio. Nam libero tepore cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus omnis voluptas assumenda.</p>
-                        </div>
-                        <div class="wrapper line1 marg_bot1">
-                            <ul class="list1 cols">
-                                <li><a href="#">At vero eos et accusamus et iusto odio</a></li>
-                                <li><a href="#">Dignissimos ducimus qui blanditiis praesentium</a></li>
-                                <li><a href="#">Voluptatum deleniti atque corrupti quos dolores</a></li>
-                                <li><a href="#">Quas molestias excepturi sint occaecati</a></li>
-                            </ul>
-                            <ul class="list1 cols pad_left1">
-                                <li><a href="#">At vero eos et accusamus et iusto odio</a></li>
-                                <li><a href="#">Dignissimos ducimus qui blanditiis praesentium</a></li>
-                                <li><a href="#">Voluptatum deleniti atque corrupti quos dolores</a></li>
-                                <li><a href="#">Quas molestias excepturi sint occaecati</a></li>
-                            </ul>
-                        </div>
-                        Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda. error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorehjum ipsum quia dolor sit amet, consectetur vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.
-                        -->
+                        </div> -->                       
                     </article>
                 </section>
                 <!-- / content -->
@@ -374,8 +258,28 @@
             </div>
         </div>
         <script type="text/javascript">
+            $("#form_1").bind("submit",function() {
+                var isValid = true;
+                if(!validator.isDate($("#date1")) || 
+                    (jQuery("[name='isRoundTrip']").get(0).checked && 
+                    !validator.isDate($("#date2")))){
+                    // TODO: Validar rango de fechas
+                    isValid = false;
+                    alert("Debes seleccionar un rango de fechas!");
+                }
+                if(validator.isEqual($("#source"), $("#destiny"))){
+                    isValid = false;
+                    alert("El origen y el destino no pueden ser iguales!");
+                }
+                return isValid;
+            })
+            
             Cufon.now();
-            $("#departure").datepick({
+            $("#date1").datepick({
+                dateFormat: 'dd-mm-yyyy',
+                minDate: new Date()
+            });
+            $("#date2").datepick({
                 dateFormat: 'dd-mm-yyyy',
                 minDate: new Date()
             });

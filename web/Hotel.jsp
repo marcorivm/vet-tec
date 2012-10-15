@@ -1,15 +1,28 @@
+<%@page import="Clases.Hotel"%>
+<%@page import="Clases.City"%>
+<%@page import="java.util.ArrayList"%>
+<%
+    City[] cities = City.getCities();
+    Hotel hotels[];
+    hotels = (Hotel[]) request.getAttribute("hotels");
+    
+%>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>About</title>
+        <title>Hoteles</title>
         <meta charset="utf-8">
         <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/layout.css" type="text/css" media="all">
         <link rel="stylesheet" href="css/style.css" type="text/css" media="all">
-        <script type="text/javascript" src="js/jquery-1.4.2.js" ></script>
+        <style type="text/css">@import "css/jquery.datepick.css";</style>
+        <script type="text/javascript" src="js/jquery-1.7.1.min.js" ></script>
         <script type="text/javascript" src="js/cufon-yui.js"></script>
         <script type="text/javascript" src="js/cufon-replace.js"></script>
         <script type="text/javascript" src="js/Myriad_Pro_600.font.js"></script>
+        <script type="text/javascript" src="js/jquery.datepick.js"></script>
+        <script type="text/javascript" src="js/vet.js"></script>
         <!--[if lt IE 9]>
                 <script type="text/javascript" src="http://info.template-help.com/files/ie6_warning/ie6_script_other.js"></script>
                 <script type="text/javascript" src="js/html5.js"></script>
@@ -19,29 +32,7 @@
         <div class="extra">
             <div class="main">
                 <!-- header -->
-                <header>
-                    <div class="wrapper">
-                        <h1><a href="index.html" id="logo">Around the World</a></h1>
-                        <div class="right">
-                            <div class="wrapper">
-                                <form id="search" action="" method="post">
-                                    <div class="bg">
-                                        <input type="submit" class="submit" value="">
-                                        <input type="text" class="input">
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="wrapper">
-                                <nav>
-                                    <ul id="top_nav">
-                                        <li><a href="#">Register</a></li>
-                                        <li><a href="#">Log In</a></li>
-                                        <li><a href="#">Help</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
+                <header>               
                     <jsp:include page="includes/navbar.jsp" />
                 </header>
                 <!-- / header -->
@@ -52,178 +43,155 @@
                         <h3>Buscar Hotel</h3>
                         <div class="pad">
                             <div class="wrapper under">
-                                <form>
-                                    <div id="aldo">
-                                        <div><label for="customerId">Id Cliente</label>
-                                            <select name="customerId" id="customerId">
-                                                <option value="blank">---------------</option>
-                                            </select>
+                                <form id="form_1" method="POST" action="HotelServlet">
+                                    <input type="hidden" name="referer" id="referer" value="Hotel.jsp" />
+                                    <div class="tabs_cont">
+                                        <div class="bg">
+
+                                            <div class="wrapper"><label for="city">Ciudad</label>
+                                                <select name="city" id="city">
+                                                    <% if (cities != null)
+                                                            for (City c : cities) {%>
+                                                    <option value="<%=c.getCityCode()%>"><%=c.getCityName()%></option>
+                                                    <% }%>
+                                                </select></div>
+
+                                            <div class="wrapper"><label for="date1">Llegada (dd/mm/aaaa)</label>
+                                                 <input type="text" name="date1" id="date1" /> <input type="hidden" name="start_date" id="start_date" /></div>
+                                            <div id="regreso" class="wrapper"><label for="finish_date">Salida (dd/mm/aaaa)</label>
+                                                <input type="text" name="date2" id="date2" /><input type="hidden" name="finish_date" id="finish_date" /></div>
+                                            <div class="wrapper">
+                                                Tipo de Habitaci&oacute;n<br />
+                                                <select name="type">
+                                                    <option value="sencilla">Sencilla</option>
+                                                    <option value="doble">Doble</option>
+                                                    <option value="triple">Triple</option>
+                                                    <option value="cuadruple">Cu&aacute;druple</option>
+                                                </select><br />
+                                            </div>
+                                            <div class="wrapper">
+                                                <input type ="radio" name="tipoHabitacion" id="deluxe" value="deluxe"/>                                                
+                                                <label for="deluxe">Cuartos Deluxe</label> <br/>
+                                                <input type="radio" name ="tipoHabitacion" id="exe" value="exe" checked="checked" />
+                                                <label for="exe">Cuartos Exe</label>
+                                            </div>
+                                            <div>
+                                                <input type="submit" class="button" value="Buscar" />
+                                            </div>
                                         </div>
-                                        <div><label for="city">City</label>
-                                            <select name="city" id="city">
-                                                <option value="blank">Chennai</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="arrival">Arrival Date</label>
-                                            <input type="text" name="arrival" id="arrival" />
-                                            <input type="button" value=">>" />
-                                        </div>
-                                        <div>
-                                            <label for="departure">Departure Date</label>
-                                            <input type="text" name="departure" id="departure" />
-                                            <input type="button" value=">>" />
-                                        </div>
-                                        <div>
-                                            <label for="dlx_rooms">DLX Rooms</label>
-                                            <input type="text" name="dlx_rooms" id="dlx_rooms" />
-                                            <label for="exe_rooms">EXE Rooms</label>
-                                            <input type="text" name="exe_rooms" id="exe_rooms" />
-                                        </div>
-                                        <div>
-                                            <input type="button" value="Search For Hotels" />
-                                        </div>
-                                    </div>
                                 </form>
-                            </div>
-                            <div class="wrapper">
-                                <figure class="left marg_right1"><img src="images/page1_img3.jpg" alt=""></figure>
-                                <p class="pad_bot2"><strong>Cruise<br>Holidays</strong></p>
-                                <p class="pad_bot2">Lorem ipsum dolor sit amet, consect etuer adipiscing.</p>
-                                <a href="#" class="marker_1"></a>
                             </div>
                         </div>
                     </article>
                     <!-- columna derecha -->
                     <article class="col2 pad_left1">
-                        <nav>
-				<ul id="menu">
-					<li><a href="index.jsp" class="nav6">Home</a></li>
-					<li><a href="vuelos.jsp" class="nav6">Vuelos</a></li>
-					<li><a href="Hotel.jsp" class="nav6">Hoteles</a></li>
-					<li><a href="Destinations.html" class="nav6">Destinations</a></li>
-					<li class="end"><a href="Contacts.html" class="nav6">Contacts</a></li>
-				</ul>
-			</nav>
-                        <h2>Vuelos Disponibles</h2>
-                        <div class="wrapper under">
-                            <form>
-                                <div><table>
-                <tr>
-                    <th>Hotel</th>
-                    <th>Location</th>
-                    <th>Book This</th>
-                </tr>
-                <tr>
-                    <td>Taj</td>
-                    <td>Chennai</td>
-                    <td><input type="button" value="Book This" /></td>
-                </tr>
-                <tr>
-                    <td>Oberoi</td>
-                    <td>Chennai</td>
-                    <td><input type="button" value="Book This" /></td>
-                </tr>
-				<tr>
-                    <td>Ashoka</td>
-                    <td>Chennai</td>
-                    <td><input type="button" value="Book This" /></td>
-                </tr>
-				<tr>
-                    <td>Princeton</td>
-                    <td>Chennai</td>
-                    <td><input type="button" value="Book This" /></td>
-                </tr>
-            </table></div>
-                            </form>
-                        </div>
+                        <% if (request.getAttribute("consulta") != null) {
+                                if (hotels != null && hotels.length > 0) {%>
                         <h2>Revisar Hotel</h2>
                         <div class="wrapper under">
-                            <div id="flightDetails" class="under">
+                            <div id="hotelDetails" class="under">
                                 <h3>Revisar Detalles del Hotel</h3>
-                                <div><span class="city">Chennai</span></div>
+                                <h4>
+                                    <div>En <span class="city"><%= City.getCity((String)request.getAttribute("city")).getCityName()%></span> del <span class="city">${date1}</span> al <span class="city">${date2}</span></div>
+                                <div>En <span class="city">${habitacion}</span></div>
+                                </h4>
                                 <div>
                                     <table>
-                    <tr>
-                        <th>Hotel Name</th>
-                        <th>Check In Date</th>
-                        <th>Check Out Date</th>
-                        <th>DLX Rooms</th>
-						<th>EXE Rooms</th>
-                    </tr>
-                    <tr>
-                        <td>Princeton</td>
-                        <td>16-Jan-2012</td>
-                        <td>20-Jan-2012</td>
-                        <td><b>2</b></td>
-						<td><b>2</b></td>
-                    </tr>
-                </table>
+                                        <tr>
+                                            <th>Hotel</th>
+                                            <th>Fecha Llegada</th>
+                                            <th>Fecha Salida</th>
+                                            <th>Tarifa Delujo por noche</th>
+                                            <th>Tarifa Ejecutiva por noche</th>
+                                        </tr>
+                                        <% for (Hotel h : hotels) {%>
+                                        <tr>
+                                            <td><%=h.getHotelName()%></td>
+                                            <td>${date1}</td>
+                                            <td>${date2}</td>
+                                            <td><b><%=h.getDeluxRoomFare_PerDay()%></b></td>
+                                            <td><b><%=h.getEXERoomFarePerDay()%></b></td>
+                                        </tr>
+                                        <% }%>
+                                    </table>
                                 </div>
                             </div>
                             <div id="fareDetails">
                                 <h3>Revisar Detalles de la Tarifa</h3>
-                                <div>
+                                <div class="scroll">
                                     <table>
-                    <tr>
-                        <th>Room Type</th>
-                        <th>Fare per day</th>
-                        <th>No of Rooms</th>
-                        <th>Fare</th>
-                        <th>Tax</th>
-						<th>Total Amount</th>
-                    </tr>
-                    <tr>
-                        <td>DLX</td>
-                        <td>1000</td>
-                        <td>2</td>
-						<td>2000</td>
-                        <td>150</td>
-                        <td>2150</td>
-                    </tr>
-                    <tr>
-                        <td>DLX</td>
-                        <td>2000</td>
-                        <td>2</td>
-						<td>4000</td>
-                        <td>150</td>
-                        <td>4150</td>
-                    </tr>
-                </table>
+                                        <tr>
+                                            <th>Hotel</th>
+                                            <th>Tipo de Habitaci&oacute;n</th>
+                                            <th>Tarifa Delujo por noche</th>
+                                            <th>Tarifa Ejecutiva por noche</th>
+                                            <th>Habitaciones Deluxe</th>
+                                            <th>Habitaciones Exe</th>
+                                            <th>Tarifa</th>
+                                            <th>Impuestos</th>
+                                            <th>Total</th>
+                                            <th>Reservar</th>
+                                        </tr>
+                                        <% for (Hotel h : hotels) {%>
+                                        <tr>
+                                            <form name="hotelSelection" action="HotelReservation.jsp" method="GET">
+                                            <input type="hidden" value="<%=h.getHotelId()%>" name="hotelNo"/>
+                                            <input type="hidden" value="${city}" name="city"/>
+                                            <input type="hidden" value="${date1}" name="date1"/>
+                                            <input type="hidden" value="${date2}" name="date2"/>
+                                            <input type="hidden" value="${type}" name="type"/>
+                                            <input type="hidden" value="${tipoHabitacion}" name="tipoHabitacion" id="tipoHabitacion" />
+                                            <td><%=h.getHotelName()%></td>
+                                            <td>${habitacion}</td>
+                                            <td><%=h.getDeluxRoomFare_PerDay()%></td>
+                                            <td><%=h.getEXERoomFarePerDay()%></td>
+                                            <td><%=h.getNoOfDeluxRooms()%></td>
+                                            <td><%=h.getNoOfEXERooms()%></td>
+                                            <td><%=(((h.getDeluxRoomFare_PerDay()) * h.getNoOfDeluxRooms()) + ((h.getEXERoomFarePerDay()) * h.getNoOfEXERooms()))%></td>
+                                            <td><%=h.getHotelTax()%></td>
+                                            <td><%=(((h.getDeluxRoomFare_PerDay()) * h.getNoOfDeluxRooms()) + ((h.getEXERoomFarePerDay()) * h.getNoOfEXERooms()) + h.getHotelTax())%></td>
+                                            <td><input type="submit" class="button" value="Reservar" /></td>
+                                            </form>
+                                        </tr>
+                                        <% }%>
+                                    </table>
                                 </div>
                             </div>
-                            <div>
-			<br/>
-            <span class="floatRight">
-                -------------------------<br />
-                Grand Total: Rs. 6300<br />
-                -------------------------
-            </span>
-			<br/>
-			<span><input type="button" value="Continue Booking" /></span>
-        </div>
-                        </div>
-                        
-                        <div class="wrapper">
-                            <figure class="left marg_right1"><img src="images/page2_img1.jpg" alt=""></figure>
-                            <p><strong>Sed ut perspiciatis unde omnis iste natus</strong> error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorehjum ipsum quia dolor sit amet, consectetur vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.</p>
-                            <p><strong>Voluptatum deleniti atque corrupti quos</strong> dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa. Et harum quidem rerum facilisest et expedita distinctio. Nam libero tepore cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus omnis voluptas assumenda.</p>
-                        </div>
-                        <div class="wrapper line1 marg_bot1">
-                            <ul class="list1 cols">
-                                <li><a href="#">At vero eos et accusamus et iusto odio</a></li>
-                                <li><a href="#">Dignissimos ducimus qui blanditiis praesentium</a></li>
-                                <li><a href="#">Voluptatum deleniti atque corrupti quos dolores</a></li>
-                                <li><a href="#">Quas molestias excepturi sint occaecati</a></li>
-                            </ul>
-                            <ul class="list1 cols pad_left1">
-                                <li><a href="#">At vero eos et accusamus et iusto odio</a></li>
-                                <li><a href="#">Dignissimos ducimus qui blanditiis praesentium</a></li>
-                                <li><a href="#">Voluptatum deleniti atque corrupti quos dolores</a></li>
-                                <li><a href="#">Quas molestias excepturi sint occaecati</a></li>
-                            </ul>
-                        </div>
-                        Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda. error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorehjum ipsum quia dolor sit amet, consectetur vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.
+                        <% } else { %>
+                        <h3>No hay resultados</h3>
+                        <article class="col2 pad_left1">
+                            <h2>Hoteles Populares</h2>
+                            <div class="wrapper under">
+                                <figure class="left marg_right1"><img src="images/page1_img4.jpg" alt=""></figure>
+                                <p class="pad_bot2"><strong>Helmsley Park Lane</strong></p>
+                                <p class="pad_bot2">Helmsley Park Lane ® es un hotel de lujo de 46 historias con las vistas panorámicas de Central Park  y el horizonte de la Ciudad de Nueva York . Sus espacios son amplios, elegantes y sus suites ofrecen ventanales y vistas magníficas. Se disfruta de un ambiente clásico, comodidad y conveniencia para una experiencia &uacute;nica en la ciudad líder mundial más extraordinaria.</p>
+                                <p class="pad_bot2"> Localizada en el Central Park en Nueva York, justo en el centro del distrito de negocios, este hotel esta a una corta distancia de la 5ta Avenida, Broadway, Radio City, entre otras atracciones.</p>
+                            </div>
+                            <div class="wrapper">
+                                <figure class="left marg_right1"><img src="images/page1_img5.jpg" alt=""></figure>
+                                <p class="pad_bot2"><strong>Belmont</strong></p>
+                                <p class="pad_bot2">El hotel Belmont es un establecimiento distendido de 3 estrellas. Dotado de un notable confort tecnológico y unos espacios sorprendentes, es un remanso de paz con una atmósfera relajante. Nuestro amable personal le informará sobre las visitas más interesantes de su barrio de los Campos Elíseos para lograr que su estancia le resulte inolvidable.</p>
+                                <p class="pad_bot2">Situado a un centenar de metros de los Campos Elíseos, el hotel Belmont le ofrece un acceso inmediato a las lujosas boutiques de las avenidas Montaigne y George V.</p>
+                            </div>
+                        </article>
+                        <% }
+                                } else {%>
+                        <article class="col2 pad_left1">
+                            <h2>Hoteles Populares</h2>
+                            <div class="wrapper under">
+                                <figure class="left marg_right1"><img src="images/page1_img4.jpg" alt=""></figure>
+                                <p class="pad_bot2"><strong>Helmsley Park Lane</strong></p>
+                                <p class="pad_bot2">Helmsley Park Lane ® es un hotel de lujo de 46 historias con las vistas panorámicas de Central Park  y el horizonte de la Ciudad de Nueva York . Sus espacios son amplios, elegantes y sus suites ofrecen ventanales y vistas magníficas. Se disfruta de un ambiente clásico, comodidad y conveniencia para una experiencia &uacute;nica en la ciudad líder mundial más extraordinaria.</p>
+                                <p class="pad_bot2"> Localizada en el Central Park en Nueva York, justo en el centro del distrito de negocios, este hotel esta a una corta distancia de la 5ta Avenida, Broadway, Radio City, entre otras atracciones.</p>
+                            </div>
+                            <div class="wrapper">
+                                <figure class="left marg_right1"><img src="images/page1_img5.jpg" alt=""></figure>
+                                <p class="pad_bot2"><strong>Belmont</strong></p>
+                                <p class="pad_bot2">El hotel Belmont es un establecimiento distendido de 3 estrellas. Dotado de un notable confort tecnológico y unos espacios sorprendentes, es un remanso de paz con una atmósfera relajante. Nuestro amable personal le informará sobre las visitas más interesantes de su barrio de los Campos Elíseos para lograr que su estancia le resulte inolvidable.</p>
+                                <p class="pad_bot2">Situado a un centenar de metros de los Campos Elíseos, el hotel Belmont le ofrece un acceso inmediato a las lujosas boutiques de las avenidas Montaigne y George V.</p>
+                            </div>
+                        </article>
+                        <% }%>
                     </article>
                 </section>
                 <!-- / content -->
@@ -232,14 +200,37 @@
         </div>
         <div class="body1">
             <div class="main">
-                <!-- footer -->
-                <footer>
-                    <a rel="nofollow" href="http://www.templatemonster.com/" target="_blank">Website template</a> designed by TemplateMonster.com<br>
-                    <a href="http://www.templates.com/product/3d-models/" target="_blank">3D Models</a> provided by Templates.com
-                </footer>
-                <!-- / footer -->
+                <jsp:include page="includes/footer.jsp" />
             </div>
         </div>
-        <script type="text/javascript"> Cufon.now(); </script>
+        <script type="text/javascript">
+            Cufon.now();
+            $("#form_2").bind("submit",function() {
+                var isValid = true;
+                
+                if(!validator.isDate($("#date1")) || 
+                    !validator.isDate($("#date2")) || 
+                    !validator.isNumeric($("#finish_date")) ||
+                    !validator.isNumeric($("#start_date"))){
+                    // TODO: Validar rango de fechas
+                    isValid = false;
+                    alert("Debes seleccionar un rango de fechas!");
+                }
+                
+                return isValid;
+            })
+            $("#date1").datepick({
+                dateFormat: 'dd-mm-yyyy',
+                minDate: new Date(),
+                altFormat: '@',
+                altField: '#start_date'
+            });
+            $("#date2").datepick({
+                dateFormat: 'dd-mm-yyyy',
+                minDate: new Date(),
+                altFormat: '@',
+                altField: '#finish_date'
+            });
+	</script>
     </body>
 </html>

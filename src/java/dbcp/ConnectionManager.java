@@ -17,7 +17,9 @@ public class ConnectionManager {
      * Initializes the <tt>con</tt> object of type {@link Connection}
      */
     public static void init() {
-        pool = new ConnectionPool();
+        if(pool == null){
+            pool = new ConnectionPool();
+        }
     }
 
 
@@ -44,7 +46,28 @@ public class ConnectionManager {
      * @throws SQLException  
      */
     public static boolean update(String[][] fields, String table, String whereClause) throws SQLException {
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
+        String query = "UPDATE " + table + " SET " + fields[0][0] + "='" + fields[0][1] + "'";
+        for (int i = 1; i < fields.length; i++) {
+            query += ", " + fields[i][0] + "='" + fields[i][1] + "'";
+        }
+        if (!whereClause.isEmpty()) {
+            query += " WHERE " + whereClause;
+        }
+        Statement st = con.createStatement();
+        return (st.executeUpdate(query) != 0);
+    }
+    
+    /**
+     * Method that executes an update on a group of fields.
+     * @param fields String array which should contain the field and values to be updated as a key pair.
+     * @param table The table to be updated.
+     * @param whereClause Should the update use a where clause, it should be in the format <b>ID = 1 AND SecondID = 2</b> and so on, regular SQL operations apply.
+     * @param con Connection used for Transaction support.
+     * @return <b>True</b> if the update is successful.
+     * @throws SQLException  
+     */
+    public static boolean update(String[][] fields, String table, String whereClause, Connection con) throws SQLException {
         String query = "UPDATE " + table + " SET " + fields[0][0] + "='" + fields[0][1] + "'";
         for (int i = 1; i < fields.length; i++) {
             query += ", " + fields[i][0] + "='" + fields[i][1] + "'";
@@ -101,7 +124,7 @@ public class ConnectionManager {
      * @throws SQLException 
      */
     public static ResultSet select(String[] fields, String table, String whereClause) throws SQLException {
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
         String query = "SELECT " + fields[0];
         for (int i = 1; i < fields.length; i++) {
             query += ", " + fields[i];
@@ -123,7 +146,7 @@ public class ConnectionManager {
      * @throws SQLException
      */
     public static boolean insert(String[] values, String table) throws SQLException {
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
         String query = "INSERT INTO " + table + " VALUES ('" + values[0] + "'";
         for (int i = 1; i < values.length; i++) {
             query += ", '" + values[i] + "'";
@@ -141,7 +164,7 @@ public class ConnectionManager {
      * @throws SQLException 
      */
     public static int insertAndGetKey(String[][] fields, String table) throws SQLException {
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
         String query = "INSERT INTO `" + table +"`";
         String columns = "(`" + fields[0][0]+"`";
         String values = " (" + fields[0][1] + "";
@@ -167,7 +190,7 @@ public class ConnectionManager {
      * @throws SQLException
      */
     public static boolean insert(String[][] fields, String table) throws SQLException {
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
         String query = "INSERT INTO " + table+"";
         String columns = " (" + fields[0][0]+"";
         String values = " ('" + fields[0][1] + "'";
@@ -201,7 +224,7 @@ public class ConnectionManager {
      * @throws SQLException
      */
     public static boolean delete(String table, String whereClause) throws SQLException {
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
         String query = "DELETE FROM " + table;
         if (!whereClause.isEmpty()) {
             query += " WHERE " + whereClause;
@@ -216,7 +239,7 @@ public class ConnectionManager {
      * @throws SQLException 
      */
     public static Connection initTransaction() throws SQLException{
-        Connection con = pool.getConnection();
+        init(); Connection con = pool.getConnection();
         con.setAutoCommit(false);
         return con;
     }
@@ -232,7 +255,7 @@ public class ConnectionManager {
     }
     
     /**
-     * Method that rollbacks the connection.
+     * Method that makes a rollback using the received connection.
      * @param con
      * @throws SQLException 
      */
@@ -243,8 +266,10 @@ public class ConnectionManager {
     
     /**
      * Method that does a INSERT INTO <tt>table</tt> VALUES (<tt>values</tt>)
+     * This method is to be used with transactions.
      * @param fields Array of strings containing the key pairs {{COLUMN, VALUE},{COLUMN, VALUE}} to be inserted.
      * @param table Table where the values should be inserted into.
+     * @param con Connection to use.
      * @return <b>True</b> if successful.
      * @throws SQLException
      */
@@ -263,5 +288,32 @@ public class ConnectionManager {
         System.out.println(query);
         return (st.executeUpdate(query) != 0);
     }
-    
+  
+    /**
+     * Method that does a INSERT INTO <tt>table</tt> VALUES (<tt>values</tt>)
+     * and returns the new generated key for the values inserted.
+     * This method is to be used with transactions.
+     * @param fields Array of strings containing the key pairs {{COLUMN, VALUE},{COLUMN, VALUE}} to be inserted.
+     * @param table Table where the values should be inserted into.
+     * @param con Connection to use.
+     * @return a ResultSet containing the generated keys.
+     * @throws SQLException 
+     */
+    public static int insertAndGetKey(String[][] fields, String table, Connection con) throws SQLException {
+        String query = "INSERT INTO `" + table +"`";
+        String columns = "(`" + fields[0][0]+"`";
+        String values = " (" + fields[0][1] + "";
+        for (int i = 1; i < fields.length; i++) {
+            columns += ", `" + fields[i][0] +"`";
+            values += "," + fields[i][1] + "";
+        }
+        columns += ")";
+        values += ")";
+        query += columns + " VALUES" + values;
+        PreparedStatement st = con.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+        st.executeUpdate();
+        ResultSet rs = st.getGeneratedKeys();
+        rs.next();
+        return rs.getInt(1);
+    }
 }

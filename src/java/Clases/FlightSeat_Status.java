@@ -65,9 +65,9 @@ public class FlightSeat_Status {
      * seat
      */
     public static FlightSeat_Status getFlightSeat_Status(int id) throws SQLException {
-        ResultSet rs = ConnectionManager.selectAllColumns("Flight", "_flightNo= " + id);
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_FlightSeat_Status_GroupNo", "FlightNo= " + id);
         if (rs.next()) {
-            FlightSeat_Status fst = new FlightSeat_Status(Flight.getFlight(rs.getInt("_flightNumber")), rs.getDate("_dateOfJourney"), rs.getInt("_remainingSeats"), rs.getTime("_timeOfJourney"));
+            FlightSeat_Status fst = new FlightSeat_Status(Flight.getFlight(rs.getInt("FlightNo")), rs.getDate("DateOfJourney"), rs.getInt("RemainingSeats"), rs.getTime("DateOfJourney"));
             return fst;
         } else {
             return null;

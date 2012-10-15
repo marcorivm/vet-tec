@@ -98,7 +98,7 @@ public class Flight_Booking {
      */
     public static Flight_Booking getFlightBooking(String id) throws SQLException{
         dbcp.ConnectionManager.init();
-        ResultSet rs = dbcp.ConnectionManager.selectAllColumns("Tbl_Flight_Booking_GroupNo", "BookingId = "+id);
+        ResultSet rs = dbcp.ConnectionManager.selectAllColumns("Tbl_Flight_Booking_GroupNo", "BookingId = '"+id+"'");
         
         if(rs.next()){
             Flight_Booking fb = new Flight_Booking(id,rs.getDate("DateOfBooking"),rs.getDate("DateOfJourney"), Customer.getCustomer(rs.getInt("CustomerId")),Flight.getFlight(rs.getInt("FlightNo")),rs.getInt("NoOfAdults"),rs.getInt("NoOfChildren"));
@@ -135,9 +135,9 @@ public class Flight_Booking {
      */
     public static String getNextId() throws SQLException {
         ConnectionManager.init();
-        ResultSet rd = ConnectionManager.select("CONCAT(  'B', (MID( BookingId, 2 ) +1 ))", "Tbl_Flight_Booking_GroupNo", "1 ORDER BY BookingId DESC LIMIT 1");
+        ResultSet rd = ConnectionManager.select("(MID( BookingId, 2 ) +1 ))", "Tbl_Flight_Booking_GroupNo", "1 ORDER BY BookingId DESC LIMIT 1");
         if(rd.next()){
-            return  rd.getString(1);
+            return  "B" + String.format("%02d",rd.getInt(1));
         } else {
             return null; 
         }

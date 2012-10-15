@@ -4,7 +4,13 @@ import dbcp.ConnectionManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Flight {
 
@@ -123,10 +129,56 @@ public class Flight {
      * @return f An object created out of the variables of the Flights class
      */
     public static Flight getFlight(int id) throws SQLException {
-        ResultSet rs = ConnectionManager.selectAllColumns("Flight", "_flightNo= " + id);
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Flight_GroupNo", "FlightNo= " + id);
         if (rs.next()) {
-            Flight f = new Flight(rs.getInt("_flight_No"), rs.getString("_airline_Name"), City.getCity(rs.getString("_source")), City.getCity(rs.getString("_destination")), rs.getTime("_departure_Time"), rs.getTime("_arrival_Time"),
-                    rs.getInt("_total_Seats"), rs.getDouble("_adult_Fare"), rs.getDouble("_child_Fare"), rs.getDouble("_airport_Tax"));
+            double dep = rs.getDouble("DepartureTime");
+            double arr = rs.getDouble("ArrivalTime");
+            int depM = (int) (dep % 1 * 100);
+            int depH = (int) (dep / 1);
+            int arrM = (int) (arr % 1 * 100);
+            int arrH = (int) (arr / 1);
+
+            Time departure = new Time(depH, depM, 0);
+            Time arrival = new Time(arrH, arrM, 0);
+            Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), departure, arrival,
+                    rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
+            return temp;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Method that creates an object according to its defined WHERE clause and
+     * received variables
+     *
+     * @param _destination The destination of the flight
+     * @throws SQLException
+     *
+     * @return f An array of Flight objects that contains the variables in the
+     * Flight class
+     */
+    public static Flight[] getFlightsTo(City _destination) throws SQLException {
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Flight_GroupNo", "destination='" + _destination.getCityCode() + "'");
+        if (rs.next()) {
+            ArrayList flightArrayList = new ArrayList();
+
+            do {
+                double dep = rs.getDouble("DepartureTime");
+                double arr = rs.getDouble("ArrivalTime");
+                int depM = (int) (dep % 1 * 100);
+                int depH = (int) (dep / 1);
+                int arrM = (int) (arr % 1 * 100);
+                int arrH = (int) (arr / 1);
+
+                Time departure = new Time(depH, depM, 0);
+                Time arrival = new Time(arrH, arrM, 0);
+                Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), departure, arrival,
+                        rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
+                flightArrayList.add(temp);
+            } while (rs.next());
+            Flight[] f = new Flight[flightArrayList.size()];
+            flightArrayList.toArray(f);
             return f;
         } else {
             return null;
@@ -145,15 +197,61 @@ public class Flight {
      * Flight class
      */
     public static Flight[] getFlights(City _source, City _destination) throws SQLException {
-        ResultSet rs = ConnectionManager.selectAllColumns("Flight", "source= " + _source + " and destination= " + _destination); //falta poner que haya un mes de diferencia, no estoy seguro de como
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Flight_GroupNo", "source='" + _source.getCityCode() + "' and destination= '" + _destination.getCityCode() + "'"); //falta poner que haya un mes de diferencia, no estoy seguro de como
         if (rs.next()) {
             ArrayList flightArrayList = new ArrayList();
-            Flight f[];
             do {
-                flightArrayList.add(new Flight(rs.getInt("_flightNo"), rs.getString("_airline_Name"), City.getCity(rs.getString("_source")), City.getCity(rs.getString("_destination")), rs.getTime("_departure_Time"), rs.getTime("_arrival_Time"),
-                        rs.getInt("_total_Seats"), rs.getDouble("_adult_Fare"), rs.getDouble("_child_Fare"), rs.getDouble("_airport_Tax")));
+                double dep = rs.getDouble("DepartureTime");
+                double arr = rs.getDouble("ArrivalTime");
+                int depM = (int) (dep % 1 * 100);
+                int depH = (int) (dep / 1);
+                int arrM = (int) (arr % 1 * 100);
+                int arrH = (int) (arr / 1);
+
+                Time departure = new Time(depH, depM, 0);
+                Time arrival = new Time(arrH, arrM, 0);
+                Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), departure, arrival,
+                        rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
+                flightArrayList.add(temp);
             } while (rs.next());
-            f = (Flight[]) flightArrayList.toArray();
+            Flight[] f = new Flight[flightArrayList.size()];
+            flightArrayList.toArray(f);
+            return f;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Method that creates an object according to its defined WHERE clause and
+     * received variables
+     *
+     * @param _source The source city of the flight
+     * @throws SQLException
+     *
+     * @return f An array of Flight objects that contains the variables in the
+     * Flight class
+     */
+    public static Flight[] getFlightsFrom(City _source) throws SQLException {
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Flight_GroupNo", "source='" + _source.getCityCode() + "'"); //falta poner que haya un mes de diferencia, no estoy seguro de como
+        if (rs.next()) {
+            ArrayList flightArrayList = new ArrayList();
+            do {
+                double dep = rs.getDouble("DepartureTime");
+                double arr = rs.getDouble("ArrivalTime");
+                int depM = (int) (dep % 1 * 100);
+                int depH = (int) (dep / 1);
+                int arrM = (int) (arr % 1 * 100);
+                int arrH = (int) (arr / 1);
+
+                Time departure = new Time(depH, depM, 0);
+                Time arrival = new Time(arrH, arrM, 0);
+                Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), departure, arrival,
+                        rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
+                flightArrayList.add(temp);
+            } while (rs.next());
+            Flight[] f = new Flight[flightArrayList.size()];
+            flightArrayList.toArray(f);
             return f;
         } else {
             return null;
@@ -178,8 +276,18 @@ public class Flight {
             ArrayList flightArrayList = new ArrayList();
             Flight f[];
             do {
-                flightArrayList.add(new Flight(rs.getInt("_flightNo"), rs.getString("_airline_Name"), City.getCity(rs.getString("_source")), City.getCity(rs.getString("_destination")), rs.getTime("_departure_Time"), rs.getTime("_arrival_Time"),
-                        rs.getInt("_total_Seats"), rs.getDouble("_adult_Fare"), rs.getDouble("_child_Fare"), rs.getDouble("_airport_Tax")));
+                double dep = rs.getDouble("DepartureTime");
+                double arr = rs.getDouble("ArrivalTime");
+                int depM = (int) (dep % 1 * 100);
+                int depH = (int) (dep / 1);
+                int arrM = (int) (arr % 1 * 100);
+                int arrH = (int) (arr / 1);
+
+                Time departure = new Time(depH, depM, 0);
+                Time arrival = new Time(arrH, arrM, 0);
+                Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), departure, arrival,
+                        rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
+                flightArrayList.add(temp);
             } while (rs.next());
             f = (Flight[]) flightArrayList.toArray();
             return f;
@@ -187,12 +295,12 @@ public class Flight {
             return null;
         }
     }
-    
-       /**
+
+    /**
      * Method that creates an object according to its defined WHERE clause and
      * received variables
      *
-     * @param _source The source city code  of the flight
+     * @param _source The source city code of the flight
      * @param _destination The destination code of the flight
      * @param _seats The amount of seats remaining needed
      * @throws SQLException
@@ -205,11 +313,20 @@ public class Flight {
         ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Flight_GroupNo", "source= '" + _source + "' and destination= '" + _destination + "'"); //falta poner que haya un mes de diferencia, no estoy seguro de como
         if (rs.next()) {
             ArrayList flightArrayList = new ArrayList();
-            
+
             do {
-                Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), rs.getTime("DepartureTime"), rs.getTime("ArrivalTime"),
+                double dep = rs.getDouble("DepartureTime");
+                double arr = rs.getDouble("ArrivalTime");
+                int depM = (int) (dep % 1 * 100);
+                int depH = (int) (dep / 1);
+                int arrM = (int) (arr % 1 * 100);
+                int arrH = (int) (arr / 1);
+
+                Time departure = new Time(depH, depM, 0);
+                Time arrival = new Time(arrH, arrM, 0);
+                Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), departure, arrival,
                         rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
-                if(temp.getRemainingSeats() >= _seats){
+                if (temp.getRemainingSeats() >= _seats) {
                     flightArrayList.add(temp);
                 }
             } while (rs.next());
@@ -220,15 +337,116 @@ public class Flight {
             return null;
         }
     }
-    
-    public int getRemainingSeats() throws SQLException{
-        /* Sacar de DB la cantididad en base a this._flight_No */
+
+    public static Flight[] getFlights(String _source, String _destination, int _seats, String date, float timeFrom, float timeTo) throws SQLException {
         ConnectionManager.init();
-        ResultSet rs = ConnectionManager.select("RemainingSeats", "Tbl_FlightSeat_Status_GroupNo", "FlightNo = '"+this._flight_No+"'");
-        if(rs.next()){
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_Flight_GroupNo", "source= '" + _source + "' and destination= '" + _destination
+                + "' and DepartureTime >= '" + timeFrom + "' and DepartureTime <= '" + timeTo + "'"); //falta poner que haya un mes de diferencia, no estoy seguro de como
+        if (rs.next()) {
+            ArrayList flightArrayList = new ArrayList();
+
+            do {
+                try {
+                    double dep = rs.getDouble("DepartureTime");
+                    double arr = rs.getDouble("ArrivalTime");
+                    int depM = (int) (dep % 1 * 100);
+                    int depH = (int) (dep / 1);
+                    int arrM = (int) (arr % 1 * 100);
+                    int arrH = (int) (arr / 1);
+
+                    Time departure = new Time(depH, depM, 0);
+                    Time arrival = new Time(arrH, arrM, 0);
+                    Flight temp = new Flight(rs.getInt("FlightNo"), rs.getString("AirlinesName"), City.getCity(rs.getString("Source")), City.getCity(rs.getString("Destination")), departure, arrival,
+                            rs.getInt("TotalSeats"), rs.getDouble("AdultFare"), rs.getDouble("ChildFare"), rs.getDouble("AirportTax"));
+                    //Date d = (Date) new DateFormat().parse(date);
+                    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                    Date d = (Date) df.parse(date);
+                    if (temp.getRemainingSeats(d) >= _seats) {
+                        flightArrayList.add(temp);
+                    }
+                } catch (ParseException ex) {
+                    Logger.getLogger(Flight.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } while (rs.next());
+            Flight f[] = new Flight[flightArrayList.size()];
+            flightArrayList.toArray(f);
+            return f;
+        } else {
+            return null;
+        }
+    }
+
+    public int getRemainingSeats(Date date) throws SQLException, ParseException {
+        /*
+         * Sacar de DB la cantididad en base a this._flight_No
+         */
+        ConnectionManager.init();
+        ResultSet rs = ConnectionManager.selectAllColumns("Tbl_FlightSeat_Status_GroupNo", "FlightNo = '" + this._flight_No + "'");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        if (rs.next()) {
+            String temp = rs.getString("DateOfJourney");
+            Date dOJ = df.parse(temp);
+            System.out.println("date: " + date.toString() + " | " + dOJ.toString() + " | " + temp);
+            if (dOJ.compareTo(date) == 0) {
+                return rs.getInt("RemainingSeats");
+            } else {
+                return -1;
+            }
+        } else {
+            return -2;
+        }
+    }
+
+    public int getRemainingSeats() throws SQLException {
+        /*
+         * Sacar de DB la cantididad en base a this._flight_No
+         */
+        ConnectionManager.init();
+        ResultSet rs = ConnectionManager.select("RemainingSeats", "Tbl_FlightSeat_Status_GroupNo", "FlightNo = '" + this._flight_No + "'");
+        if (rs.next()) {
             return rs.getInt("RemainingSeats");
         } else {
             return -1;
         }
+    }
+
+    /**
+     * Method that returns the applicable discount to a flight according to date
+     * of booking and current flight's capacity
+     *
+     * @param Flight_No The Flight number to calculate discount
+     * @param DoB Date of Booking
+     * @param DoJ Date of Flight's Journey
+     * @param Package_Discount Package Discount assigned by travel agent
+     * @return Discount in percentage form, -0.2 represents a 20% discount
+     * @throws SQLException
+     * @throws ParseException
+     */
+    public static double getDiscount(int Flight_No, Date DoB, Date DoJ, double Package_Discount) throws SQLException, ParseException {
+        double descuento = 0;
+        Flight flight = Flight.getFlight(Flight_No);
+
+        Date mesAntes = (Date) DoJ.clone();
+        mesAntes.setMonth(mesAntes.getMonth() - 1);
+
+        // se hizo el booking por lo menos un mes antes del viaje
+        if (DoB.before(mesAntes)) {
+            descuento -= 0.2;
+        }
+
+        // descuento por capacidad
+        int asientosDisponibles = flight.getRemainingSeats();
+        int asientosVuelo = flight.getTotal_Seats();
+        double ratioOcupado = (asientosVuelo - asientosDisponibles) / (double) asientosVuelo;
+        // si hay 80% del vuelo ocupado, vender mas caro
+        if (ratioOcupado >= 0.8) {
+            descuento += 0.2; // 20% mas caro
+        } else if (ratioOcupado <= 0.2) { // si hay solo 20% ocupado, vender mas barato
+            descuento -= 0.2; // 20% mas barato
+        }
+
+        // agregar el descuneto por paquete
+        descuento += Package_Discount;
+        return descuento;
     }
 }

@@ -2,16 +2,19 @@ package Servlets;
 
 
 
+import Clases.City;
+import Clases.Customer;
+import Clases.Flight;
 import Clases.Flight_Booking;
 import dbcp.ConnectionManager;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.SimpleDateFormat;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -41,25 +44,34 @@ public class ReservarVuelo extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter(); //Se deja para que los de aquellos encargados de la interfaz decidan como se imprimirá
         ResultSet resultados;
-        try {
-    
+        //Obtenemos la conexión e iniciamos la transacción IMPORTANTE cerrar conexión (commit o rollback)
+        Connection con = ConnectionManager.initTransaction();
+            
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD hh:mm:ss");
             
-	    String campos[][] = {{"FlightNo",request.getParameter("FlightNo")},{"AirlinesName",request.getParameter("AirlinesName")},{"Source",request.getParameter("Source")},{"Destination",request.getParameter("Destination")},{"DepartureTime",request.getParameter("DepartureTime")},{"ArrivalTime",request.getParameter("ArrivalTime")},{"TotalSeats",request.getParameter("TotalSeats")},{"AdultFare",request.getParameter("AdultFare")},{"ChildFare",request.getParameter("ChildFare")}};//Introducciòn de parametros
-            String isRound = request.getParameter("isRound");
-            int ciudades = dbcp.ConnectionManager.insertAndGetKey(campos,"Tbl_Flight_GroupNo");//Se inserta el dato y se guarda la reservaciòn
-            String camposregistro[][] = {{"BookingId",Flight_Booking.getNextID()},{"FlightNo","" + ciudades},{"CustomerId",request.getParameter("CustomerId")},{"DateofBooking",(sdf.format(cal.getTime()))},{"DateOfJourney",request.getParameter("DateOfJourney")},{"NoOfAdults",request.getParameter("NoOfAdults")},{"NoOfChildren",request.getParameter("NoOfChildren")}};
-      	    boolean insercion = dbcp.ConnectionManager.insert(camposregistro,"Tbl_Flight_Booking_GroupNo");
+            boolean isRound = (request.getParameter("isRoundTrip").equalsIgnoreCase("true"));
+            Flight flightTo = Flight.getFlight(Integer.parseInt(request.getParameter("flightTo")));
+            request.getSession().setAttribute("flightTo", flightTo);
             
+            Flight_Booking fbTo = new Flight_Booking(Flight_Booking.getNextId(), Date.valueOf((sdf.format(cal.getTime()))),
+                                Date.valueOf(request.getParameter("DateOfJourney")), Customer.getCustomer(Integer.parseInt(request.getParameter("CustomerId"))),
+                                flightTo, Integer.parseInt(request.getParameter("NoOfAdults")), Integer.parseInt(request.getParameter("NoOfChildren")));
+            // Inicializar la variable de control para el segundo vuelo
+            request.getSession().setAttribute("fbTo", fbTo);
+            boolean vuelo_2 = true; 
             if(isRound)
             {
-                String vuelo2[][] = 
+                
+                Flight flightFrom = Flight.getFlight(Integer.parseInt(request.getParameter("flightFrom")));
+                request.getSession().setAttribute("flightFrom", flightFrom);
+                Flight_Booking fbFrom = new Flight_Booking(Flight_Booking.getNextId(), Date.valueOf((sdf.format(cal.getTime()))),
+                                Date.valueOf(request.getParameter("DateOfJourney")), Customer.getCustomer(Integer.parseInt(request.getParameter("CustomerId"))),
+                                flightFrom, Integer.parseInt(request.getParameter("NoOfAdults")), Integer.parseInt(request.getParameter("NoOfChildren")));
+                request.getSession().setAttribute("fbFrom", fbFrom);
             }
-            
-        } finally {            
-            out.close();
-        }
+            RequestDispatcher rd = request.getRequestDispatcher("PrepareOfr");
+            rd.forward(request, response);
     }
 
  
